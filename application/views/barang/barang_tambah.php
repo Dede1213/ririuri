@@ -6,9 +6,9 @@
 			<th>Kode Barang</th>
 			<th>Nama Barang</th>
 			<th>Kategori</th>
-			<th>Size</th>
 			<th>Merek</th>
 			<th>Stok</th>
+			<th>Modal</th>
 			<th>Harga</th>
 			<th>Keterangan</th>
 			<th>Batal</th>
@@ -99,8 +99,8 @@ function BarisBaru()
 	var Nomor = $('#TabelTambahBarang tbody tr').length + 1;
 	var Baris = "<tr>";
 	Baris += "<td>"+Nomor+"</td>";
-	Baris += "<td><input type='text' name='kode[]' class='form-control input-sm kode_barang'><span id='SamaKode'></span></td>";
-	Baris += "<td><input type='text' name='nama[]' class='form-control input-sm'></td>";
+	Baris += "<td><input type='text' name='kode[]' class='form-control input-sm kode_barang' ><span id='SamaKode'></span></td>";
+	Baris += "<td><input type='text' name='nama[]' class='form-control input-sm' style='width:300px;'></td>";
 	Baris += "<td>";
 	Baris += "<select name='id_kategori_barang[]' class='form-control input-sm' style='width:100px;'>";
 	Baris += "<option value=''></option>";
@@ -116,7 +116,7 @@ function BarisBaru()
 
 	Baris += "</select>";
 	Baris += "</td>";
-	Baris += "<td><input type='text' name='size[]' class='form-control input-sm'></td>";
+	// Baris += "<td><input type='text' name='size[]' class='form-control input-sm'></td>";
 	
 	Baris += "<td>";
 	Baris += "<select name='id_merk_barang[]' class='form-control input-sm' style='width:100px;'>";
@@ -135,8 +135,9 @@ function BarisBaru()
 	Baris += "</td>";
 
 	Baris += "<td><input type='text' name='stok[]' class='form-control input-sm' onkeypress='return check_int(event)'></td>";
+	Baris += "<td><input type='text' name='modal[]' class='form-control input-sm' onkeypress='return check_int(event)'></td>";
 	Baris += "<td><input type='text' name='harga[]' class='form-control input-sm' onkeypress='return check_int(event)'></td>";
-	Baris += "<td><textarea name='keterangan[]' class='form-control input-sm'></textarea></td>";
+	Baris += "<td><textarea name='keterangan[]' class='form-control input-sm' style='width:250px;'></textarea></td>";
 	Baris += "<td align='center'><a href='#' id='HapusBaris'><i class='fa fa-times' style='color:red;'></i></a></td>";
 	Baris += "</tr>";
 

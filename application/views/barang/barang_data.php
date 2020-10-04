@@ -20,9 +20,9 @@ $level = $this->session->userdata('ap_level');
 							<th>Kode</th>
 							<th>Nama Barang</th>
 							<th>Kategori</th>
-							<th>Size</th>
 							<th>Merek</th>
 							<th>Stok</th>
+							<th>Modal</th>
 							<th>Harga</th>
 							<th>Keterangan</th>
 							<?php if($level == 'admin' OR $level == 'inventory') { ?>

@@ -27,8 +27,8 @@ class Barang extends MY_Controller
 		$requestData	= $_REQUEST;
 		$fetch			= $this->m_barang->fetch_data_barang($requestData['search']['value'], $requestData['order'][0]['column'], $requestData['order'][0]['dir'], $requestData['start'], $requestData['length']);
 		
-		print_r($fetch);
-		exit;
+		// print_r($fetch);
+		// exit;
 		$totalData		= $fetch['totalData'];
 		$totalFiltered	= $fetch['totalFiltered'];
 		$query			= $fetch['query'];
@@ -42,9 +42,9 @@ class Barang extends MY_Controller
 			$nestedData[]	= $row['kode_barang'];
 			$nestedData[]	= $row['nama_barang'];
 			$nestedData[]	= $row['kategori'];
-			$nestedData[]	= $row['size'];
 			$nestedData[]	= $row['merk'];
 			$nestedData[]	= ($row['total_stok'] == 'Kosong') ? "<font color='red'><b>".$row['total_stok']."</b></font>" : $row['total_stok'];
+			$nestedData[]	= $row['modal'];
 			$nestedData[]	= $row['harga'];
 			$nestedData[]	= preg_replace("/\r\n|\r|\n/",'<br />', $row['keterangan']);
 
@@ -109,10 +109,10 @@ class Barang extends MY_Controller
 					$this->form_validation->set_rules('kode['.$no.']','Kode Barang #'.($no + 1),'trim|required|alpha_numeric|max_length[40]|callback_exist_kode[kode['.$no.']]');
 					$this->form_validation->set_rules('nama['.$no.']','Nama Barang #'.($no + 1),'trim|required|max_length[60]|alpha_numeric_spaces');
 					$this->form_validation->set_rules('id_kategori_barang['.$no.']','Kategori #'.($no + 1),'trim|required');
-					$this->form_validation->set_rules('size['.$no.']','Size Barang #'.($no + 1),'trim|required|max_length[60]|alpha_numeric_spaces');
 					$this->form_validation->set_rules('id_merk_barang['.$no.']','Merek #'.($no + 1),'trim');
 					$this->form_validation->set_rules('stok['.$no.']','Stok #'.($no + 1),'trim|required|numeric|max_length[10]|callback_cek_titik[stok['.$no.']]');
-					$this->form_validation->set_rules('harga['.$no.']','Harga #'.($no + 1),'trim|required|numeric|min_length[4]|max_length[10]|callback_cek_titik[harga['.$no.']]');
+					$this->form_validation->set_rules('modal['.$no.']','Modal #'.($no + 1),'trim|required|numeric|min_length[3]|max_length[10]|callback_cek_titik[modal['.$no.']]');
+					$this->form_validation->set_rules('harga['.$no.']','Harga #'.($no + 1),'trim|required|numeric|min_length[3]|max_length[10]|callback_cek_titik[harga['.$no.']]');
 					$this->form_validation->set_rules('keterangan['.$no.']','Keterangan #'.($no + 1),'trim|max_length[2000]');
 					$no++;
 				}
@@ -134,13 +134,13 @@ class Barang extends MY_Controller
 						$kode 				= $_POST['kode'][$no_array];
 						$nama 				= $_POST['nama'][$no_array];
 						$id_kategori_barang	= $_POST['id_kategori_barang'][$no_array];
-						$size 				= $_POST['size'][$no_array];
 						$id_merk_barang		= $_POST['id_merk_barang'][$no_array];
 						$stok 				= $_POST['stok'][$no_array];
+						$modal 				= $_POST['modal'][$no_array];
 						$harga 				= $_POST['harga'][$no_array];
 						$keterangan 		= $this->clean_tag_input($_POST['keterangan'][$no_array]);
 
-						$insert = $this->m_barang->tambah_baru($kode, $nama, $id_kategori_barang,$size , $id_merk_barang, $stok, $harga, $keterangan);
+						$insert = $this->m_barang->tambah_baru($kode, $nama, $id_kategori_barang, $id_merk_barang, $stok, $modal, $harga, $keterangan);
 						if($insert){
 							$inserted++;
 						}
@@ -228,13 +228,15 @@ class Barang extends MY_Controller
 
 	public function edit($id_barang = NULL)
 	{
-		if( ! empty($id_barang))
+		if(!empty($id_barang))
 		{
+			
 			$level = $this->session->userdata('ap_level');
 			if($level == 'admin' OR $level == 'inventory')
 			{
 				if($this->input->is_ajax_request())
 				{
+					
 					$this->load->model('m_barang');
 					
 					if($_POST)
@@ -254,7 +256,7 @@ class Barang extends MY_Controller
 						$this->form_validation->set_rules('id_kategori_barang','Kategori','trim|required');
 						$this->form_validation->set_rules('id_merk_barang','Merek','trim');
 						$this->form_validation->set_rules('total_stok','Stok','trim|required|numeric|max_length[10]|callback_cek_titik[total_stok]');
-						$this->form_validation->set_rules('harga','Harga','trim|required|numeric|min_length[4]|max_length[10]|callback_cek_titik[harga]');
+						$this->form_validation->set_rules('harga','Harga','trim|required|numeric|min_length[3]|max_length[10]|callback_cek_titik[harga]');
 						$this->form_validation->set_rules('keterangan','Keterangan','trim|max_length[2000]');
 						
 						$this->form_validation->set_message('required','%s harus diisi !');
@@ -269,12 +271,19 @@ class Barang extends MY_Controller
 							$nama 				= $this->input->post('nama_barang');
 							$id_kategori_barang	= $this->input->post('id_kategori_barang');
 							$id_merk_barang		= $this->input->post('id_merk_barang');
-							$size				= $this->input->post('size');
 							$stok 				= $this->input->post('total_stok');
+							$modal 				= $this->input->post('modal');
+							$stok_new 				= $this->input->post('stok_new');
+							$modal_new 				= $this->input->post('modal_new');
+
+							$stokFinal =  $stok + $stok_new;
+							$modalFinal = (($modal*$stok)+($modal_new*$stok_new))/$stokFinal;
+							// echo $modal."*".$stok."+".$modal_new."*".$stok_new."/".$stokFinal."=".$modalFinal;
+							// exit;
 							$harga 				= $this->input->post('harga');
 							$keterangan 		= $this->clean_tag_input($this->input->post('keterangan'));
 
-							$update = $this->m_barang->update_barang($id_barang, $kode_barang, $nama,  $id_kategori_barang, $size, $id_merk_barang, $stok, $harga, $keterangan);
+							$update = $this->m_barang->update_barang($id_barang, $kode_barang, $nama,  $id_kategori_barang, $id_merk_barang, $stokFinal, $modalFinal, $harga, $keterangan);
 							if($update)
 							{
 								echo json_encode(array(
@@ -294,12 +303,17 @@ class Barang extends MY_Controller
 					}
 					else
 					{
+						
 						$this->load->model('m_kategori_barang');
 						$this->load->model('m_merk_barang');
 
+						
 						$dt['barang'] 	= $this->m_barang->get_baris($id_barang)->row();
+			// 			echo "asdasd";
+			// exit;
 						$dt['kategori'] = $this->m_kategori_barang->get_all();
 						$dt['merek'] 	= $this->m_merk_barang->get_all();
+						
 						$this->load->view('barang/barang_edit', $dt);
 					}
 				}

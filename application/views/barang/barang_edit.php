@@ -44,18 +44,18 @@
 			</select>
 		</div>
 	</div>
-	<div class="form-group">
+	<!-- <div class="form-group">
 		<label class="col-sm-3 control-label">Size</label>
 		<div class="col-sm-8">
 			<?php 
-			echo form_input(array(
-				'name' => 'size',
-				'class' => 'form-control',
-				'value' => $barang->size
-			));
+			// echo form_input(array(
+			// 	'name' => 'size',
+			// 	'class' => 'form-control',
+			// 	'value' => $barang->size
+			// ));
 			?>
 		</div>
-	</div>
+	</div> -->
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Merek</label>
 		<div class="col-sm-8">
@@ -76,10 +76,11 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-3 control-label">Stok</label>
+		<label class="col-sm-3 control-label">*Stok</label>
 		<div class="col-sm-8">
 			<?php 
 			echo form_input(array(
+				'id' => 'stok',
 				'name' => 'total_stok',
 				'class' => 'form-control',
 				'value' => $barang->total_stok
@@ -87,6 +88,48 @@
 			?>
 		</div>
 	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-3 control-label">*Modal</label>
+		<div class="col-sm-8">
+			<?php 
+			echo form_input(array(
+				'id' => 'modal',
+				'name' => 'modal',
+				'class' => 'form-control',
+				'value' => $barang->modal
+			));
+			?>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Stok Terbaru</label>
+		<div class="col-sm-8">
+			<?php 
+			echo form_input(array(
+				'id' => 'stok_new',
+				'name' => 'stok_new',
+				'class' => 'form-control',
+				'value' => 0
+			));
+			?>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Modal Terbaru</label>
+		<div class="col-sm-8">
+			<?php 
+			echo form_input(array(
+				'id' => 'modal_new',
+				'name' => 'modal_new',
+				'class' => 'form-control',
+				'value' => 0
+			));
+			?>
+		</div>
+	</div>
+
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Harga</label>
 		<div class="col-sm-8">
@@ -99,6 +142,8 @@
 			?>
 		</div>
 	</div>
+
+	
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Keterangan</label>
 		<div class="col-sm-8">
@@ -137,5 +182,20 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	// $('#hitungModal').click(function(){
+	// 	var stok =  $('#stok').val();
+	// 	var stok_new =  $('#stok_new').val();
+	// 	var modal =  $('#modal').val();
+	// 	var modal_new =  $('#modal_new').val();
+	// 	var cModal = parseInt(modal)+parseInt(modal_new);
+	// 	var cStok = parseInt(stok)+parseInt(stok_new);
+	// 	var count = cModal/cStok;
+
+	// 	$('#stok').val(cStok);
+	// 	$('#modal').val(count.toFixed(2));
+	// 	// alert(count.toFixed(2));
+	// });
+
 });
 </script>

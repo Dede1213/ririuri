@@ -171,6 +171,12 @@ if($level !== 'admin')
 										<input type='text' id='UangKembali' class='form-control' disabled>
 									</div>
 								</div>
+								<div class="form-group">
+									<label class="col-sm-6 control-label">Biaya Admin (F11)</label>
+									<div class="col-sm-6">
+										<input type='text' name='biaya_admin' id='biaya_admin' class='form-control' onkeypress='return check_int(event)'>
+									</div>
+								</div>
 								<div class='row'>
 									<div class='col-sm-6' style='padding-right: 0px;'>
 										<button type='button' class='btn btn-warning btn-block' id='CetakStruk'>
@@ -560,6 +566,12 @@ $(document).on('keydown', 'body', function(e){
 		return false;
 	}
 
+	if(charCode == 122) //F11
+	{
+		$('#biaya_admin').focus();
+		return false;
+	}
+
 	if(charCode == 120) //F9
 	{
 		CetakStruk();
@@ -614,6 +626,7 @@ function SimpanTransaksi()
 	FormData += "&cash="+$('#UangCash').val();
 	FormData += "&catatan="+encodeURI($('#catatan').val());
 	FormData += "&grand_total="+$('#TotalBayarHidden').val();
+	FormData += "&biaya_admin="+$('#biaya_admin').val();
 
 	$.ajax({
 		url: "<?php echo site_url('penjualan/transaksi'); ?>",

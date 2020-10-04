@@ -78,6 +78,7 @@ class Penjualan extends MY_Controller
 							$bayar			= $this->input->post('cash');
 							$grand_total	= $this->input->post('grand_total');
 							$catatan		= $this->clean_tag_input($this->input->post('catatan'));
+							$biaya_admin			= $this->input->post('biaya_admin'); 
 
 							if($bayar < $grand_total)
 							{
@@ -86,7 +87,7 @@ class Penjualan extends MY_Controller
 							else
 							{
 								$this->load->model('m_penjualan_master');
-								$master = $this->m_penjualan_master->insert_master($nomor_nota, $tanggal, $id_kasir, $id_pelanggan, $bayar, $grand_total, $catatan);
+								$master = $this->m_penjualan_master->insert_master($nomor_nota, $tanggal, $id_kasir, $id_pelanggan, $bayar, $grand_total, $catatan, $biaya_admin);
 								if($master)
 								{
 									$id_master 	= $this->m_penjualan_master->get_id($nomor_nota)->row()->id_penjualan_m;
@@ -104,9 +105,11 @@ class Penjualan extends MY_Controller
 											$jumlah_beli 	= $_POST['jumlah_beli'][$no_array];
 											$harga_satuan 	= $_POST['harga_satuan'][$no_array];
 											$sub_total 		= $_POST['sub_total'][$no_array];
-											$id_barang		= $this->m_barang->get_id($kode_barang)->row()->id_barang;
-											
-											$insert_detail	= $this->m_penjualan_detail->insert_detail($id_master, $id_barang, $jumlah_beli, $harga_satuan, $sub_total);
+											$getData		= $this->m_barang->get_id($kode_barang)->row();
+											$id_barang		= $getData->id_barang;
+											$modal			= $getData->modal;
+											$laba 			= ($harga_satuan-$modal)*$jumlah_beli;
+											$insert_detail	= $this->m_penjualan_detail->insert_detail($id_master, $id_barang, $jumlah_beli, $harga_satuan, $modal, $laba, $sub_total);
 											if($insert_detail)
 											{
 												$this->m_barang->update_stok($id_barang, $jumlah_beli);

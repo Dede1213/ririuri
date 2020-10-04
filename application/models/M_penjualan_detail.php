@@ -1,13 +1,15 @@
 <?php
 class M_penjualan_detail extends CI_Model
 {
-	function insert_detail($id_master, $id_barang, $jumlah_beli, $harga_satuan, $sub_total)
+	function insert_detail($id_master, $id_barang, $jumlah_beli, $harga_satuan, $modal, $laba,  $sub_total)
 	{
 		$dt = array(
 			'id_penjualan_m' => $id_master,
 			'id_barang	' => $id_barang,
 			'jumlah_beli' => $jumlah_beli,
 			'harga_satuan' => $harga_satuan,
+			'modal' => $modal,
+			'laba' => $laba,
 			'total' => $sub_total
 		);
 

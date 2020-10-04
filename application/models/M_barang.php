@@ -9,7 +9,8 @@ class M_barang extends CI_Model
 				a.`id_barang`, 
 				a.`kode_barang`, 
 				a.`nama_barang`,
-				a.`size`,
+				a.`modal`,
+				
 				IF(a.`total_stok` = 0, 'Kosong', a.`total_stok`) AS total_stok,
 				CONCAT('Rp. ', REPLACE(FORMAT(a.`harga`, 0),',','.') ) AS harga,
 				a.`keterangan`,
@@ -31,7 +32,6 @@ class M_barang extends CI_Model
 			$sql .= "
 				a.`kode_barang` LIKE '%".$this->db->escape_like_str($like_value)."%' 
 				OR a.`nama_barang` LIKE '%".$this->db->escape_like_str($like_value)."%'
-				OR a.`size` LIKE '%".$this->db->escape_like_str($like_value)."%' 
 				OR IF(a.`total_stok` = 0, 'Kosong', a.`total_stok`) LIKE '%".$this->db->escape_like_str($like_value)."%' 
 				OR CONCAT('Rp. ', REPLACE(FORMAT(a.`harga`, 0),',','.') ) LIKE '%".$this->db->escape_like_str($like_value)."%' 
 				OR a.`keterangan` LIKE '%".$this->db->escape_like_str($like_value)."%' 
@@ -39,6 +39,9 @@ class M_barang extends CI_Model
 				OR c.`merk` LIKE '%".$this->db->escape_like_str($like_value)."%' 
 			";
 			$sql .= " ) ";
+
+			// print_r($sql);
+			// exit;	
 		}
 		
 		$data['totalFiltered']	= $this->db->query($sql)->num_rows();
@@ -47,12 +50,12 @@ class M_barang extends CI_Model
 			0 => 'nomor',
 			1 => 'a.`kode_barang`',
 			2 => 'a.`nama_barang`',
-			3 => 'a.`size`',
 			4 => 'b.`kategori`',
 			5 => 'c.`merk`',
 			6 => 'a.`total_stok`',
-			7 => '`harga`',
-			8 => 'a.`keterangan`'
+			7 => 'a.`modal`',
+			8 => '`harga`',
+			9 => 'a.`keterangan`'
 		);
 		
 		$sql .= " ORDER BY ".$columns_order_by[$column_order]." ".$column_dir.", nomor ";
@@ -70,15 +73,15 @@ class M_barang extends CI_Model
 				->update('pj_barang', $dt);
 	}
 
-	function tambah_baru($kode, $nama, $id_kategori_barang, $size, $id_merk_barang, $stok, $harga, $keterangan)
+	function tambah_baru($kode, $nama, $id_kategori_barang, $id_merk_barang, $stok, $modal, $harga, $keterangan)
 	{
 		$dt = array(
 			'kode_barang' => $kode,
 			'nama_barang' => $nama,
 			'total_stok' => $stok,
+			'modal' => $modal,
 			'harga' => $harga,
 			'id_kategori_barang' => $id_kategori_barang,
-			'size' => $size,
 			'id_merk_barang' => (empty($id_merk_barang)) ? NULL : $id_merk_barang,
 			'keterangan' => $keterangan,
 			'dihapus' => 'tidak'
@@ -100,20 +103,20 @@ class M_barang extends CI_Model
 	function get_baris($id_barang)
 	{
 		return $this->db
-			->select('id_barang, kode_barang, nama_barang, size, total_stok, harga, id_kategori_barang, id_merk_barang, keterangan')
+			->select('*')
 			->where('id_barang', $id_barang)
 			->limit(1)
 			->get('pj_barang');
 	}
 
-	function update_barang($id_barang, $kode_barang, $nama, $id_kategori_barang, $size, $id_merk_barang, $stok, $harga, $keterangan)
+	function update_barang($id_barang, $kode_barang, $nama, $id_kategori_barang, $id_merk_barang, $stok, $modal, $harga, $keterangan)
 	{
 		$dt = array(
 			'kode_barang' => $kode_barang,
 			'nama_barang' => $nama,
 			'total_stok' => $stok,
+			'modal' => $modal,
 			'harga' => $harga,
-			'size' => $size,
 			'id_kategori_barang' => $id_kategori_barang,
 			'id_merk_barang' => (empty($id_merk_barang)) ? NULL : $id_merk_barang,
 			'keterangan' => $keterangan
@@ -174,7 +177,7 @@ class M_barang extends CI_Model
 	function get_id($kode_barang)
 	{
 		return $this->db
-			->select('id_barang, nama_barang')
+			->select('*')
 			->where('kode_barang', $kode_barang)
 			->limit(1)
 			->get('pj_barang');
