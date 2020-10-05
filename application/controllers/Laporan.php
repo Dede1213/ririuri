@@ -108,14 +108,14 @@ class Laporan extends MY_Controller
 		$pdf->Cell(7, 7, 'No', 1, 0, 'L'); 
 		$pdf->Cell(35, 7, 'No.Nota', 1, 0, 'L'); 
 		$pdf->Cell(20, 7, 'Tanggal', 1, 0, 'L'); 
-		$pdf->Cell(70, 7, 'Nama Barang', 1, 0, 'L');
-		$pdf->Cell(20, 7, 'Harga/pc', 1, 0, 'L'); 
-		$pdf->Cell(20, 7, 'Modal', 1, 0, 'L'); 
-		$pdf->Cell(12, 7, 'Qty', 1, 0, 'L'); 
-		$pdf->Cell(25, 7, 'Subtotal', 1, 0, 'L'); 
-		$pdf->Cell(20, 7, 'Laba', 1, 0, 'L'); 
-		$pdf->Cell(25, 7, 'Grand Total', 1, 0, 'L'); 
-		$pdf->Cell(20, 7, 'Admin', 1, 0, 'L'); 
+		$pdf->Cell(50, 7, 'Nama Barang', 1, 0, 'L');
+		$pdf->Cell(18, 7, 'Harga/pc', 1, 0, 'L'); 
+		$pdf->Cell(18, 7, 'Modal', 1, 0, 'L'); 
+		$pdf->Cell(8, 7, 'Qty', 1, 0, 'L'); 
+		$pdf->Cell(20, 7, 'Subtotal', 1, 0, 'L'); 
+		$pdf->Cell(18, 7, 'Laba', 1, 0, 'L'); 
+		$pdf->Cell(20, 7, 'Grand Total', 1, 0, 'L'); 
+		$pdf->Cell(18, 7, 'Admin', 1, 0, 'L'); 
 		$pdf->Cell(50, 7, 'Keterangan', 1, 0, 'L'); 
 		$pdf->Ln();
 
@@ -157,15 +157,15 @@ class Laporan extends MY_Controller
 			$pdf->Cell(7, 7, $no, 1, 0, 'L'); 
 			$pdf->Cell(35, 7, $nota, 1, 0, 'L'); 
 			$pdf->Cell(20, 7, $tanggal, 1, 0, 'L'); 
-			$pdf->Cell(70, 7, substr($p->nama_barang,0,35), 1, 0, 'L');  //
-			$pdf->Cell(20, 7, number_format($p->harga_satuan), 1, 0, 'L'); 
-			$pdf->Cell(20, 7, number_format($p->modal), 1, 0, 'L'); 
-			$pdf->Cell(12, 7, $p->jumlah_beli, 1, 0, 'L'); 
-			$pdf->Cell(25, 7, number_format($p->total), 1, 0, 'L'); 
-			$pdf->Cell(20, 7, number_format($p->laba), 1, 0, 'L'); 
-			$pdf->Cell(25, 7, $grand, 1, 0, 'L'); 
-			$pdf->Cell(20, 7, number_format($p->biaya_admin), 1, 0, 'L');
-			$pdf->Cell(50, 7, $keterengan, 1, 0, 'L');
+			$pdf->Cell(50, 7, substr($p->nama_barang,0,25), 1, 0, 'L');  //
+			$pdf->Cell(18, 7, number_format($p->harga_satuan), 1, 0, 'L'); 
+			$pdf->Cell(18, 7, number_format($p->modal), 1, 0, 'L'); 
+			$pdf->Cell(8, 7, $p->jumlah_beli, 1, 0, 'L'); 
+			$pdf->Cell(20, 7, number_format($p->total), 1, 0, 'L'); 
+			$pdf->Cell(18, 7, number_format($p->laba), 1, 0, 'L'); 
+			$pdf->Cell(20, 7, $grand, 1, 0, 'L'); 
+			$pdf->Cell(18, 7, number_format($p->biaya_admin), 1, 0, 'L');
+			$pdf->Cell(50, 7, substr($keterengan,0,25), 1, 0, 'L');
 			$pdf->Ln();
 
 				$total_laba = $total_laba + $p->laba;
@@ -180,8 +180,11 @@ class Laporan extends MY_Controller
 				$no++;
 		}
 
-		$pdf->Cell(100, 7, 'Total Seluruh Penjualan', 1, 0, 'L'); 
-		$pdf->Cell(85, 7, "Rp. ".str_replace(",", ".", number_format($total_penjualan)), 1, 0, 'L');
+		$pdf->Cell(176, 7, 'Total Seluruh Penjualan', 1, 0, 'L'); 
+		$pdf->Cell(18, 7, number_format($total_laba), 1, 0, 'L'); 
+		$pdf->Cell(20, 7, number_format($total_penjualan), 1, 0, 'L');
+		$pdf->Cell(18, 7, number_format($total_Admin), 1, 0, 'L'); 
+		$pdf->Cell(50, 7, '', 1, 0, 'L');
 		$pdf->Ln();
 
 		$pdf->Output();
