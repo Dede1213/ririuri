@@ -133,17 +133,7 @@ class M_penjualan_master extends CI_Model
 	function laporan_penjualan($from, $to)
 	{
 		$sql = "
-			SELECT 
-				DISTINCT(SUBSTR(a.`tanggal`, 1, 10)) AS tanggal,
-				(
-					SELECT 
-						SUM(b.`grand_total`) 
-					FROM 
-						`pj_penjualan_master` AS b 
-					WHERE 
-						SUBSTR(b.`tanggal`, 1, 10) = SUBSTR(a.`tanggal`, 1, 10) 
-					LIMIT 1
-				) AS total_penjualan 
+			SELECT a.*
 			FROM 
 				`pj_penjualan_master` AS a 
 			WHERE 

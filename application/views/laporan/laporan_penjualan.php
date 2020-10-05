@@ -4,8 +4,11 @@
 		<thead>
 			<tr>
 				<th>#</th>
+				<th>No. Nota</th>
 				<th>Tanggal</th>
-				<th>Total Penjualan</th>
+				<th>Grand Total</th>
+				<th>Admin</th>
+				<th>Keterangan</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -17,12 +20,15 @@
 				echo "
 					<tr>
 						<td>".$no."</td>
+						<td>".$p->nomor_nota."</td>
 						<td>".date('d F Y', strtotime($p->tanggal))."</td>
-						<td>Rp. ".str_replace(",", ".", number_format($p->total_penjualan))."</td>
+						<td>Rp. ".str_replace(",", ".", number_format($p->grand_total))."</td>
+						<td>".$p->biaya_admin."</td>
+						<td>".$p->keterangan_lain."</td>
 					</tr>
 				";
 
-				$total_penjualan = $total_penjualan + $p->total_penjualan;
+				$total_penjualan = $total_penjualan + $p->grand_total;
 				$no++;
 			}
 
