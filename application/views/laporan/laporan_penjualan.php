@@ -26,6 +26,9 @@
 			$last_nota = '';
 			foreach($penjualan->result() as $p)
 			{
+
+				
+
 				if($last_nota == $p->nomor_nota){
 					$nota = '';
 					$tanggal = '';
@@ -33,23 +36,23 @@
 					$keterengan = '';
 					$no_old = $no-1;
 					$no = '';
+					$biaya_admin = '';
+
 				}else{
 					$nota = $p->nomor_nota;
 					$tanggal = date("d/m/Y", strtotime($p->tanggal));
 					$grand = number_format($p->grand_total);
 					$keterengan = $p->keterangan_lain;
 					$total_penjualan = $total_penjualan + $p->grand_total;
+					$biaya_admin = number_format($p->biaya_admin);
+					$total_Admin = $total_Admin + $p->biaya_admin;
 				}
 
-				$mod = $no%2;
-				if ($mod == 0){
-					$color ='#f2f2f2';
-				}else{
-					$color ='';
-				}
+				
+				
 
 				echo "
-					<tr bgcolor='".$color."'>
+					<tr>
 						<td>".$no."</td>
 						<td>".$nota."</td>
 						<td>".$tanggal
@@ -61,14 +64,14 @@
 						<td>".number_format($p->total)."</td>
 						<td>".number_format($p->laba)."</td>
 						<td>".$grand."</td>
-						<td>".number_format($p->biaya_admin)."</td>
+						<td>".$biaya_admin."</td>
 						<td>".$keterengan."</td>
 					</tr>
 				";
 
 				
 				$total_laba = $total_laba + $p->laba;
-				$total_Admin = $total_Admin + $p->biaya_admin;
+				
 
 				if($last_nota == $p->nomor_nota){
 					$no = $no_old;

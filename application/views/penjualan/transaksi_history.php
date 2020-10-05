@@ -20,6 +20,7 @@ $level = $this->session->userdata('ap_level');
 							<th>Tanggal</th>
 							<th>Nomor Nota</th>
 							<th>Grand Total</th>
+							<th>Biaya Admin</th>
 							<th>Pelanggan</th>
 							<th>Keterangan</th>
 							<th>Kasir</th>

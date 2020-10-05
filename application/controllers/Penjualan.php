@@ -381,6 +381,7 @@ class Penjualan extends MY_Controller
 			$nestedData[]	= $row['tanggal'];
 			$nestedData[]	= "<a href='".site_url('penjualan/detail-transaksi/'.$row['id_penjualan_m'])."' id='LihatDetailTransaksi'><i class='fa fa-file-text-o fa-fw'></i> ".$row['nomor_nota']."</a>";
 			$nestedData[]	= $row['grand_total'];
+			$nestedData[]	= $row['biaya_admin'];
 			$nestedData[]	= $row['nama_pelanggan'];
 			$nestedData[]	= preg_replace("/\r\n|\r|\n/",'<br />', $row['keterangan']);
 			$nestedData[]	= $row['kasir'];

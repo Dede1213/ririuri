@@ -34,8 +34,9 @@ class M_penjualan_master extends CI_Model
 				a.`id_penjualan_m`, 
 				a.`nomor_nota` AS nomor_nota, 
 				DATE_FORMAT(a.`tanggal`, '%d %b %Y - %H:%i:%s') AS tanggal,
-				CONCAT('Rp. ', REPLACE(FORMAT(a.`grand_total`, 0),',','.') ) AS grand_total,
+				CONCAT(REPLACE(FORMAT(a.`grand_total`, 0),',','.') ) AS grand_total,
 				IF(b.`nama` IS NULL, 'Umum', b.`nama`) AS nama_pelanggan,
+				REPLACE(FORMAT(a.`biaya_admin`, 0),',','.') AS biaya_admin,
 				c.`nama` AS kasir,
 				a.`keterangan_lain` AS keterangan   
 			FROM 
