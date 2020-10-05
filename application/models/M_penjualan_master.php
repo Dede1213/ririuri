@@ -130,19 +130,28 @@ class M_penjualan_master extends CI_Model
 			->delete('pj_penjualan_master');
 	}
 
-	function laporan_penjualan($from, $to)
+	function laporan_penjualan($from, $to, $id_barang)
 	{
-		$sql = "
-			SELECT a.*
-			FROM 
-				`pj_penjualan_master` AS a 
+
+		if($id_barang){
+			$WHERE = "AND b.id_barang ='".$id_barang."'";
+		}else{
+			$WHERE = '';
+		}
+		$sql = "SELECT a.*,b.*,c.nama_barang FROM `pj_penjualan_master` a 
+		LEFT JOIN `pj_penjualan_detail` b ON a.`id_penjualan_m`=b.`id_penjualan_m`
+		LEFT JOIN `pj_barang` c ON b.`id_barang`= c.`id_barang`
+		
 			WHERE 
 				SUBSTR(a.`tanggal`, 1, 10) >= '".$from."' 
 				AND SUBSTR(a.`tanggal`, 1, 10) <= '".$to."' 
+				$WHERE
 			ORDER BY 
 				a.`tanggal` ASC
 		";
 
+		// print_r($sql);
+		// exit;
 		return $this->db->query($sql);
 	}
 

@@ -35,6 +35,29 @@ $level = $this->session->userdata('ap_level');
 				</div>
 			</div>	
 
+			<div class="row">
+				<div class="col-sm-5">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-4 control-label">Pilih Barang</label>
+							<div class="col-sm-8">
+							<select name='id_barang' id='id_barang' class='form-control'>
+							<option value=''>-</option>
+								<?php
+									foreach($barang as $data){
+										echo "<option value='".$data['id_barang']."'>".$data['nama_barang']."</option>";
+									}
+									// print_r($barang);
+								?>
+							</select>
+							
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>	
+
 			<div class='row'>
 				<div class="col-sm-5">
 					<div class="form-horizontal">
@@ -78,6 +101,7 @@ $(document).ready(function(){
 
 		var TanggalDari = $('#tanggal_dari').val();
 		var TanggalSampai = $('#tanggal_sampai').val();
+		var id_barang = $('#id_barang').val();
 
 		if(TanggalDari == '' || TanggalSampai == '')
 		{
@@ -90,7 +114,7 @@ $(document).ready(function(){
 		}
 		else
 		{
-			var URL = "<?php echo site_url('laporan/penjualan'); ?>/" + TanggalDari + "/" + TanggalSampai;
+			var URL = "<?php echo site_url('laporan/penjualan'); ?>/" + TanggalDari + "/" + TanggalSampai+ "/" + id_barang;
 			$('#result').load(URL);
 		}
 	});

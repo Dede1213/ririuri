@@ -191,4 +191,11 @@ class M_barang extends CI_Model
 
 		return $this->db->query($sql);
 	}
+
+	function getBarangdd()
+	{
+		$sql = "Select id_barang,nama_barang,kode_barang from pj_barang";
+
+		return $this->db->query($sql)->result_array();
+	}
 }
