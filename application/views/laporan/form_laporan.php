@@ -42,7 +42,7 @@ $level = $this->session->userdata('ap_level');
 							<label class="col-sm-4 control-label">Pilih Barang</label>
 							<div class="col-sm-8">
 							<select name='id_barang' id='id_barang' class='form-control'>
-							<option value=''>-</option>
+							<option value='0'>-</option>
 								<?php
 									foreach($barang as $data){
 										echo "<option value='".$data['id_barang']."'>".$data['nama_barang']."</option>";

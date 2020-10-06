@@ -134,7 +134,7 @@ class M_penjualan_master extends CI_Model
 	function laporan_penjualan($from, $to, $id_barang)
 	{
 
-		if($id_barang){
+		if($id_barang != '0'){
 			$WHERE = "AND b.id_barang ='".$id_barang."'";
 		}else{
 			$WHERE = '';
