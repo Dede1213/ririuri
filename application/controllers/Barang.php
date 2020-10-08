@@ -87,7 +87,7 @@ class Barang extends MY_Controller
 		}
 
 
-		echo $modal;
+		echo number_format($modal);
 	}
 
 	public function hapus($id_barang)
