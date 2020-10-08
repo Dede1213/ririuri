@@ -31,6 +31,12 @@ $level = $this->session->userdata('ap_level');
 							<?php } ?>
 						</tr>
 					</thead>
+					<tfoot>
+            <tr>
+                <th colspan='2'>Total Modal</th>
+				<th id='TotalModal' colspan='2'></th>
+            </tr>
+        </tfoot>
 				</table>
 			</div>
 		</div>
@@ -76,6 +82,7 @@ if($level == 'admin' OR $level == 'inventory')
 			"sPaginationType": "simple_numbers", 
 			"iDisplayLength": 10,
 			"aLengthMenu": [[10, 20, 50, 100, 150], [10, 20, 50, 100, 150]],
+			
 			"ajax":{
 				url :"<?php echo site_url('barang/barang-json'); ?>",
 				type: "post",
@@ -85,7 +92,19 @@ if($level == 'admin' OR $level == 'inventory')
 					$("#my-grid_processing").css("display","none");
 				}
 			}
+			
+			
 		} );
+
+		$.ajax({    
+			type: "get",
+			url: "<?php echo site_url('barang/total_modal'); ?>",             
+			dataType: "html",               
+			success: function(response){                    
+				$("#TotalModal").html(response); 
+				//alert(response);
+			}
+		});
 	});
 	
 	$(document).on('click', '#HapusBarang', function(e){

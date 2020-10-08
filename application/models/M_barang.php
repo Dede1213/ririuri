@@ -194,7 +194,7 @@ class M_barang extends CI_Model
 
 	function getBarangdd()
 	{
-		$sql = "Select id_barang,nama_barang,kode_barang from pj_barang";
+		$sql = "Select * from pj_barang";
 
 		return $this->db->query($sql)->result_array();
 	}

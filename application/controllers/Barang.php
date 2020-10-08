@@ -33,9 +33,11 @@ class Barang extends MY_Controller
 		$totalFiltered	= $fetch['totalFiltered'];
 		$query			= $fetch['query'];
 
+		$modal = 0;
 		$data	= array();
 		foreach($query->result_array() as $row)
 		{ 
+			$modal = $row['total_stok'] * $row['modal'];
 			$nestedData = array(); 
 
 			$nestedData[]	= $row['nomor'];
@@ -63,10 +65,29 @@ class Barang extends MY_Controller
 			"draw"            => intval( $requestData['draw'] ),  
 			"recordsTotal"    => intval( $totalData ),  
 			"recordsFiltered" => intval( $totalFiltered ), 
-			"data"            => $data
+			"data"            => $data,
+			"totalmodal"		=> $modal,
 			);
 
 		echo json_encode($json_data);
+	}
+
+	public function total_modal()
+	{
+		
+		$this->load->model('m_barang');
+		
+		$fetch			= $this->m_barang->getBarangdd();
+		
+		$modal = 0;
+		foreach($fetch as $row)
+		{ 
+			$modalCount = $row['total_stok'] * $row['modal'];
+			$modal = $modal+$modalCount;
+		}
+
+
+		echo $modal;
 	}
 
 	public function hapus($id_barang)
