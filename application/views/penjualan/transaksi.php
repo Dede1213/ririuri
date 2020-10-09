@@ -517,8 +517,9 @@ function HitungTotalBayar()
 	$('#TotalBayar').html(to_rupiah(Total));
 	$('#TotalBayarHidden').val(Total);
 
-	$('#UangCash').val('');
-	$('#UangKembali').val('');
+	$('#UangCash').val(Total);
+	// $('#UangKembali').val('');
+	HitungTotalKembalian();
 }
 
 function HitungTotalKembalian()
