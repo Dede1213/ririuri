@@ -44,12 +44,14 @@ class Laporan extends MY_Controller
 		$this->load->view('laporan/laporan_penjualan', $dt);
 	}
 
-	public function excel($from, $to)
+	public function excel($from, $to, $id_barang)
 	{
+		
 		$this->load->model('m_penjualan_master');
-		$penjualan 	= $this->m_penjualan_master->laporan_penjualan($from, $to);
+		$penjualan 	= $this->m_penjualan_master->laporan_penjualan($from, $to, $id_barang);
 		if($penjualan->num_rows() > 0)
 		{
+			
 			$filename = 'Laporan_Penjualan_'.$from.'_'.$to;
 			header("Content-type: application/x-msdownload");
 			header("Content-Disposition: attachment; filename=".$filename.".xls");
@@ -70,6 +72,7 @@ class Laporan extends MY_Controller
 							<th>Laba</th>
 							<th>Grand Total</th>
 							<th>Admin</th>
+							<th>Income+</th>
 							<th>Keterangan</th>
 						</tr>
 					</thead>
@@ -80,6 +83,7 @@ class Laporan extends MY_Controller
 			$total_penjualan = 0;
 			$total_laba = 0;
 			$total_Admin = 0;
+			$total_laba_tambahan = 0;
 			$last_nota = '';
 			foreach($penjualan->result() as $p)
 			{
@@ -91,6 +95,7 @@ class Laporan extends MY_Controller
 					$no_old = $no-1;
 					$no = '';
 					$biaya_admin = '';
+					$laba_tambahan = '';
 				}else{
 					$nota = $p->nomor_nota;
 					$tanggal = date("d/m/Y", strtotime($p->tanggal));
@@ -99,6 +104,8 @@ class Laporan extends MY_Controller
 					$total_penjualan = $total_penjualan + $p->grand_total;
 					$biaya_admin = number_format($p->biaya_admin);
 					$total_Admin = $total_Admin + $p->biaya_admin;
+					$laba_tambahan = number_format($p->laba_tambahan);
+					$total_laba_tambahan = $total_laba_tambahan + $p->laba_tambahan;
 				}
 
 				
@@ -116,6 +123,7 @@ class Laporan extends MY_Controller
 						<td>".number_format($p->laba)."</td>
 						<td>".$grand."</td>
 						<td>".$biaya_admin."</td>
+						<td>".$laba_tambahan."</td>
 						<td>".$keterengan."</td>
 					</tr>
 				";
@@ -138,6 +146,7 @@ class Laporan extends MY_Controller
 					<td><b>".number_format($total_laba)."</b></td>
 					<td><b>".number_format($total_penjualan)."</b></td>
 					<td><b>".number_format($total_Admin)."</b></td>
+					<td><b>".number_format($total_laba_tambahan)."</b></td>
 				</tr>
 			   </tbody>
 			</table>
@@ -158,7 +167,6 @@ class Laporan extends MY_Controller
 		$pdf->Cell(0, 8, "Laporan Penjualan Tanggal ".date('d/m/Y', strtotime($from))." - ".date('d/m/Y', strtotime($to)), 0, 1, 'L'); 
 		
 		$pdf->Cell(7, 7, 'No', 1, 0, 'L'); 
-		$pdf->Cell(35, 7, 'No.Nota', 1, 0, 'L'); 
 		$pdf->Cell(20, 7, 'Tanggal', 1, 0, 'L'); 
 		$pdf->Cell(50, 7, 'Nama Barang', 1, 0, 'L');
 		$pdf->Cell(25, 7, 'Harga/pc', 1, 0, 'L'); 
@@ -166,6 +174,7 @@ class Laporan extends MY_Controller
 		$pdf->Cell(8, 7, 'Qty', 1, 0, 'L'); 
 		$pdf->Cell(25, 7, 'Laba', 1, 0, 'L'); 
 		$pdf->Cell(25, 7, 'Admin', 1, 0, 'L'); 
+		$pdf->Cell(25, 7, 'Income +', 1, 0, 'L'); 
 		$pdf->Cell(50, 7, 'Keterangan', 1, 0, 'L'); 
 		$pdf->Ln();
 
@@ -178,6 +187,7 @@ class Laporan extends MY_Controller
 		$total_laba = 0;
 		$total_Admin = 0;
 		$last_nota = '';
+		$total_laba_tambahan = 0;
 
 		foreach($penjualan->result() as $p)
 		{
@@ -190,6 +200,7 @@ class Laporan extends MY_Controller
 				$no_old = $no-1;
 				$no = '';
 				$biaya_admin = '';
+				$laba_tambahan = '';
 			}else{
 				$nota = $p->nomor_nota;
 				$tanggal = date("d/m/Y", strtotime($p->tanggal));
@@ -198,11 +209,12 @@ class Laporan extends MY_Controller
 				$total_penjualan = $total_penjualan + $p->grand_total;
 				$biaya_admin = number_format($p->biaya_admin);
 				$total_Admin = $total_Admin + $p->biaya_admin;
+				$laba_tambahan = number_format($p->laba_tambahan);
+				$total_laba_tambahan = $total_laba_tambahan + $p->laba_tambahan;
 			}
 
 
 			$pdf->Cell(7, 7, $no, 1, 0, 'L'); 
-			$pdf->Cell(35, 7, $nota, 1, 0, 'L'); 
 			$pdf->Cell(20, 7, $tanggal, 1, 0, 'L'); 
 			$pdf->Cell(50, 7, substr($p->nama_barang,0,25), 1, 0, 'L');  //
 			$pdf->Cell(25, 7, number_format($p->harga_satuan), 1, 0, 'L'); 
@@ -210,6 +222,7 @@ class Laporan extends MY_Controller
 			$pdf->Cell(8, 7, $p->jumlah_beli, 1, 0, 'L'); 
 			$pdf->Cell(25, 7, number_format($p->laba), 1, 0, 'L'); 
 			$pdf->Cell(25, 7, $biaya_admin, 1, 0, 'L');
+			$pdf->Cell(25, 7, $laba_tambahan, 1, 0, 'L');
 			$pdf->Cell(50, 7, substr($keterengan,0,25), 1, 0, 'L');
 			$pdf->Ln();
 
@@ -224,9 +237,10 @@ class Laporan extends MY_Controller
 				$no++;
 		}
 
-		$pdf->Cell(170, 7, '                                                                                        Total', 1, 0, 'L'); 
+		$pdf->Cell(135, 7, '                                                                                        Total', 1, 0, 'L'); 
 		$pdf->Cell(25, 7, number_format($total_laba), 1, 0, 'L'); 
 		$pdf->Cell(25, 7, number_format($total_Admin), 1, 0, 'L'); 
+		$pdf->Cell(25, 7, number_format($total_laba_tambahan), 1, 0, 'L'); 
 		$pdf->Cell(50, 7, '', 1, 0, 'L');
 		$pdf->Ln();
 

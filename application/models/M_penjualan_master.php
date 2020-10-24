@@ -1,7 +1,7 @@
 <?php
 class M_penjualan_master extends CI_Model
 {
-	function insert_master($nomor_nota, $tanggal, $id_kasir, $id_pelanggan, $bayar, $grand_total, $catatan, $biaya_admin)
+	function insert_master($nomor_nota, $tanggal, $id_kasir, $id_pelanggan, $bayar, $grand_total, $catatan, $biaya_admin, $laba_tambahan)
 	{
 		$dt = array(
 			'nomor_nota' => $nomor_nota,
@@ -9,6 +9,7 @@ class M_penjualan_master extends CI_Model
 			'grand_total' => $grand_total,
 			'bayar' => $bayar,
 			'biaya_admin' => $biaya_admin,
+			'laba_tambahan' => $laba_tambahan,
 			'keterangan_lain' => $catatan,
 			'id_pelanggan' => (empty($id_pelanggan)) ? NULL : $id_pelanggan,
 			'id_user' => $id_kasir

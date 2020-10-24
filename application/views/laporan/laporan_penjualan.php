@@ -4,16 +4,16 @@
 		<thead>
 			<tr>
 				<th>#</th>
-				<th>No. Nota</th>
 				<th>Tanggal</th>
 				<th>Nama Barang</th>
-				<th>Harga Satuan</th>
+				<th>Harga /pc</th>
 				<th>Modal</th>
 				<th>Qty</th>
 				<th>Subtotal</th>
 				<th>Laba</th>
-				<th>Grand Total</th>
+				<th>G.Total</th>
 				<th>Admin</th>
+				<th>Income+</th>
 				<th>Keterangan</th>
 			</tr>
 		</thead>
@@ -23,6 +23,7 @@
 			$total_penjualan = 0;
 			$total_laba = 0;
 			$total_Admin = 0;
+			$total_laba_tambahan = 0;
 			$last_nota = '';
 			foreach($penjualan->result() as $p)
 			{
@@ -37,6 +38,7 @@
 					$no_old = $no-1;
 					$no = '';
 					$biaya_admin = '';
+					$laba_tambahan = '';
 
 				}else{
 					$nota = $p->nomor_nota;
@@ -46,6 +48,8 @@
 					$total_penjualan = $total_penjualan + $p->grand_total;
 					$biaya_admin = number_format($p->biaya_admin);
 					$total_Admin = $total_Admin + $p->biaya_admin;
+					$laba_tambahan = number_format($p->laba_tambahan);
+					$total_laba_tambahan = $total_laba_tambahan + $p->laba_tambahan;
 				}
 
 				
@@ -54,7 +58,6 @@
 				echo "
 					<tr>
 						<td>".$no."</td>
-						<td>".$nota."</td>
 						<td>".$tanggal
 						."</td>
 						<td>".$p->nama_barang."</td>
@@ -65,6 +68,7 @@
 						<td>".number_format($p->laba)."</td>
 						<td>".$grand."</td>
 						<td>".$biaya_admin."</td>
+						<td>".$laba_tambahan."</td>
 						<td>".$keterengan."</td>
 					</tr>
 				";
@@ -89,10 +93,11 @@
 
 			echo "
 				<tr>
-					<td colspan='8'><b>TOTAL</b></td>
+					<td colspan='7'><b>TOTAL</b></td>
 					<td><b>".number_format($total_laba)."</b></td>
 					<td><b>".number_format($total_penjualan)."</b></td>
-					<td colspan='2'><b>".number_format($total_Admin)."</b></td>
+					<td><b>".number_format($total_Admin)."</b></td>
+					<td><b>".number_format($total_laba_tambahan)."</b></td>
 				</tr>
 			";
 			?>

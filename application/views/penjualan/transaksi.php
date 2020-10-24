@@ -177,6 +177,12 @@ if($level !== 'admin')
 										<input type='text' name='biaya_admin' id='biaya_admin' class='form-control' onkeypress='return check_int(event)'>
 									</div>
 								</div>
+								<div class="form-group">
+									<label class="col-sm-6 control-label">Income +</label>
+									<div class="col-sm-6">
+										<input type='text' name='laba_tambahan' id='laba_tambahan' class='form-control'>
+									</div>
+								</div>
 								<div class='row'>
 									<div class='col-sm-6' style='padding-right: 0px;'>
 										<button type='button' class='btn btn-warning btn-block' id='CetakStruk'>
@@ -628,6 +634,7 @@ function SimpanTransaksi()
 	FormData += "&catatan="+encodeURI($('#catatan').val());
 	FormData += "&grand_total="+$('#TotalBayarHidden').val();
 	FormData += "&biaya_admin="+$('#biaya_admin').val();
+	FormData += "&laba_tambahan="+$('#laba_tambahan').val();
 
 	$.ajax({
 		url: "<?php echo site_url('penjualan/transaksi'); ?>",

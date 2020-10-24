@@ -79,6 +79,7 @@ class Penjualan extends MY_Controller
 							$grand_total	= $this->input->post('grand_total');
 							$catatan		= $this->clean_tag_input($this->input->post('catatan'));
 							$biaya_admin			= $this->input->post('biaya_admin'); 
+							$laba_tambahan			= $this->input->post('laba_tambahan'); 
 
 							if($bayar < $grand_total)
 							{
@@ -87,7 +88,7 @@ class Penjualan extends MY_Controller
 							else
 							{
 								$this->load->model('m_penjualan_master');
-								$master = $this->m_penjualan_master->insert_master($nomor_nota, $tanggal, $id_kasir, $id_pelanggan, $bayar, $grand_total, $catatan, $biaya_admin);
+								$master = $this->m_penjualan_master->insert_master($nomor_nota, $tanggal, $id_kasir, $id_pelanggan, $bayar, $grand_total, $catatan, $biaya_admin, $laba_tambahan);
 								if($master)
 								{
 									$id_master 	= $this->m_penjualan_master->get_id($nomor_nota)->row()->id_penjualan_m;
