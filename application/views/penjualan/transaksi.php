@@ -94,7 +94,8 @@ if($level !== 'admin')
 								</select>
 							</div>
 
-							<div class="form-horizontal">
+							<!-- <div class="form-horizontal">
+								
 								<div class="form-group">
 									<label class="col-sm-4 control-label">Telp / HP</label>
 									<div class="col-sm-8">
@@ -113,7 +114,18 @@ if($level !== 'admin')
 										<div id='info_tambahan_pelanggan'><small><i>Tidak ada</i></small></div>
 									</div>
 								</div>
+							</div> -->
+
+							<div class="form-group">
+								<label>Nama & Alamat</label>
+								<textarea id='nama_alamat' class='form-control'></textarea>
 							</div>
+							<div class="form-group">
+									<label>No.Resi</label>
+									<input id='no_resi' type='text' class='form-control'/>
+							</div>
+
+							
 
 						</div>
 					</div>
@@ -183,22 +195,36 @@ if($level !== 'admin')
 										<input type='text' name='laba_tambahan' id='laba_tambahan' class='form-control'>
 									</div>
 								</div>
-								<div class='row'>
-									<div class='col-sm-6' style='padding-right: 0px;'>
-										<button type='button' class='btn btn-warning btn-block' id='CetakStruk'>
-											<i class='fa fa-print'></i> Cetak (F9)
-										</button>
-									</div>
-									<div class='col-sm-6'>
-										<button type='button' class='btn btn-primary btn-block' id='Simpann'>
-											<i class='fa fa-floppy-o'></i> Simpan (F10)
-										</button>
-									</div>
-								</div>
+								
 							</div>
 						</div>
 					</div>
 
+<br />
+					<div class='row'>
+					<div class='col-sm-4'> </div>
+						<div class='col-sm-8'>
+							<div class='col-sm-3' style='padding-right: 0px;margin-left:150px;'>
+								<button type='button' class='btn btn-warning btn-block' id='CetakResi'>
+									<i class='fa fa-print'></i> Cetak Resi 
+								</button>
+
+							</div>
+
+							<div class='col-sm-3' style='padding-right: 0px;'>
+								<button type='button' class='btn btn-warning btn-block' id='CetakStruk'>
+									<i class='fa fa-print'></i> Cetak (F9)
+								</button>
+							</div>
+							<div class='col-sm-3'>
+								<button type='button' class='btn btn-primary btn-block' id='Simpann'>
+									<i class='fa fa-floppy-o'></i> Simpan (F10)
+								</button>
+							</div>
+						</div>
+					</div>
+					
+					
 					<br />
 				</div>
 			</div>
@@ -224,29 +250,32 @@ $(document).ready(function(){
 		BarisBaru();
 	}
 
-	$('#id_pelanggan').change(function(){
-		if($(this).val() !== '')
-		{
-			$.ajax({
-				url: "<?php echo site_url('penjualan/ajax-pelanggan'); ?>",
-				type: "POST",
-				cache: false,
-				data: "id_pelanggan="+$(this).val(),
-				dataType:'json',
-				success: function(json){
-					$('#telp_pelanggan').html(json.telp);
-					$('#alamat_pelanggan').html(json.alamat);
-					$('#info_tambahan_pelanggan').html(json.info_tambahan);
-				}
-			});
-		}
-		else
-		{
-			$('#telp_pelanggan').html('<small><i>Tidak ada</i></small>');
-			$('#alamat_pelanggan').html('<small><i>Tidak ada</i></small>');
-			$('#info_tambahan_pelanggan').html('<small><i>Tidak ada</i></small>');
-		}
-	});
+// #Autoload data pelanggan
+	// $('#id_pelanggan').change(function(){
+	// 	if($(this).val() !== '')
+	// 	{
+	// 		$.ajax({
+	// 			url: "<?php echo site_url('penjualan/ajax-pelanggan'); ?>",
+	// 			type: "POST",
+	// 			cache: false,
+	// 			data: "id_pelanggan="+$(this).val(),
+	// 			dataType:'json',
+	// 			success: function(json){
+	// 				$('#telp_pelanggan').html(json.telp);
+	// 				$('#alamat_pelanggan').html(json.alamat);
+	// 				$('#info_tambahan_pelanggan').html(json.info_tambahan);
+	// 			}
+	// 		});
+	// 	}
+	// 	else
+	// 	{
+	// 		$('#telp_pelanggan').html('<small><i>Tidak ada</i></small>');
+	// 		$('#alamat_pelanggan').html('<small><i>Tidak ada</i></small>');
+	// 		$('#info_tambahan_pelanggan').html('<small><i>Tidak ada</i></small>');
+	// 	}
+	// });
+// #Autoload data pelanggan
+
 
 	$('#BarisBaru').click(function(){
 		BarisBaru();
@@ -623,6 +652,10 @@ $(document).on('click', 'button#CetakStruk', function(){
 	CetakStruk();
 });
 
+$(document).on('click', 'button#CetakResi', function(){
+	CetakResi();
+});
+
 function SimpanTransaksi()
 {
 	var FormData = "nomor_nota="+encodeURI($('#nomor_nota').val());
@@ -687,6 +720,47 @@ function CetakStruk()
 			FormData += "&grand_total="+$('#TotalBayarHidden').val();
 
 			window.open("<?php echo site_url('penjualan/transaksi-cetak/?'); ?>" + FormData,'_blank');
+		}
+		else
+		{
+			$('.modal-dialog').removeClass('modal-lg');
+			$('.modal-dialog').addClass('modal-sm');
+			$('#ModalHeader').html('Oops !');
+			$('#ModalContent').html('Harap masukan Total Bayar');
+			$('#ModalFooter').html("<button type='button' class='btn btn-primary' data-dismiss='modal' autofocus>Ok</button>");
+			$('#ModalGue').modal('show');
+		}
+	}
+	else
+	{
+		$('.modal-dialog').removeClass('modal-lg');
+		$('.modal-dialog').addClass('modal-sm');
+		$('#ModalHeader').html('Oops !');
+		$('#ModalContent').html('Harap pilih barang terlebih dahulu');
+		$('#ModalFooter').html("<button type='button' class='btn btn-primary' data-dismiss='modal' autofocus>Ok</button>");
+		$('#ModalGue').modal('show');
+
+	}
+}
+
+function CetakResi()
+{
+	if($('#TotalBayarHidden').val() > 0)
+	{
+		if($('#UangCash').val() !== '')
+		{
+			var FormData = "nomor_nota="+encodeURI($('#nomor_nota').val());
+			FormData += "&tanggal="+encodeURI($('#tanggal').val());
+			FormData += "&id_kasir="+$('#id_kasir').val();
+			FormData += "&id_pelanggan="+$('#id_pelanggan').val();
+			FormData += "&" + $('#TabelTransaksi tbody input').serialize();
+			FormData += "&cash="+$('#UangCash').val();
+			FormData += "&catatan="+encodeURI($('#catatan').val());
+			FormData += "&grand_total="+$('#TotalBayarHidden').val();
+			FormData += "&nama_alamat="+$('#nama_alamat').val();
+			FormData += "&no_resi="+$('#no_resi').val();
+
+			window.open("<?php echo site_url('penjualan/transaksi-cetak-resi/?'); ?>" + FormData,'_blank');
 		}
 		else
 		{

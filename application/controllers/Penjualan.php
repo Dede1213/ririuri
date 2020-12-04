@@ -280,6 +280,72 @@ class Penjualan extends MY_Controller
 		$pdf->Output();
 	}
 
+
+	public function transaksi_cetak_resi()
+	{
+		$nomor_nota 	= $this->input->get('nomor_nota');
+		$tanggal		= $this->input->get('tanggal');
+		$id_kasir		= $this->input->get('id_kasir');
+		$id_pelanggan	= $this->input->get('id_pelanggan');
+		$cash			= $this->input->get('cash');
+		$catatan		= $this->input->get('catatan');
+		$grand_total	= $this->input->get('grand_total');
+		$nama_alamat	= $this->input->get('nama_alamat');
+		$no_resi	= $this->input->get('no_resi');
+
+		$this->load->model('m_user');
+		$kasir = $this->m_user->get_baris($id_kasir)->row()->nama;
+		
+		$this->load->model('m_pelanggan');
+		$pelanggan = 'umum';
+		if( ! empty($id_pelanggan))
+		{
+			$pelanggan = $this->m_pelanggan->get_baris($id_pelanggan)->row()->nama;
+		}
+
+		$this->load->library('cfpdf');		
+		$pdf = new FPDF('P','mm','A5');
+		$pdf->SetLeftMargin(0);
+		$pdf->SetTopMargin(5);
+
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','',10);
+
+		$pdf->MultiCell(55, 5, 'deded Irawan', 0,'L'); 
+		$pdf->MultiCell(55, 3, '--------------------------------------------- ', 0,'L'); 
+		
+		$this->load->model('m_barang');
+		$this->load->helper('text');
+
+		$no = 0;
+		foreach($_GET['kode_barang'] as $kd)
+		{
+			if( ! empty($kd))
+			{
+				$nama_barang = $this->m_barang->get_id($kd)->row()->nama_barang;
+				$pdf->MultiCell(55, 5, '*'.$nama_barang.' X '.$_GET['jumlah_beli'][$no], 0,'L'); 
+				$pdf->Ln();
+				$no++;
+			}
+		}
+
+		$pdf->MultiCell(55, 1, '--------------------------------------------- ', 0,'L'); 
+		$pdf->MultiCell(55, 5, 'Hallo Kak, Apabila ada komplain atau sesuatu yang kurang berkenan, jangan langsung kasih ulasan jelek yah :) ', 0); 
+		$pdf->MultiCell(55, 5, 'Silahkan chat kita via WhatsApp  di nomor 081929911100. ', 0); 
+		$pdf->Ln();
+		
+		$pdf->MultiCell(55, 5, 'Terimakasih telah berbelanja di : ', 0); 	
+		$pdf->SetFont('Arial','B',13);
+		$pdf->SetFillColor(0,0,0);
+		$pdf->SetTextColor(255, 255, 255); 
+
+		$pdf->MultiCell(55, 5, 'RIRIURI STORE',1,'C',1); 
+		
+		
+		
+		$pdf->Output();
+	}
+
 	public function ajax_pelanggan()
 	{
 		if($this->input->is_ajax_request())
