@@ -313,7 +313,7 @@ class Penjualan extends MY_Controller
 		$this->zend->load('Zend/Barcode');
 		$this->load->library('zend');
         $this->zend->load('Zend/Barcode');
-        $image_resource = Zend_Barcode::factory('code128', 'image', array('text'=>$no_resi,'font'=>5), array())->draw();
+        $image_resource = Zend_Barcode::factory('code128', 'image', array('text'=>$no_resi,'font'=>4), array())->draw();
         $image_name     = 'barcode.jpg';
         $image_dir      = './assets/img/'; // penyimpanan file barcode
 		imagejpeg($image_resource, $image_dir.$image_name); 
@@ -327,7 +327,8 @@ class Penjualan extends MY_Controller
 		$pdf->AddPage();
 		$pdf->SetFont('Arial','',8);
 
-		$pdf->Image(base_url('assets/img/barcode.jpg'),5,1,0,0);
+		
+		$pdf->Image(base_url('assets/img/barcode.jpg'),0,1,50,18);
 	
 		$pdf->MultiCell(48, 5, '', 0,'L');
 		$pdf->MultiCell(48, 5, '', 0,'L');
@@ -339,7 +340,10 @@ class Penjualan extends MY_Controller
 		
 		
 		$pdf->MultiCell(48, 3, '------------------------------------------------', 0,'L'); 
+		$pdf->SetFont('Arial','B',8);
+		$pdf->MultiCell(48, 10, 'Nama Barang :', 0,'C');
 		
+		$pdf->SetFont('Arial','',8);
 		$this->load->model('m_barang');
 		$this->load->helper('text');
 
@@ -356,8 +360,7 @@ class Penjualan extends MY_Controller
 		}
 		$pdf->MultiCell(48, 3, '#'.$kasir.' - '.$no_resi, 0,'L'); 
 		$pdf->MultiCell(48, 5, '------------------------------------------------', 0,'L'); 
-		$pdf->MultiCell(48, 5, 'Hallo Kak, Mohon bintang 5 dan Ulasan terbaik nya yah :) Jika kaka ada komplain atau keluhan Silahkan chat kita via WhatsApp  di nomor 081929911100.', 0); 
-		// $pdf->MultiCell(48, 5, 'Silahkan chat kita via WhatsApp  di nomor 081929911100. ', 0); 
+		$pdf->MultiCell(48, 5, 'Hallo Kak '.$nama_penerima.', Mohon bintang 5 dan Ulasan terbaik nya yah :) Jika kaka ada komplain atau keluhan Silahkan chat kita via WhatsApp  di nomor 081929911100.', 0); 
 		$pdf->Ln();
 		
 		$pdf->MultiCell(48, 5, 'Terimakasih telah berbelanja di : ', 0); 	

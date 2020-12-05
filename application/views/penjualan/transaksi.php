@@ -766,9 +766,9 @@ function CetakResi()
 
 			window.open("<?php echo site_url('penjualan/transaksi-cetak-resi/?'); ?>" + FormData,'_blank');
 
-			$('#nama_penerima').val('');
-			$('#alamat_penerima').val('');
-			$('#no_resi').val('');
+// 			$('#nama_penerima').val('');
+// 			$('#alamat_penerima').val('');
+// 			$('#no_resi').val('');
 		}
 		else
 		{
