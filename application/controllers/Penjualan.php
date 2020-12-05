@@ -355,7 +355,7 @@ class Penjualan extends MY_Controller
 			}
 		}
 		$pdf->MultiCell(48, 3, '#'.$kasir.' - '.$no_resi, 0,'L'); 
-		$pdf->MultiCell(48, 1, '------------------------------------------------', 0,'L'); 
+		$pdf->MultiCell(48, 5, '------------------------------------------------', 0,'L'); 
 		$pdf->MultiCell(48, 5, 'Hallo Kak, Mohon bintang 5 dan Ulasan terbaik nya yah :) Jika kaka ada komplain atau keluhan Silahkan chat kita via WhatsApp  di nomor 081929911100.', 0); 
 		// $pdf->MultiCell(48, 5, 'Silahkan chat kita via WhatsApp  di nomor 081929911100. ', 0); 
 		$pdf->Ln();
