@@ -126,6 +126,17 @@ $tambahan = nbs(2)."<span id='Notifikasi' style='display: none;'></span>";
 		$('#ModalFooter').html("<button type='button' class='btn btn-primary' data-dismiss='modal'>Tutup</button>");
 		$('#ModalGue').modal('show');
 	});
+
+	$(document).on('click', '#EditTransaksi', function(e){
+		e.preventDefault();
+		var CaptionHeader = 'Edit Biaya Admin ';
+		$('.modal-dialog').removeClass('modal-sm');
+		$('.modal-dialog').addClass('modal-sm');
+		$('#ModalHeader').html(CaptionHeader);
+		$('#ModalContent').load($(this).attr('href'));
+		$('#ModalFooter').html("<button type='button' class='btn btn-primary' data-dismiss='modal'>Tutup</button>");
+		$('#ModalGue').modal('show');
+	});
 </script>
 <script type="text/javascript" language="javascript" src="<?php echo config_item('plugin'); ?>datatables/js/jquery.dataTables.js"></script>
 <script type="text/javascript" language="javascript" src="<?php echo config_item('plugin'); ?>datatables/js/dataTables.bootstrap.js"></script>

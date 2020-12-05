@@ -104,10 +104,11 @@ body {
 	margin-bottom: 0px;
 }
 
-button#CetakStruk, button#Simpann {
+button#CetakStruk, button#Simpann, button#CetakResi {
 	padding-top: 8px;
 	padding-bottom: 8px;
 }
+
 
 .info_pelanggan {
 	margin-bottom: 0px;

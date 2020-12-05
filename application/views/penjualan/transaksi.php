@@ -117,8 +117,12 @@ if($level !== 'admin')
 							</div> -->
 
 							<div class="form-group">
-								<label>Nama & Alamat</label>
-								<textarea id='nama_alamat' class='form-control'></textarea>
+									<label>Nama Penerima</label>
+									<input id='nama_penerima' type='text' class='form-control'/>
+							</div>
+							<div class="form-group">
+								<label>Alamat Penerima</label>
+								<textarea id='alamat_penerima' class='form-control'></textarea>
 							</div>
 							<div class="form-group">
 									<label>No.Resi</label>
@@ -208,7 +212,6 @@ if($level !== 'admin')
 								<button type='button' class='btn btn-warning btn-block' id='CetakResi'>
 									<i class='fa fa-print'></i> Cetak Resi 
 								</button>
-
 							</div>
 
 							<div class='col-sm-3' style='padding-right: 0px;'>
@@ -757,10 +760,15 @@ function CetakResi()
 			FormData += "&cash="+$('#UangCash').val();
 			FormData += "&catatan="+encodeURI($('#catatan').val());
 			FormData += "&grand_total="+$('#TotalBayarHidden').val();
-			FormData += "&nama_alamat="+$('#nama_alamat').val();
+			FormData += "&nama_penerima="+$('#nama_penerima').val();
+			FormData += "&alamat_penerima="+$('#alamat_penerima').val();
 			FormData += "&no_resi="+$('#no_resi').val();
 
 			window.open("<?php echo site_url('penjualan/transaksi-cetak-resi/?'); ?>" + FormData,'_blank');
+
+			$('#nama_penerima').val('');
+			$('#alamat_penerima').val('');
+			$('#no_resi').val('');
 		}
 		else
 		{

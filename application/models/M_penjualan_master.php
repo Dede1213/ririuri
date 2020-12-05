@@ -86,6 +86,7 @@ class M_penjualan_master extends CI_Model
 	{
 		$sql = "
 			SELECT 
+				a.`id_penjualan_m`,
 				a.`nomor_nota`, 
 				a.`grand_total`,
 				a.`tanggal`,
@@ -96,7 +97,9 @@ class M_penjualan_master extends CI_Model
 				b.`nama` AS nama_pelanggan,
 				b.`alamat` AS alamat_pelanggan,
 				b.`telp` AS telp_pelanggan,
-				b.`info_tambahan` AS info_pelanggan 
+				b.`info_tambahan` AS info_pelanggan,
+				a.`biaya_admin`,
+				a.`laba_tambahan`  
 			FROM 
 				`pj_penjualan_master` AS a 
 				LEFT JOIN `pj_pelanggan` AS b ON a.`id_pelanggan` = b.`id_pelanggan` 
@@ -160,5 +163,17 @@ class M_penjualan_master extends CI_Model
 	function cek_nota_validasi($nota)
 	{
 		return $this->db->select('nomor_nota')->where('nomor_nota', $nota)->limit(1)->get('pj_penjualan_master');
+	}
+
+	function update_transaksi($id_penjualan_m, $biaya_admin, $laba_tambahan)
+	{
+		$dt = array(
+			'biaya_admin' => $biaya_admin,
+			'laba_tambahan' => $laba_tambahan
+		);
+
+		return $this->db
+			->where('id_penjualan_m', $id_penjualan_m)
+			->update('pj_penjualan_master', $dt);
 	}
 }

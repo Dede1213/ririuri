@@ -283,6 +283,9 @@ class Penjualan extends MY_Controller
 
 	public function transaksi_cetak_resi()
 	{
+		
+		
+		
 		$nomor_nota 	= $this->input->get('nomor_nota');
 		$tanggal		= $this->input->get('tanggal');
 		$id_kasir		= $this->input->get('id_kasir');
@@ -290,7 +293,8 @@ class Penjualan extends MY_Controller
 		$cash			= $this->input->get('cash');
 		$catatan		= $this->input->get('catatan');
 		$grand_total	= $this->input->get('grand_total');
-		$nama_alamat	= $this->input->get('nama_alamat');
+		$nama_penerima	= $this->input->get('nama_penerima');
+		$alamat_penerima	= $this->input->get('alamat_penerima');
 		$no_resi	= $this->input->get('no_resi');
 
 		$this->load->model('m_user');
@@ -303,16 +307,38 @@ class Penjualan extends MY_Controller
 			$pelanggan = $this->m_pelanggan->get_baris($id_pelanggan)->row()->nama;
 		}
 
+		############## Barcode generator with Zend ################
+		// $temp = "JP070927883624";
+		$this->load->library('zend');
+		$this->zend->load('Zend/Barcode');
+		$this->load->library('zend');
+        $this->zend->load('Zend/Barcode');
+        $image_resource = Zend_Barcode::factory('code128', 'image', array('text'=>$no_resi,'font'=>5), array())->draw();
+        $image_name     = 'barcode.jpg';
+        $image_dir      = './assets/img/'; // penyimpanan file barcode
+		imagejpeg($image_resource, $image_dir.$image_name); 
+		############## Barcode generator with Zend ################
+
 		$this->load->library('cfpdf');		
 		$pdf = new FPDF('P','mm','A5');
 		$pdf->SetLeftMargin(0);
-		$pdf->SetTopMargin(5);
+		$pdf->SetTopMargin(1);
 
 		$pdf->AddPage();
-		$pdf->SetFont('Arial','',10);
+		$pdf->SetFont('Arial','',8);
 
-		$pdf->MultiCell(55, 5, 'deded Irawan', 0,'L'); 
-		$pdf->MultiCell(55, 3, '--------------------------------------------- ', 0,'L'); 
+		$pdf->Image(base_url('assets/img/barcode.jpg'),5,1,0,0);
+	
+		$pdf->MultiCell(48, 5, '', 0,'L');
+		$pdf->MultiCell(48, 5, '', 0,'L');
+		$pdf->MultiCell(48, 5, '', 0,'L');
+		$pdf->MultiCell(48, 5, '', 0,'L');
+		$pdf->MultiCell(48, 5, $nama_penerima, 0,'L');
+		$pdf->MultiCell(48, 5, $alamat_penerima, 0); 
+		
+		
+		
+		$pdf->MultiCell(48, 3, '------------------------------------------------', 0,'L'); 
 		
 		$this->load->model('m_barang');
 		$this->load->helper('text');
@@ -323,27 +349,30 @@ class Penjualan extends MY_Controller
 			if( ! empty($kd))
 			{
 				$nama_barang = $this->m_barang->get_id($kd)->row()->nama_barang;
-				$pdf->MultiCell(55, 5, '*'.$nama_barang.' X '.$_GET['jumlah_beli'][$no], 0,'L'); 
+				$pdf->MultiCell(48, 3, '*'.$nama_barang.' X '.$_GET['jumlah_beli'][$no], 0,'L'); 
 				$pdf->Ln();
 				$no++;
 			}
 		}
-
-		$pdf->MultiCell(55, 1, '--------------------------------------------- ', 0,'L'); 
-		$pdf->MultiCell(55, 5, 'Hallo Kak, Apabila ada komplain atau sesuatu yang kurang berkenan, jangan langsung kasih ulasan jelek yah :) ', 0); 
-		$pdf->MultiCell(55, 5, 'Silahkan chat kita via WhatsApp  di nomor 081929911100. ', 0); 
+		$pdf->MultiCell(48, 3, '#'.$kasir.' - '.$no_resi, 0,'L'); 
+		$pdf->MultiCell(48, 1, '------------------------------------------------', 0,'L'); 
+		$pdf->MultiCell(48, 5, 'Hallo Kak, Mohon bintang 5 dan Ulasan terbaik nya yah :) Jika kaka ada komplain atau keluhan Silahkan chat kita via WhatsApp  di nomor 081929911100.', 0); 
+		// $pdf->MultiCell(48, 5, 'Silahkan chat kita via WhatsApp  di nomor 081929911100. ', 0); 
 		$pdf->Ln();
 		
-		$pdf->MultiCell(55, 5, 'Terimakasih telah berbelanja di : ', 0); 	
+		$pdf->MultiCell(48, 5, 'Terimakasih telah berbelanja di : ', 0); 	
 		$pdf->SetFont('Arial','B',13);
 		$pdf->SetFillColor(0,0,0);
 		$pdf->SetTextColor(255, 255, 255); 
 
-		$pdf->MultiCell(55, 5, 'RIRIURI STORE',1,'C',1); 
+		$pdf->MultiCell(48, 5, 'RIRIURI STORE',1,'C',1); 
 		
 		
 		
 		$pdf->Output();
+
+		#------------- delete gambar barcode nya biar ga nyampah --------------#
+		// unlink(base_url()."assets/img/".$no_resi.".jpg".);
 	}
 
 	public function ajax_pelanggan()
@@ -455,7 +484,7 @@ class Penjualan extends MY_Controller
 		
 			if($level == 'admin' OR $level == 'keuangan')
 			{
-				$nestedData[]	= "<a href='".site_url('penjualan/hapus-transaksi/'.$row['id_penjualan_m'])."' id='HapusTransaksi'><i class='fa fa-trash-o'></i> Hapus</a>";
+				$nestedData[]	= "<a href='".site_url('penjualan/hapus-transaksi/'.$row['id_penjualan_m'])."' id='HapusTransaksi'><i class='fa fa-trash-o'></i> Hapus</a> | <a href='".site_url('penjualan/edit-transaksi/'.$row['id_penjualan_m'])."' id='EditTransaksi'><i class='fa fa-edit'></i> Edit</a>";
 			}
 
 			$data[] = $nestedData;
@@ -483,6 +512,49 @@ class Penjualan extends MY_Controller
 			
 			$this->load->view('penjualan/transaksi_history_detail', $dt);
 		}
+	}
+
+	public function edit_transaksi($id_penjualan)
+	{
+		if($this->input->is_ajax_request())
+		{
+			$this->load->model('m_penjualan_detail');
+			$this->load->model('m_penjualan_master');
+
+			$dt['detail'] = $this->m_penjualan_detail->get_detail($id_penjualan);
+			$dt['master'] = $this->m_penjualan_master->get_baris($id_penjualan)->row();
+			
+			$this->load->view('penjualan/edit_transaksi', $dt);
+		}
+	}
+
+	public function act_edit_transaksi($id_penjualan_m = NULL)
+	{
+		
+				if($this->input->is_ajax_request())
+				{
+					$this->load->model('m_penjualan_master');
+					
+					if($_POST)
+					{
+							$biaya_admin 		= $this->input->post('biaya_admin');
+							$laba_tambahan	 	= $this->input->post('laba_tambahan');
+
+							$update 	= $this->m_penjualan_master->update_transaksi($id_penjualan_m, $biaya_admin, $laba_tambahan);
+							if($update)
+							{
+								echo json_encode(array(
+									'status' => 1,
+									'pesan' => "<div class='alert alert-success'><i class='fa fa-check'></i> Data berhasil diupdate.</div>"
+								));
+							}
+							else
+							{
+								$this->query_error();
+							}
+					}
+				}
+			
 	}
 
 	public function hapus_transaksi($id_penjualan)
