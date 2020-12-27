@@ -296,6 +296,7 @@ class Penjualan extends MY_Controller
 		$nama_penerima	= $this->input->get('nama_penerima');
 		$alamat_penerima	= $this->input->get('alamat_penerima');
 		$no_resi	= $this->input->get('no_resi');
+		$opsi	= $this->input->get('opsi');
 
 		$this->load->model('m_user');
 		$kasir = $this->m_user->get_baris($id_kasir)->row()->nama;
@@ -327,19 +328,20 @@ class Penjualan extends MY_Controller
 		$pdf->AddPage();
 		$pdf->SetFont('Arial','',8);
 
+		if($opsi == 'Semua' || $opsi == 'Resi'){
+			$pdf->Image(base_url('assets/img/barcode.jpg'),0,1,50,18);
 		
-		$pdf->Image(base_url('assets/img/barcode.jpg'),0,1,50,18);
-	
-		$pdf->MultiCell(48, 5, '', 0,'L');
-		$pdf->MultiCell(48, 5, '', 0,'L');
-		$pdf->MultiCell(48, 5, '', 0,'L');
-		$pdf->MultiCell(48, 5, '', 0,'L');
-		$pdf->MultiCell(48, 5, $nama_penerima, 0,'L');
-		$pdf->MultiCell(48, 5, $alamat_penerima, 0); 
+			$pdf->MultiCell(48, 5, '', 0,'L');
+			$pdf->MultiCell(48, 5, '', 0,'L');
+			$pdf->MultiCell(48, 5, '', 0,'L');
+			$pdf->MultiCell(48, 5, '', 0,'L');
+			$pdf->MultiCell(48, 5, $nama_penerima, 0,'L');
+			$pdf->MultiCell(48, 5, $alamat_penerima, 0); 
+			$pdf->MultiCell(48, 3, '------------------------------------------------', 0,'L'); 
+		}
 		
 		
 		
-		$pdf->MultiCell(48, 3, '------------------------------------------------', 0,'L'); 
 		$pdf->SetFont('Arial','B',8);
 		$pdf->MultiCell(48, 10, 'Nama Barang :', 0,'C');
 		
@@ -358,18 +360,21 @@ class Penjualan extends MY_Controller
 				$no++;
 			}
 		}
-		$pdf->MultiCell(48, 3, '#'.$kasir.' - '.$no_resi, 0,'L'); 
-		$pdf->MultiCell(48, 5, '------------------------------------------------', 0,'L'); 
-		$pdf->MultiCell(48, 5, 'Hallo Kak '.$nama_penerima.', Mohon bintang 5 dan Ulasan terbaik nya yah :) Jika kaka ada komplain atau keluhan Silahkan chat kita via WhatsApp  di nomor 081929911100.', 0); 
-		$pdf->Ln();
-		
-		$pdf->MultiCell(48, 5, 'Terimakasih telah berbelanja di : ', 0); 	
-		$pdf->SetFont('Arial','B',13);
-		$pdf->SetFillColor(0,0,0);
-		$pdf->SetTextColor(255, 255, 255); 
+		$pdf->MultiCell(48, 3, '#'.$kasir.' - '.$nomor_nota, 0,'L'); 
 
-		$pdf->MultiCell(48, 5, 'RIRIURI STORE',1,'C',1); 
-		
+		if($opsi == 'Semua' || $opsi == 'Ucapan'){
+
+			$pdf->MultiCell(48, 5, '------------------------------------------------', 0,'L'); 
+			$pdf->MultiCell(48, 5, 'Hallo Kak '.$nama_penerima.', Mohon bintang 5 dan Ulasan terbaik nya yah :) Jika kaka ada komplain atau keluhan Silahkan chat kita via WhatsApp  di nomor 081929911100.', 0); 
+			$pdf->Ln();
+			
+			$pdf->MultiCell(48, 5, 'Terimakasih telah berbelanja di : ', 0); 	
+			$pdf->SetFont('Arial','B',13);
+			$pdf->SetFillColor(0,0,0);
+			$pdf->SetTextColor(255, 255, 255); 
+
+			$pdf->MultiCell(48, 5, 'RIRIURI STORE',1,'C',1); 
+		}
 		
 		
 		$pdf->Output();

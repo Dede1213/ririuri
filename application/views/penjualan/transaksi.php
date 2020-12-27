@@ -128,6 +128,14 @@ if($level !== 'admin')
 									<label>No.Resi</label>
 									<input id='no_resi' type='text' class='form-control'/>
 							</div>
+							<div class="form-group">
+									<label>Opsi Cetak</label>
+									<select id="opsi" class='form-control'>
+										<option>Semua</option>
+										<option>Resi</option>
+										<option>Ucapan</option>
+									</select>
+							</div>
 
 							
 
@@ -763,6 +771,7 @@ function CetakResi()
 			FormData += "&nama_penerima="+$('#nama_penerima').val();
 			FormData += "&alamat_penerima="+$('#alamat_penerima').val();
 			FormData += "&no_resi="+$('#no_resi').val();
+			FormData += "&opsi="+$('#opsi').val();
 
 			window.open("<?php echo site_url('penjualan/transaksi-cetak-resi/?'); ?>" + FormData,'_blank');
 
