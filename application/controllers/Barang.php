@@ -299,6 +299,10 @@ class Barang extends MY_Controller
 
 							$stokFinal =  $stok + $stok_new;
 							$modalFinal = (($modal*$stok)+($modal_new*$stok_new))/$stokFinal;
+
+							if(is_nan($modalFinal)){
+							    $modalFinal = $modal;
+							}
 							// echo $modal."*".$stok."+".$modal_new."*".$stok_new."/".$stokFinal."=".$modalFinal;
 							// exit;
 							$harga 				= $this->input->post('harga');
