@@ -36,15 +36,17 @@ $level = $this->session->userdata('ap_level');
 				</li>
 				<?php } ?>
 
-				<li class="dropdown <?php if($controller == 'barang') { echo 'active'; } ?>">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class='fa fa-cube fa-fw'></i> Barang <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="<?php echo site_url('barang'); ?>">Semua Barang</a></li>
-						<li role="separator" class="divider"></li>
-						<li><a href="<?php echo site_url('barang/list-merek'); ?>">List Merek</a></li>
-						<li><a href="<?php echo site_url('barang/list-kategori'); ?>">List Kategori</a></li>
-					</ul>
-				</li>
+				<?php if($level == 'admin' OR $level == 'inventory') { ?>
+					<li class="dropdown <?php if($controller == 'barang') { echo 'active'; } ?>">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class='fa fa-cube fa-fw'></i> Barang <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="<?php echo site_url('barang'); ?>">Semua Barang</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="<?php echo site_url('barang/list-merek'); ?>">List Merek</a></li>
+							<li><a href="<?php echo site_url('barang/list-kategori'); ?>">List Kategori</a></li>
+						</ul>
+					</li>
+				<?php } ?>
 
 				<?php if($level == 'admin' OR $level == 'keuangan') { ?>
 				<li <?php if($controller == 'laporan') { echo "class='active'"; } ?>><a href="<?php echo site_url('laporan'); ?>"><i class='fa fa-file-text-o fa-fw'></i> Laporan</a></li>
@@ -57,9 +59,10 @@ $level = $this->session->userdata('ap_level');
 
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class='fa fa-user fa-fw'></i> <?php echo $this->session->userdata('ap_nama'); ?> <span class="caret"></span></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class='fa fa-gear fa-fw'></i> <?php echo $this->session->userdata('ap_nama'); ?> <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="<?php echo site_url('user/ubah-password'); ?>" id='GantiPass'>Ubah Password</a></li>
+						<li><a href="<?php echo site_url('user/ubah-toko'); ?>" id='AturToko'>Atur Toko</a></li>
 						<li role="separator" class="divider"></li>
 						<li><a href="<?php echo site_url('secure/logout'); ?>"><i class='fa fa-sign-out fa-fw'></i> Log Out</a></li>
 					</ul>
@@ -79,4 +82,16 @@ $(document).on('click', '#GantiPass', function(e){
 	$('#ModalContent').load($(this).attr('href'));
 	$('#ModalGue').modal('show');
 });
+
+$(document).on('click', '#AturToko', function(e){
+	e.preventDefault();
+
+	$('.modal-dialog').removeClass('modal-lg');
+	$('.modal-dialog').addClass('modal-sm');
+	$('#ModalHeader').html('Atur Toko');
+	$('#ModalContent').load($(this).attr('href'));
+	$('#ModalGue').modal('show');
+});
+
+
 </script>

@@ -3,9 +3,12 @@ class M_pelanggan extends CI_Model
 {
 	function get_all()
 	{
+		$id_toko = $this->session->userdata('id_toko');
+
 		return $this->db
 			->select('id_pelanggan, nama, alamat, telp, info_tambahan')
 			->where('dihapus', 'tidak')
+			->where('id_toko', $id_toko)
 			->order_by('nama','asc')
 			->get('pj_pelanggan');
 	}
@@ -21,6 +24,8 @@ class M_pelanggan extends CI_Model
 
 	function fetch_data_pelanggan($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL)
 	{
+		$id_toko = $this->session->userdata('id_toko');
+
 		$sql = "
 			SELECT 
 				(@row:=@row+1) AS nomor, 
@@ -33,6 +38,7 @@ class M_pelanggan extends CI_Model
 			FROM 
 				`pj_pelanggan` AS a 
 				, (SELECT @row := 0) r WHERE 1=1 
+				AND a.`id_toko` = '$id_toko' 
 				AND a.`dihapus` = 'tidak' 
 		";
 		
@@ -73,7 +79,10 @@ class M_pelanggan extends CI_Model
 	{
 		date_default_timezone_set("Asia/Jakarta");
 
+		$id_toko = $this->session->userdata('id_toko');
+
 		$dt = array(
+			'id_toko' => $id_toko,
 			'nama' => $nama,
 			'alamat' => $alamat,
 			'telp' => $telepon,
@@ -113,9 +122,12 @@ class M_pelanggan extends CI_Model
 
 	function get_dari_kode($kode_unik)
 	{
+		$id_toko = $this->session->userdata('id_toko');
+
 		return $this->db
 			->select('id_pelanggan')
 			->where('kode_unik', $kode_unik)
+			->where('id_toko', $id_toko)
 			->limit(1)
 			->get('pj_pelanggan');
 	}

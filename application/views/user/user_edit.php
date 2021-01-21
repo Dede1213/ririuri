@@ -35,7 +35,7 @@ if($user->label == 'admin')
 <?php } ?>
 
 <div class='form-group'>
-	<label>Nama Lengkap</label>
+	<label>Nama </label>
 	<?php 
 	echo form_input(array(
 		'name' => 'nama',

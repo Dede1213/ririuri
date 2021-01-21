@@ -118,15 +118,34 @@ if($level !== 'admin')
 
 							<div class="form-group">
 									<label>Nama Penerima</label>
-									<input id='nama_penerima' type='text' class='form-control'/>
+									<input id='nama_penerima' name="nama_penerima" type='text' class='form-control'/>
+							</div>
+							<div class="form-group">
+									<label>Nomor Telepon</label>
+									<input id='no_hp' name="no_hp" type='text' class='form-control'/>
 							</div>
 							<div class="form-group">
 								<label>Alamat Penerima</label>
-								<textarea id='alamat_penerima' class='form-control'></textarea>
+								<textarea id='alamat_penerima' name="alamat_penerima" class='form-control'></textarea>
+							</div>
+							<div class="form-group">
+									<label>Ekspedisi</label>
+									<select id="ekspedisi" name="ekspedisi" class='form-control'>
+										<option>Other</option>
+										<option>Anter Aja</option>
+										<option>JNT</option>
+										<option>JNE</option>
+										<option>Si Cepat</option>
+										<option>Ninja Express</option>
+										<option>ID Express</option>
+										<option>Gojek</option>
+										<option>Grab</option>
+										
+									</select>
 							</div>
 							<div class="form-group">
 									<label>No.Resi</label>
-									<input id='no_resi' type='text' class='form-control'/>
+									<input id='no_resi' name='no_resi' type='text' class='form-control'/>
 							</div>
 							<div class="form-group">
 									<label>Opsi Cetak</label>
@@ -680,6 +699,12 @@ function SimpanTransaksi()
 	FormData += "&biaya_admin="+$('#biaya_admin').val();
 	FormData += "&laba_tambahan="+$('#laba_tambahan').val();
 
+	FormData += "&nama_penerima="+$('#nama_penerima').val();
+	FormData += "&alamat_penerima="+$('#alamat_penerima').val();
+	FormData += "&no_resi="+$('#no_resi').val();
+	FormData += "&no_hp="+$('#no_hp').val();
+	FormData += "&ekspedisi="+$('#ekspedisi').val();
+
 	$.ajax({
 		url: "<?php echo site_url('penjualan/transaksi'); ?>",
 		type: "POST",
@@ -771,6 +796,8 @@ function CetakResi()
 			FormData += "&nama_penerima="+$('#nama_penerima').val();
 			FormData += "&alamat_penerima="+$('#alamat_penerima').val();
 			FormData += "&no_resi="+$('#no_resi').val();
+			FormData += "&no_hp="+$('#no_hp').val();
+			FormData += "&ekspedisi="+$('#ekspedisi').val();
 			FormData += "&opsi="+$('#opsi').val();
 
 			window.open("<?php echo site_url('penjualan/transaksi-cetak-resi/?'); ?>" + FormData,'_blank');

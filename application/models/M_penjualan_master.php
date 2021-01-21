@@ -3,7 +3,10 @@ class M_penjualan_master extends CI_Model
 {
 	function insert_master($nomor_nota, $tanggal, $id_kasir, $id_pelanggan, $bayar, $grand_total, $catatan, $biaya_admin, $laba_tambahan)
 	{
+		$id_toko = $this->session->userdata('id_toko');
+
 		$dt = array(
+			'id_toko' => $id_toko,
 			'nomor_nota' => $nomor_nota,
 			'tanggal' => $tanggal,
 			'grand_total' => $grand_total,
@@ -18,6 +21,21 @@ class M_penjualan_master extends CI_Model
 		return $this->db->insert('pj_penjualan_master', $dt);
 	}
 
+	function insert_resi($id_penjualan_m,$nama_penerima, $alamat_penerima, $no_resi, $no_hp, $ekspedisi)
+	{
+		
+		$dt = array(
+			'id_penjualan_m' => $id_penjualan_m,
+			'nama_penerima' => $nama_penerima,
+			'alamat_penerima' => $alamat_penerima,
+			'no_resi' => $no_resi,
+			'no_penerima' => $no_hp,
+			'ekspedisi' => $ekspedisi
+		);
+
+		return $this->db->insert('pj_penjualan_resi', $dt);
+	}
+
 	function get_id($nomor_nota)
 	{
 		return $this->db
@@ -29,6 +47,7 @@ class M_penjualan_master extends CI_Model
 
 	function fetch_data_penjualan($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		$sql = "
 			SELECT 
 				(@row:=@row+1) AS nomor, 
@@ -46,8 +65,11 @@ class M_penjualan_master extends CI_Model
 				LEFT JOIN `pj_user` AS c ON a.`id_user` = c.`id_user` 
 				, (SELECT @row := 0) r WHERE 1=1 
 		";
+
+		// echo $sql;
+		// exit;
 		
-		$data['totalData'] = $this->db->query($sql)->num_rows();
+		
 		
 		if( ! empty($like_value))
 		{
@@ -60,10 +82,10 @@ class M_penjualan_master extends CI_Model
 				OR c.`nama` LIKE '%".$this->db->escape_like_str($like_value)."%' 
 				OR a.`keterangan_lain` LIKE '%".$this->db->escape_like_str($like_value)."%' 
 			";
-			$sql .= " ) ";
+			$sql .= " )";
 		}
 		
-		$data['totalFiltered']	= $this->db->query($sql)->num_rows();
+		
 		
 		$columns_order_by = array( 
 			0 => 'nomor',
@@ -74,9 +96,14 @@ class M_penjualan_master extends CI_Model
 			5 => 'keterangan',
 			6 => 'kasir'
 		);
+		$sql .= " AND a.id_toko = '$id_toko'";
+		
+		$data['totalData'] = $this->db->query($sql)->num_rows();
+		$data['totalFiltered']	= $this->db->query($sql)->num_rows();
 
 		$sql .= " ORDER BY ".$columns_order_by[$column_order]." ".$column_dir.", nomor ";
 		$sql .= " LIMIT ".$limit_start." ,".$limit_length." ";
+		
 		
 		$data['query'] = $this->db->query($sql);
 		return $data;
@@ -84,6 +111,7 @@ class M_penjualan_master extends CI_Model
 
 	function get_baris($id_penjualan)
 	{
+		
 		$sql = "
 			SELECT 
 				a.`id_penjualan_m`,
@@ -143,6 +171,9 @@ class M_penjualan_master extends CI_Model
 		}else{
 			$WHERE = '';
 		}
+
+		$id_toko = $this->session->userdata('id_toko');
+
 		$sql = "SELECT a.*,b.*,c.nama_barang FROM `pj_penjualan_master` a 
 		LEFT JOIN `pj_penjualan_detail` b ON a.`id_penjualan_m`=b.`id_penjualan_m`
 		LEFT JOIN `pj_barang` c ON b.`id_barang`= c.`id_barang`
@@ -150,6 +181,7 @@ class M_penjualan_master extends CI_Model
 			WHERE 
 				SUBSTR(a.`tanggal`, 1, 10) >= '".$from."' 
 				AND SUBSTR(a.`tanggal`, 1, 10) <= '".$to."' 
+				AND a.id_toko = '$id_toko'
 				$WHERE
 			ORDER BY 
 				a.`tanggal` ASC

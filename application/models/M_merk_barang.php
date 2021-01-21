@@ -3,8 +3,11 @@ class M_merk_barang extends CI_Model
 {
 	function get_all()
 	{
+		$id_toko = $this->session->userdata('id_toko');
+
 		return $this->db
 			->select('id_merk_barang, merk')
+			->where('id_toko', $id_toko)
 			->where('dihapus', 'tidak')
 			->order_by('merk', 'asc')
 			->get('pj_merk_barang');
@@ -12,6 +15,7 @@ class M_merk_barang extends CI_Model
 
 	function fetch_data_merek($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		$sql = "
 			SELECT 
 				(@row:=@row+1) AS nomor, 
@@ -19,6 +23,7 @@ class M_merk_barang extends CI_Model
 				merk 
 			FROM 
 				`pj_merk_barang`, (SELECT @row := 0) r WHERE 1=1 
+				AND id_toko = '$id_toko' 
 				AND dihapus = 'tidak' 
 		";
 		
@@ -49,7 +54,10 @@ class M_merk_barang extends CI_Model
 
 	function tambah_merek($merek)
 	{
+
+		$id_toko = $this->session->userdata('id_toko');
 		$dt = array(
+			'id_toko' => $id_toko,
 			'merk' => $merek,
 			'dihapus' => 'tidak'
 		);
@@ -70,8 +78,11 @@ class M_merk_barang extends CI_Model
 
 	function get_baris($id_merk_barang)
 	{
+		$id_toko = $this->session->userdata('id_toko');
+
 		return $this->db
 			->select('id_merk_barang, merk')
+			->where('id_toko', $id_toko)
 			->where('id_merk_barang', $id_merk_barang)
 			->limit(1)
 			->get('pj_merk_barang');

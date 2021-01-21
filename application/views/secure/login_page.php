@@ -43,7 +43,12 @@
 					<button type="submit" class="btn btn-primary">
 						<span class='glyphicon glyphicon-log-in' aria-hidden="true"></span> Sign In
 					</button>
-					<button type="reset" class="btn btn-default" id='ResetData'>Reset</button>
+					<!-- <button type="button" class="btn btn-default" id='TambahUser'>
+					
+					<span class='glyphicon glyphicon-edit' aria-hidden="true"></span> DAFTAR
+					</button> -->
+
+					<a href="<?php echo site_url('secure/tambah');?>" class='btn btn-default' id='TambahUser'><i class='fa fa-user fa-fw'></i> Daftar</a>
 				<?php echo form_close(); ?>
 
 				<div id='ResponseInput'></div>
@@ -53,20 +58,21 @@
 	</div>
 </div>
 
-<hr style='border-color:#999; border-style:dashed; '/>
-<div class='container'>
-<center>
-LIST AKSES<br /><br />
-<div class='row'>
-<div class='col-sm-3'><b>Admin</b> <br />Username : admin<br />Password : admin</div>
-<div class='col-sm-3'><b>Kasir</b> <br />Username : kasir<br />Password : kasir</div>
-<div class='col-sm-3'><b>Gudang</b> <br />Username : jaka<br />Password : jaka</div>
-<div class='col-sm-3'><b>Keuangan</b> <br />Username : joko<br />Password : joko</div>
-</div>
-</center>
-</div>
+
 
 <script>
+
+$(document).on('click', '#TambahUser, #EditUser', function(e){
+		e.preventDefault();
+		
+		$('.modal-dialog').removeClass('modal-lg');
+		$('.modal-dialog').removeClass('modal-sm');
+		$('#ModalHeader').html('Registrasi Toko Baru');
+
+		$('#ModalContent').load($(this).attr('href'));
+		$('#ModalGue').modal('show');
+	});
+
 $(function(){
 	//------------------------Proses Login Ajax-------------------------//
 	$('#FormLogin').submit(function(e){

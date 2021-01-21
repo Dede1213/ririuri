@@ -3,6 +3,7 @@ class M_barang extends CI_Model
 {
 	function fetch_data_barang($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		$sql = "
 			SELECT 
 				(@row:=@row+1) AS nomor, 
@@ -21,7 +22,7 @@ class M_barang extends CI_Model
 				LEFT JOIN `pj_kategori_barang` AS b ON a.`id_kategori_barang` = b.`id_kategori_barang` 
 				LEFT JOIN `pj_merk_barang` AS c ON a.`id_merk_barang` = c.`id_merk_barang` 
 				, (SELECT @row := 0) r WHERE 1=1 
-				AND a.`dihapus` = 'tidak' 
+				AND a.`dihapus` = 'tidak' AND a.`id_toko`='$id_toko'
 		";
 		
 		$data['totalData'] = $this->db->query($sql)->num_rows();
@@ -76,6 +77,8 @@ class M_barang extends CI_Model
 	function tambah_baru($kode, $nama, $id_kategori_barang, $id_merk_barang, $stok, $modal, $harga, $keterangan)
 	{
 		$dt = array(
+
+			'id_toko' => $this->session->userdata('id_toko'),
 			'kode_barang' => $kode,
 			'nama_barang' => $nama,
 			'total_stok' => $stok,
@@ -147,6 +150,8 @@ class M_barang extends CI_Model
 			$not_in .= " AND `kode_barang` != '".$registered."' ";
 		}
 
+		$id_toko = $this->session->userdata('id_toko');
+
 		$sql = "
 			SELECT 
 				`kode_barang`, `nama_barang`, `harga` 
@@ -154,6 +159,7 @@ class M_barang extends CI_Model
 				`pj_barang` 
 			WHERE 
 				`dihapus` = 'tidak' 
+				AND `id_toko` = '$id_toko'
 				AND `total_stok` > 0 
 				AND ( 
 					`kode_barang` LIKE '%".$this->db->escape_like_str($keyword)."%' 
@@ -194,7 +200,8 @@ class M_barang extends CI_Model
 
 	function getBarangdd()
 	{
-		$sql = "Select * from pj_barang";
+		$id_toko = $this->session->userdata('id_toko');
+		$sql = "Select * from pj_barang where id_toko ='$id_toko' ";
 
 		return $this->db->query($sql)->result_array();
 	}

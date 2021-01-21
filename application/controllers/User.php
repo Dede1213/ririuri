@@ -298,6 +298,50 @@ class User extends MY_Controller
 		}
 	}
 
+	public function ubah_toko()
+	{
+		if($this->input->is_ajax_request())
+		{
+			if($_POST)
+			{
+				$this->load->library('form_validation');
+				$this->form_validation->set_rules('nama_toko','Nama Toko','trim');
+				$this->form_validation->set_rules('kartu_ucapan','Kartu Ucapan','trim');
+				
+				if($this->form_validation->run() == TRUE)
+				{
+					$this->load->model('m_user');
+					$nama 	= $this->input->post('nama_toko');
+					$kartu 	= $this->input->post('kartu_ucapan');
+
+					$update 	= $this->m_user->update_toko($nama,$kartu);
+					if($update)
+					{
+						
+						echo json_encode(array(
+							'status' => 1,
+							'pesan' => "<div class='alert alert-success'><i class='fa fa-check'></i> Toko berhasil diupdate.</div>"
+						));
+					}
+					else
+					{
+						$this->query_error();
+					}
+				}
+				else
+				{
+					$this->input_error();
+				}
+			}
+			else
+			{
+				$this->load->model('m_user');
+				$dt['toko'] 	= $this->m_user->get_toko()->row();
+				$this->load->view('user/change_store',$dt);
+			}
+		}
+	}
+
 	public function check_pass($pass)
 	{
 		$this->load->model('m_user');

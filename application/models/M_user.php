@@ -4,7 +4,7 @@ class M_user extends CI_Model
 	function validasi_login($username, $password)
 	{
 		return $this->db
-			->select('a.id_user, a.username, a.password, a.nama, b.label AS level, b.level_akses AS level_caption', false)
+			->select('a.id_user, a.username, a.password, a.nama, a.id_toko, b.label AS level, b.level_akses AS level_caption', false)
 			->join('pj_akses b', 'a.id_akses = b.id_akses', 'left')
 			->where('a.username', $username)
 			->where('a.password', sha1($password))
@@ -28,8 +28,11 @@ class M_user extends CI_Model
 
 	function list_kasir()
 	{
+		$id_toko = $this->session->userdata('id_toko');
+
 		return $this->db
 			->select('id_user, nama')
+			->where('id_toko', $id_toko)
 			->where('status', 'Aktif')
 			->where('dihapus', 'tidak')
 			->order_by('nama','asc')
@@ -38,6 +41,8 @@ class M_user extends CI_Model
 
 	function fetch_data_user($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL)
 	{
+		$id_toko = $this->session->userdata('id_toko');
+
 		$sql = "
 			SELECT 
 				(@row:=@row+1) AS nomor, 
@@ -51,6 +56,7 @@ class M_user extends CI_Model
 				`pj_user` AS a 
 				LEFT JOIN `pj_akses` AS b ON a.`id_akses` = b.`id_akses` 
 				, (SELECT @row := 0) r WHERE 1=1 
+				AND a.`id_toko` = '$id_toko'
 				AND a.`dihapus` = 'tidak' 
 		";
 		
@@ -105,7 +111,11 @@ class M_user extends CI_Model
 
 	function tambah_baru($username, $password, $nama, $id_akses, $status)
 	{
+
+		$id_toko = $this->session->userdata('id_toko');
+
 		$dt = array(
+			'id_toko' => $id_toko,
 			'username' => $username,
 			'password' => sha1($password),
 			'nama' => $nama,
@@ -117,8 +127,36 @@ class M_user extends CI_Model
 		return $this->db->insert('pj_user', $dt);
 	}
 
+	function registrasi_baru($id_toko,$username, $password, $nama, $id_akses, $status)
+	{
+
+
+		$dt = array(
+			'id_toko' => $id_toko,
+			'username' => $username,
+			'password' => sha1($password),
+			'nama' => $nama,
+			'id_akses' => $id_akses,
+			'status' => $status,
+			'dihapus' => 'tidak'
+		);
+
+		return $this->db->insert('pj_user', $dt);
+	}
+
+	function registrasi_toko($nama)
+	{
+
+		$dt = array(
+			'nama_toko' => $nama
+		);
+
+		return $this->db->insert('pj_toko', $dt);
+	}
+
 	function get_baris($id_user)
 	{
+		
 		$sql = "
 			SELECT 
 				a.`id_user`,
@@ -171,5 +209,24 @@ class M_user extends CI_Model
 		return $this->db
 				->where('id_user', $this->session->userdata('ap_id_user'))
 				->update('pj_user', $dt);
+	}
+
+	function update_toko($nama,$kartu)
+	{
+		$dt['nama_toko']		= $nama;
+		$dt['kartu_ucapan']	= $kartu;
+
+		return $this->db
+				->where('id_toko', $this->session->userdata('id_toko'))
+				->update('pj_toko', $dt);
+	}
+
+
+	function get_toko()
+	{
+		$id_toko = $this->session->userdata('id_toko');
+		$sql = "SELECT * FROM pj_toko WHERE id_toko = '$id_toko'";
+
+		return $this->db->query($sql);
 	}
 }

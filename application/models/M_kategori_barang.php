@@ -3,8 +3,10 @@ class M_kategori_barang extends CI_Model
 {
 	function get_all()
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		return $this->db
 			->select('id_kategori_barang, kategori')
+			->where('id_toko', $id_toko)
 			->where('dihapus', 'tidak')
 			->order_by('kategori', 'asc')
 			->get('pj_kategori_barang');
@@ -12,6 +14,7 @@ class M_kategori_barang extends CI_Model
 
 	function fetch_data_kategori($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		$sql = "
 			SELECT 
 				(@row:=@row+1) AS nomor, 
@@ -19,6 +22,7 @@ class M_kategori_barang extends CI_Model
 				kategori  
 			FROM 
 				`pj_kategori_barang`, (SELECT @row := 0) r WHERE 1=1 
+				AND id_toko = '$id_toko'
 				AND dihapus = 'tidak' 
 		";
 		
@@ -49,7 +53,9 @@ class M_kategori_barang extends CI_Model
 
 	function tambah_kategori($kategori)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		$dt = array(
+			'id_toko' => $id_toko,
 			'kategori' => $kategori,
 			'dihapus' => 'tidak'
 		);
@@ -70,8 +76,10 @@ class M_kategori_barang extends CI_Model
 
 	function get_baris($id_kategori_barang)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		return $this->db
 			->select('id_kategori_barang, kategori')
+			->where('id_toko', $id_toko)
 			->where('id_kategori_barang', $id_kategori_barang)
 			->limit(1)
 			->get('pj_kategori_barang');

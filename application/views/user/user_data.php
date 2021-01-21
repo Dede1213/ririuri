@@ -18,7 +18,7 @@ $level = $this->session->userdata('ap_level');
 						<tr>
 							<th>#</th>
 							<th>Username</th>
-							<th>Nama Lengkap</th>
+							<th>Nama</th>
 							<th>Akses</th>
 							<th>Status</th>
 							<th class='no-sort'>Edit</th>

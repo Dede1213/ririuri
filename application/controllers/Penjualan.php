@@ -24,7 +24,7 @@ class Penjualan extends MY_Controller
 
 	public function index()
 	{
-		$this->transaksi();
+			$this->transaksi();
 	}
 
 	public function transaksi()
@@ -79,7 +79,13 @@ class Penjualan extends MY_Controller
 							$grand_total	= $this->input->post('grand_total');
 							$catatan		= $this->clean_tag_input($this->input->post('catatan'));
 							$biaya_admin			= $this->input->post('biaya_admin'); 
-							$laba_tambahan			= $this->input->post('laba_tambahan'); 
+							$laba_tambahan			= $this->input->post('laba_tambahan');
+							
+							$nama_penerima			= $this->input->post('nama_penerima');
+							$alamat_penerima		= $this->input->post('alamat_penerima');
+							$no_resi				= $this->input->post('no_resi');
+							$no_hp					= $this->input->post('no_hp');
+							$ekspedisi				= $this->input->post('ekspedisi');
 
 							if($bayar < $grand_total)
 							{
@@ -89,9 +95,13 @@ class Penjualan extends MY_Controller
 							{
 								$this->load->model('m_penjualan_master');
 								$master = $this->m_penjualan_master->insert_master($nomor_nota, $tanggal, $id_kasir, $id_pelanggan, $bayar, $grand_total, $catatan, $biaya_admin, $laba_tambahan);
-								if($master)
+								
+								$id_master 	= $this->m_penjualan_master->get_id($nomor_nota)->row()->id_penjualan_m;
+
+								$insertResi = $this->m_penjualan_master->insert_resi($id_master,$nama_penerima, $alamat_penerima, $no_resi, $no_hp, $ekspedisi);
+								if($master && $insertResi)
 								{
-									$id_master 	= $this->m_penjualan_master->get_id($nomor_nota)->row()->id_penjualan_m;
+									
 									$inserted	= 0;
 
 									$this->load->model('m_penjualan_detail');
@@ -295,11 +305,14 @@ class Penjualan extends MY_Controller
 		$grand_total	= $this->input->get('grand_total');
 		$nama_penerima	= $this->input->get('nama_penerima');
 		$alamat_penerima	= $this->input->get('alamat_penerima');
+		$no_hp	= $this->input->get('no_hp');
+		$ekspedisi	= $this->input->get('ekspedisi');
 		$no_resi	= $this->input->get('no_resi');
 		$opsi	= $this->input->get('opsi');
 
 		$this->load->model('m_user');
 		$kasir = $this->m_user->get_baris($id_kasir)->row()->nama;
+		$toko = $this->m_user->get_toko()->row();
 		
 		$this->load->model('m_pelanggan');
 		$pelanggan = 'umum';
@@ -307,6 +320,30 @@ class Penjualan extends MY_Controller
 		{
 			$pelanggan = $this->m_pelanggan->get_baris($id_pelanggan)->row()->nama;
 		}
+
+
+		############## Logo Ekspedisi ############################
+		if($ekspedisi == "Anter Aja"){
+			$logo = "anteraja.jpg";
+		}else if($ekspedisi == "JNT"){
+			$logo = "jnt.jpg";
+		}else if($ekspedisi == "JNE"){
+			$logo = "jne.jpg";
+		}else if($ekspedisi == "Si Cepat"){
+			$logo = "sicepat.jpg";
+		}else if($ekspedisi == "Ninja Express"){
+			$logo = "ninja.jpg";
+		}else if($ekspedisi == "ID Express"){
+			$logo = "idexpress.jpg";
+		}else if($ekspedisi == "Gojek"){
+			$logo = "gojek.jpg";
+		}else if($ekspedisi == "Grab"){
+			$logo = "grab.jpg";
+		}else{
+			$logo = "logo.png";
+		}
+										
+		############## End Logo Ekspedisi ############################
 
 		############## Barcode generator with Zend ################
 		// $temp = "JP070927883624";
@@ -329,14 +366,19 @@ class Penjualan extends MY_Controller
 		$pdf->SetFont('Arial','',8);
 
 		if($opsi == 'Semua' || $opsi == 'Resi'){
-			$pdf->Image(base_url('assets/img/barcode.jpg'),0,1,50,18);
+			$pdf->Image(base_url('assets/img/'.$logo),10,1,30,18);
+			
+			$pdf->Image(base_url('assets/img/barcode.jpg'),0,17,50,18);
 		
 			$pdf->MultiCell(48, 5, '', 0,'L');
 			$pdf->MultiCell(48, 5, '', 0,'L');
 			$pdf->MultiCell(48, 5, '', 0,'L');
 			$pdf->MultiCell(48, 5, '', 0,'L');
+			$pdf->MultiCell(48, 5, '', 0,'L');
+			$pdf->MultiCell(48, 5, '', 0,'L');
+			$pdf->MultiCell(48, 5, '', 0,'L');
 			$pdf->MultiCell(48, 5, $nama_penerima, 0,'L');
-			$pdf->MultiCell(48, 5, $alamat_penerima, 0); 
+			$pdf->MultiCell(48, 5, $alamat_penerima.' ('.$no_hp.')', 0); 
 			$pdf->MultiCell(48, 3, '------------------------------------------------', 0,'L'); 
 		}
 		
@@ -364,8 +406,12 @@ class Penjualan extends MY_Controller
 
 		if($opsi == 'Semua' || $opsi == 'Ucapan'){
 
-			$pdf->MultiCell(48, 5, '------------------------------------------------', 0,'L'); 
-			$pdf->MultiCell(48, 5, 'Hallo Kak '.$nama_penerima.', Mohon bintang 5 dan Ulasan terbaik nya yah :) Jika kaka ada komplain atau keluhan Silahkan chat kita via WhatsApp  di nomor 081929911100.', 0); 
+			
+			$pdf->MultiCell(48, 5, '------------------------------------------------', 0,'L');
+			$pdf->Ln(); 
+			$pdf->MultiCell(48, 5, 'Hallo Kak '.$nama_penerima.',', 0); 
+			$pdf->MultiCell(48, 5, $toko->kartu_ucapan, 0); 
+
 			$pdf->Ln();
 			
 			$pdf->MultiCell(48, 5, 'Terimakasih telah berbelanja di : ', 0); 	
@@ -373,7 +419,7 @@ class Penjualan extends MY_Controller
 			$pdf->SetFillColor(0,0,0);
 			$pdf->SetTextColor(255, 255, 255); 
 
-			$pdf->MultiCell(48, 5, 'RIRIURI STORE',1,'C',1); 
+			$pdf->MultiCell(48, 5, $toko->nama_toko,1,'C',1); 
 		}
 		
 		
