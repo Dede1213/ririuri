@@ -339,6 +339,12 @@ class Penjualan extends MY_Controller
 			$logo = "gojek.jpg";
 		}else if($ekspedisi == "Grab"){
 			$logo = "grab.jpg";
+		}else if($ekspedisi == "Shopee Xpress"){
+			$logo = "shopee.jpg";
+		}else if($ekspedisi == "Lion Parcel"){
+			$logo = "lion.jpg";
+		}else if($ekspedisi == "Pos Indonesia"){
+			$logo = "pos.jpg";
 		}else{
 			$logo = "logo.png";
 		}
@@ -366,7 +372,7 @@ class Penjualan extends MY_Controller
 		$pdf->SetFont('Arial','',8);
 
 		if($opsi == 'Semua' || $opsi == 'Resi'){
-			$pdf->Image(base_url('assets/img/'.$logo),10,1,30,18);
+			$pdf->Image(base_url('assets/img/'.$logo),11,1,25,15);
 			
 			$pdf->Image(base_url('assets/img/barcode.jpg'),0,17,50,18);
 		

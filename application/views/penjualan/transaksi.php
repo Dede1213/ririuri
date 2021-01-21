@@ -136,10 +136,13 @@ if($level !== 'admin')
 										<option>JNT</option>
 										<option>JNE</option>
 										<option>Si Cepat</option>
+										<option>Shopee Xpress</option>
+										<option>Lion Parcel</option>
 										<option>Ninja Express</option>
 										<option>ID Express</option>
 										<option>Gojek</option>
 										<option>Grab</option>
+										<option>Pos Indonesia</option>
 										
 									</select>
 							</div>
