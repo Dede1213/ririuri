@@ -27,6 +27,35 @@ class Penjualan extends MY_Controller
 			$this->transaksi();
 	}
 
+	public function dompdf()
+	{
+			//Load the library
+			$this->load->library('html2pdf');
+	    
+			//Set folder to save PDF to (jika ingin di simpan)
+			$this->html2pdf->folder('./assets/pdfs/');
+			
+			//Set the filename to save/download as
+			$this->html2pdf->filename('result.pdf');
+			
+			//Set the paper defaults
+			$this->html2pdf->paper('a4', 'portrait');
+			
+			$data = array(
+				'title' => 'PDF Created',
+				'message' => 'Hello World!'
+			);
+			
+			//Load html view
+			$this->html2pdf->html($this->load->view('penjualan/dompdf', $data, true));
+			
+			if($this->html2pdf->create()) { //$this->html2pdf->create('save')
+				//PDF was successfully saved or downloaded
+				// echo 'PDF saved';
+			}
+	}
+
+	
 	public function transaksi()
 	{
 		$level = $this->session->userdata('ap_level');
