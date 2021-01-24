@@ -211,10 +211,12 @@ class M_user extends CI_Model
 				->update('pj_user', $dt);
 	}
 
-	function update_toko($nama,$kartu)
+	function update_toko($nama,$kartu,$no_telp,$alamat)
 	{
 		$dt['nama_toko']		= $nama;
 		$dt['kartu_ucapan']	= $kartu;
+		$dt['no_telp']	= $no_telp;
+		$dt['alamat']	= $alamat;
 
 		return $this->db
 				->where('id_toko', $this->session->userdata('id_toko'))

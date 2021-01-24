@@ -159,6 +159,15 @@ if($level !== 'admin')
 									</select>
 							</div>
 
+							<div class="form-group">
+									<label>Opsi Kertas</label>
+									<select id="kertas" class='form-control'>
+										<option>57mm</option>
+										<option>80mm</option>
+										<option>100mm</option>
+									</select>
+							</div>
+
 							
 
 						</div>
@@ -246,7 +255,7 @@ if($level !== 'admin')
 
 							<div class='col-sm-3' style='padding-right: 0px;'>
 								<button type='button' class='btn btn-warning btn-block' id='CetakStruk'>
-									<i class='fa fa-print'></i> Cetak (F9)
+									<i class='fa fa-print'></i> Cetak Struk (F9)
 								</button>
 							</div>
 							<div class='col-sm-3'>
@@ -802,6 +811,7 @@ function CetakResi()
 			FormData += "&no_hp="+$('#no_hp').val();
 			FormData += "&ekspedisi="+$('#ekspedisi').val();
 			FormData += "&opsi="+$('#opsi').val();
+			FormData += "&kertas="+$('#kertas').val();
 
 			window.open("<?php echo site_url('penjualan/transaksi-cetak-resi/?'); ?>" + FormData,'_blank');
 

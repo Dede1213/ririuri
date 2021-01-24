@@ -4,6 +4,14 @@
 	<input type='text' name='nama_toko' class='form-control' autofocus="autofocus" value="<?php echo $toko->nama_toko;?>">
 </div>
 <div class='form-group'>
+	<label>No Telpon</label>
+	<input type='text' name='no_telp' class='form-control' autofocus="autofocus" value="<?php echo $toko->no_telp;?>">
+</div>
+<div class='form-group'>
+	<label>Alamat</label>
+	<textarea name='alamat' class='form-control'><?php echo $toko->alamat;?></textarea>
+</div>
+<div class='form-group'>
 	<label>Kartu Ucapan</label>
 	<textarea name='kartu_ucapan' class='form-control'><?php echo $toko->kartu_ucapan;?></textarea>
 </div>
@@ -27,9 +35,9 @@ $(document).ready(function(){
 			dataType:'json',
 			success: function(json){
 				if(json.status == 1){ 
-					$('#FormUbahToko').each(function(){
-						this.reset();
-					});
+					// $('#FormUbahToko').each(function(){
+					// 	this.reset();
+					// });
 
 					$('#ResponseInput').html(json.pesan);
 					setTimeout(function(){ 

@@ -305,16 +305,22 @@ class User extends MY_Controller
 			if($_POST)
 			{
 				$this->load->library('form_validation');
-				$this->form_validation->set_rules('nama_toko','Nama Toko','trim');
+				$this->form_validation->set_rules('nama_toko','Nama Toko','required|trim');
+				$this->form_validation->set_rules('no_telp','No Telepon','required|trim');
+				$this->form_validation->set_rules('alamat','Alamat','trim');
 				$this->form_validation->set_rules('kartu_ucapan','Kartu Ucapan','trim');
-				
+
+				$this->form_validation->set_message('required','%s harus diisi !');
+
 				if($this->form_validation->run() == TRUE)
 				{
 					$this->load->model('m_user');
 					$nama 	= $this->input->post('nama_toko');
+					$no_telp 	= $this->input->post('no_telp');
+					$alamat 	= $this->input->post('alamat');
 					$kartu 	= $this->input->post('kartu_ucapan');
 
-					$update 	= $this->m_user->update_toko($nama,$kartu);
+					$update 	= $this->m_user->update_toko($nama,$kartu,$no_telp,$alamat);
 					if($update)
 					{
 						

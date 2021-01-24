@@ -27,8 +27,26 @@ class Penjualan extends MY_Controller
 			$this->transaksi();
 	}
 
-	public function dompdf()
+	public function dompdf80()
 	{
+		$barcodeOptions = array(
+			'text' => "123456789000", 
+			'font' => 4,
+            'barHeight'=> 30,
+			'factor'=>1.8,
+			'drawText' => false
+
+   		 );
+		$this->load->library('zend');
+		$this->zend->load('Zend/Barcode');
+		$this->load->library('zend');
+        $this->zend->load('Zend/Barcode');
+        $image_resource = Zend_Barcode::factory('code128', 'image', $barcodeOptions, array())->draw();
+        $image_name     = 'barcode.jpg';
+        $image_dir      = './assets/img/'; // penyimpanan file barcode
+		imagejpeg($image_resource, $image_dir.$image_name); 
+
+		// $this->load->view('penjualan/dompdf');
 			//Load the library
 			$this->load->library('html2pdf');
 	    
@@ -47,13 +65,61 @@ class Penjualan extends MY_Controller
 			);
 			
 			//Load html view
-			$this->html2pdf->html($this->load->view('penjualan/dompdf', $data, true));
+			$this->html2pdf->html($this->load->view('penjualan/dompdf80', $data, true));
 			
 			if($this->html2pdf->create()) { //$this->html2pdf->create('save')
 				//PDF was successfully saved or downloaded
 				// echo 'PDF saved';
 			}
 	}
+
+	public function dompdf100()
+	{
+		$barcodeOptions = array(
+			'text' => "123456789000", 
+			'font' => 4,
+            'barHeight'=> 30,
+			'factor'=>1.8,
+			'drawText' => false
+
+   		 );
+		$this->load->library('zend');
+		$this->zend->load('Zend/Barcode');
+		$this->load->library('zend');
+        $this->zend->load('Zend/Barcode');
+        $image_resource = Zend_Barcode::factory('code128', 'image', $barcodeOptions, array())->draw();
+        $image_name     = 'barcode.jpg';
+        $image_dir      = './assets/img/'; // penyimpanan file barcode
+		imagejpeg($image_resource, $image_dir.$image_name); 
+
+		// $this->load->view('penjualan/dompdf');
+			//Load the library
+			$this->load->library('html2pdf');
+	    
+			//Set folder to save PDF to (jika ingin di simpan)
+			$this->html2pdf->folder('./assets/pdfs/');
+			
+			//Set the filename to save/download as
+			$this->html2pdf->filename('result.pdf');
+			
+			//Set the paper defaults
+			$this->html2pdf->paper('a4', 'portrait');
+			
+			$data = array(
+				'title' => 'PDF Created',
+				'message' => 'Hello World!'
+			);
+			
+			//Load html view
+			$this->html2pdf->html($this->load->view('penjualan/dompdf100', $data, true));
+			
+			if($this->html2pdf->create()) { //$this->html2pdf->create('save')
+				//PDF was successfully saved or downloaded
+				// echo 'PDF saved';
+			}
+	}
+
+	
 
 	
 	public function transaksi()
@@ -319,8 +385,164 @@ class Penjualan extends MY_Controller
 		$pdf->Output();
 	}
 
-
 	public function transaksi_cetak_resi()
+	{
+		
+		
+		
+
+		$nomor_nota 	= $this->input->get('nomor_nota');
+		$tanggal		= $this->input->get('tanggal');
+		$id_kasir		= $this->input->get('id_kasir');
+		$id_pelanggan	= $this->input->get('id_pelanggan');
+		// $cash			= $this->input->get('cash');
+		// $catatan		= $this->input->get('catatan');
+		// $grand_total	= $this->input->get('grand_total');
+		$nama_penerima	= $this->input->get('nama_penerima');
+		$alamat_penerima	= $this->input->get('alamat_penerima');
+		$no_hp	= $this->input->get('no_hp');
+		$ekspedisi	= $this->input->get('ekspedisi');
+		$no_resi	= $this->input->get('no_resi');
+		$opsi	= $this->input->get('opsi');
+		$kertas = $this->input->get('kertas');
+
+		$this->load->model('m_user');
+		$kasir = $this->m_user->get_baris($id_kasir)->row()->nama;
+		$toko = $this->m_user->get_toko()->row();
+		
+		$this->load->model('m_pelanggan');
+		$pelanggan = 'umum';
+		if( ! empty($id_pelanggan))
+		{
+			$pelanggan = $this->m_pelanggan->get_baris($id_pelanggan)->row()->nama;
+		}
+
+		if($ekspedisi == "Anter Aja"){
+			$logo = "anteraja.jpg";
+		}else if($ekspedisi == "JNT"){
+			$logo = "jnt.jpg";
+		}else if($ekspedisi == "JNE"){
+			$logo = "jne.jpg";
+		}else if($ekspedisi == "Si Cepat"){
+			$logo = "sicepat.jpg";
+		}else if($ekspedisi == "Ninja Express"){
+			$logo = "ninja.jpg";
+		}else if($ekspedisi == "ID Express"){
+			$logo = "idexpress.jpg";
+		}else if($ekspedisi == "Gojek"){
+			$logo = "gojek.jpg";
+		}else if($ekspedisi == "Grab"){
+			$logo = "grab.jpg";
+		}else if($ekspedisi == "Shopee Xpress"){
+			$logo = "shopee.jpg";
+		}else if($ekspedisi == "Lion Parcel"){
+			$logo = "lion.jpg";
+		}else if($ekspedisi == "Pos Indonesia"){
+			$logo = "pos.jpg";
+		}else{
+			$logo = "logo.png";
+		}
+
+		
+		
+
+		$data = array('ekspedisi'=>$logo,
+					  'nama_toko'=>$toko->nama_toko,
+					  'nomor_toko'=>$toko->no_telp,
+					  'alamat_toko'=>$toko->alamat,
+					  'kartu_ucapan'=>$toko->kartu_ucapan,
+					  'no_nota'=>$nomor_nota,
+					  'no_resi'=>$no_resi,
+					  'nama_penerima'=> $nama_penerima,
+					  'alamat_penerima' => $alamat_penerima,
+					  'no_hp'	=> $no_hp,
+					  'kode_barang' => $_GET['kode_barang'],
+					  'qty' => $_GET['jumlah_beli'],
+					  'kertas' => $_GET['kertas'],
+					  'opsi' => $_GET['opsi']
+					);
+		
+	    
+		$this->dompdf57($data);
+	}
+
+	public function dompdf57($data)
+	{
+		
+		if(empty($data['no_resi'])){
+			$no_resi = "kosong";
+		}else{
+			$no_resi = $data['no_resi'];
+		}
+
+		
+		$barcodeOptions = array(
+			'text' => $no_resi, 
+			'font' => 1,
+            'barHeight'=> 40,
+			'factor'=>1,
+			'drawText' => false
+
+   		 );
+		$this->load->library('zend');
+		$this->zend->load('Zend/Barcode');
+		$this->load->library('zend');
+        $this->zend->load('Zend/Barcode');
+        $image_resource = Zend_Barcode::factory('code128', 'image', $barcodeOptions, array())->draw();
+        $image_name     = 'barcode.jpg';
+        $image_dir      = './assets/img/'; // penyimpanan file barcode
+		imagejpeg($image_resource, $image_dir.$image_name); 
+
+		// $this->load->view('penjualan/dompdf');
+			//Load the library
+			$this->load->library('html2pdf');
+	    
+			//Set folder to save PDF to (jika ingin di simpan)
+			$this->html2pdf->folder('./assets/pdfs/');
+			
+			//Set the filename to save/download as
+			$this->html2pdf->filename('result.pdf');
+			
+			//Set the paper defaults
+			$this->html2pdf->paper('a4', 'portrait');
+			
+			// $data = array(
+			// 	'title' => 'PDF Created',
+			// 	'message' => 'Hello World!'
+			// );
+			$data_barang = '';
+			$no = 0;
+			$this->load->model('m_barang');
+			foreach($_GET['kode_barang'] as $kd)
+			{
+				if( ! empty($kd))
+				{
+					$no_actual = $no + 1;
+					$nama_barang = $this->m_barang->get_id($kd)->row()->nama_barang;
+					$data_barang .= "<tr><td>".$no_actual."</td><td>".$nama_barang."</td><td>".$_GET['jumlah_beli'][$no]."</td></tr>";
+					$no++;
+				}
+			}
+
+			$data['data_barang'] = $data_barang;
+			
+			//Load html view
+			if($data['kertas'] == '100mm'){
+				$this->html2pdf->html($this->load->view('penjualan/dompdf100', $data, true));
+			}elseif($data['kertas'] == '80mm'){
+				$this->html2pdf->html($this->load->view('penjualan/dompdf80', $data, true));
+			}else{
+				$this->html2pdf->html($this->load->view('penjualan/dompdf57', $data, true));
+			}
+			
+			
+			if($this->html2pdf->create()) { //$this->html2pdf->create('save')
+				//PDF was successfully saved or downloaded
+				// echo 'PDF saved';
+			}
+	}
+
+	public function transaksi_cetak_resi_lama() // Versi lama dengan library FPDF
 	{
 		
 		

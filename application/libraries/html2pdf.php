@@ -136,7 +136,7 @@ class Html2pdf {
 	    //Load the DOMPDF libary
 	    require_once("dompdf/dompdf_config.inc.php");
 	    
-	    $dompdf = new DOMPDF();
+	    $dompdf = new DOMPDF(array('enable_remote' => true));
 	    $dompdf->load_html($this->html);
 	    $dompdf->set_paper($this->paper_size, $this->orientation);
 	    $dompdf->render();

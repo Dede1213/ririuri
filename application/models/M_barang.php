@@ -95,9 +95,11 @@ class M_barang extends CI_Model
 
 	function cek_kode($kode)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		return $this->db
 			->select('id_barang')
 			->where('kode_barang', $kode)
+			->where('id_toko', $id_toko)
 			->where('dihapus', 'tidak')
 			->limit(1)
 			->get('pj_barang');
@@ -173,18 +175,22 @@ class M_barang extends CI_Model
 
 	function get_stok($kode)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		return $this->db
 			->select('nama_barang, total_stok')
 			->where('kode_barang', $kode)
+			->where('id_toko', $id_toko)
 			->limit(1)
 			->get('pj_barang');
 	}
 
 	function get_id($kode_barang)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		return $this->db
 			->select('*')
 			->where('kode_barang', $kode_barang)
+			->where('id_toko', $id_toko)
 			->limit(1)
 			->get('pj_barang');
 	}
