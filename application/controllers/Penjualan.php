@@ -574,32 +574,7 @@ class Penjualan extends MY_Controller
 
 
 		############## Logo Ekspedisi ############################
-		if($ekspedisi == "Anter Aja"){
-			$logo = "anteraja.jpg";
-		}else if($ekspedisi == "JNT"){
-			$logo = "jnt.jpg";
-		}else if($ekspedisi == "JNE"){
-			$logo = "jne.jpg";
-		}else if($ekspedisi == "Si Cepat"){
-			$logo = "sicepat.jpg";
-		}else if($ekspedisi == "Ninja Express"){
-			$logo = "ninja.jpg";
-		}else if($ekspedisi == "ID Express"){
-			$logo = "idexpress.jpg";
-		}else if($ekspedisi == "Gojek"){
-			$logo = "gojek.jpg";
-		}else if($ekspedisi == "Grab"){
-			$logo = "grab.jpg";
-		}else if($ekspedisi == "Shopee Xpress"){
-			$logo = "shopee.jpg";
-		}else if($ekspedisi == "Lion Parcel"){
-			$logo = "lion.jpg";
-		}else if($ekspedisi == "Pos Indonesia"){
-			$logo = "pos.jpg";
-		}else{
-			$logo = "logo.png";
-		}
-										
+		$logo = "logo.png";								
 		############## End Logo Ekspedisi ############################
 
 		############## Barcode generator with Zend ################
