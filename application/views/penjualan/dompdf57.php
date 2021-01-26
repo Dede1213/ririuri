@@ -116,7 +116,7 @@
             <table id="table2" style="margin-top:<?php echo $margin_top_ucapan;?>">
                 <tr>
                     <td><div style="text-align:justify;font-size:11px;padding:2;">
-                        Hallo kak <?php echo $nama_penerima;?>,
+                        Hallo Kak <?php echo $nama_penerima;?>,
                         <br> <?php echo $kartu_ucapan;?>
                     </div>
                         <br>

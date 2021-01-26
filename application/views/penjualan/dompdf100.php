@@ -3,6 +3,12 @@
     <?php
         $table_size = "325px"; //333 100 mm
         $logo_size = "80px";
+
+        if(strlen($nama_toko) > 13){
+            $font_size = '10px';
+        }else{
+            $font_size = '14px';
+        }
     ?>
     <head>
         <meta charset="UTF-8">
@@ -31,11 +37,12 @@
             
             .text {
                         font-family: 'Arial', cursive;
-                        font-size:19px;
-                        text-shadow: 5px 5px 0px #f0e8db, 8px 8px 0px #6c5257;
-                        margin-top : 12px;
-                        margin-right:2px;
+                        font-size:<?php echo $font_size;?>;
                         font-weight:bold;
+                        margin-top : -5;
+                        text-align:center;
+                        /* margin-top:10px; */
+                        vertical-align:middle;
                     }
 
                     .textA {
@@ -49,42 +56,42 @@
         </style>
     </head>
     <body>
-
+    <?php if($opsi == 'Semua' || $opsi == 'Resi'){ ?>
         <table id="table">
         <tr style="border-bottom:2px dotted #000;">
-            <td><img style="margin-left:5px;" width="<?php echo $logo_size;?>" src="./assets/img/anteraja.jpg"/></td><td><div class="text" style="text-align:center;">Ririuri Store</div></td>
+            <td><img style="margin-left:5px;" width="<?php echo $logo_size;?>" src="./assets/img/<?php echo $ekspedisi;?>"/></td><td><div class="text"><?php echo $nama_toko;?></div></td>
         </tr>
         
         <tr>
-            <td colspan=2><div style="border:1px solid #000;font-weight:bold;font-size:12px;padding:1px;margin:1px;">No.Resi : 100000292929</div></td>
+            <td colspan=2><div style="border:1px solid #000;font-weight:bold;font-size:12px;padding:1px;margin:1px;">No.Resi : <?php echo $no_resi;?></div></td>
         </tr>
         
         <tr style="border-bottom:2px dotted #000;">
             <td colspan="2">
-                <img style="margin-left:75px;" src="./assets/img/barcode.jpg"/>
+                <img style="margin-left:50px;width:60%;" src="./assets/img/barcode.jpg"/>
             </td>
         </tr>
         <tr >
             <td colspan=2><div style="font-size:12px;font-weight:bold;margin-left:1px;">Penerima : </div></td>
         </tr>
             <tr>
-            <td colspan=2><div style="font-size:12px;text-align:justify;margin-left:1px;">Dede Irawan, 089630622362</div></td>
+            <td colspan=2><div style="font-size:12px;text-align:justify;margin-left:1px;"><?php echo $nama_penerima;?>, <?php echo $no_hp;?></div></td>
         </tr>
         <tr>
-            <td colspan=2 style="border-bottom:2px solid #000;"><div style="font-size:12px;text-align:justify;padding:1px;">Kota bekasi jawa barat bandar gebang rumahkontarakan panjaitan no 3 pangkalan 5 ,BANTAR GEBANG, KOTA BEKASI, JAWABARAT </div></td>
+            <td colspan=2 style="border-bottom:2px solid #000;"><div style="font-size:12px;text-align:justify;padding:1px;"><?php echo $alamat_penerima;?> </div></td>
         </tr>
         <tr>
             <td colspan=2><div style="font-size:12px;font-weight:bold;margin-left:1px;">Pengirim :</div></td>
         </tr>
         <tr>
-            <td colspan=2><div style="font-size:12px;text-align:justify;margin-left:1px;"> Ririuri Store, 029828282 </div>
+            <td colspan=2><div style="font-size:12px;text-align:justify;margin-left:1px;"> <?php echo $nama_toko;?>, <?php echo $nomor_toko;?> </div>
         </tr>
             <tr>
-            <td colspan=2 style="border-bottom:2px solid #000;"><div style="font-size:12px;text-align:justify;padding:1px;">Kota bekasi jawa barat bandar gebang rumahkontarakan panjaitan no 3 pangkalan 5 ,BANTAR GEBANG, KOTA BEKASI, JAWABARAT </div></td>
+            <td colspan=2 style="border-bottom:2px solid #000;"><div style="font-size:12px;text-align:justify;padding:1px;"><?php echo $alamat_toko;?> </div></td>
         </tr>
 
         <tr>
-            <td colspan=2><div style="font-size:12px;padding:1px;margin:1px;">No.Pesanan : 100000292929</div></td>
+            <td colspan=2><div style="font-size:12px;padding:1px;margin:1px;">No.Pesanan : <?php echo $no_nota;?></div></td>
         </tr>
        
         </table>
@@ -94,24 +101,37 @@
             <tr>
                 <td width="4%">No</td><td>Nama Produk</td><td width="10%">Qty</td>
             </tr>
+            <?php
+            echo $data_barang;
+            ?>
             <tr>
-                <td>1</td><td>Nama Produk</td><td>5</td>
-            </tr>
-            <tr>
-                <td colspan=3>No.Pesanan : 900000818181</td>
+                <td colspan=3>No.Pesanan : <?php echo $no_nota;?></td>
             </tr>
         </table>
-        <br><div style="margin-left:-42px;">------------------------------------------------------------------</div><br>
-        <table id="table2">
+        <?php } ?>
+        <?php if($opsi == 'Semua' || $opsi == 'Ucapan'){ ?>
+            <?php if($opsi == 'Ucapan'){ $margin_top_ucapan = "-45px"; }else{ $margin_top_ucapan = "0px"; }?>
+            <?php if($opsi == 'Semua'){ ?>
+                <br><div style="margin-left:-42px;">------------------------------------------------------------------</div><br>
+            <?php } ?>   
+        <table id="table2" style="margin-top:<?php echo $margin_top_ucapan;?>">
             <tr>
                 <td><div style="text-align:justify;font-size:12px;padding:2;">
-                    Hallo kak Dede Irawan,
-                    <br> Mohon bintang 5 dan ulasan terbaik nya ya. Semoga kaka sukses dan sehat selalu.
+                    Hallo Kak <?php echo $nama_penerima;?>,
+                    <br> <?php echo $kartu_ucapan;?>
                 </div>
                     <br>
-                    <div style="background-color:black;color:#fff;text-align:center;font-size:15px;font-weight:bold;padding:2;">Ririuri Store</div>
+                    <div style="background-color:black;color:#fff;text-align:center;font-size:15px;font-weight:bold;padding:2;"><?php echo $nama_toko;?></div>
                 </td>
             </tr>
         </table>
+        <?php } ?>
+        <?php if($opsi == 'Ucapan'){ ?>
+            <table id="table2">
+                <tr>
+                    <td colspan=3><div style="text-align:justify;font-size:11px;padding:2;">No.Pesanan : <?php echo $no_nota;?></div></td>
+                </tr>
+            </table>
+        <?php }?>
     </body>
 </html>

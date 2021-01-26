@@ -45,7 +45,7 @@ $config['bootstrap']		= $config['plugin'].'bootstrap-3.3.6/';
 $config['font_awesome']		= $config['plugin'].'font-awesome/';
 
 //Setingan Judul & Footer Web
-$config['web_title']		= "Aplikasi Penjualan Shopee";
+$config['web_title']		= "Sahabatseller.my.id";
 $config['web_footer']		= $config['web_title']." &copy; 2021. Version 1.0. Programmed by SarjanaKomedi Modify By Dede Irawan";
 
 /*
