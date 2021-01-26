@@ -506,10 +506,6 @@ class Penjualan extends MY_Controller
 			//Set the paper defaults
 			$this->html2pdf->paper('a4', 'portrait');
 			
-			// $data = array(
-			// 	'title' => 'PDF Created',
-			// 	'message' => 'Hello World!'
-			// );
 			$data_barang = '';
 			$no = 0;
 			$this->load->model('m_barang');
@@ -1064,6 +1060,63 @@ class Penjualan extends MY_Controller
 						"pesan" => "<font color='red'><i class='fa fa-warning'></i> Terjadi kesalahan, coba lagi !</font>
 					"));
 				}
+			}
+		}
+	}
+
+	public function cetak_masal()
+	{
+		$level = $this->session->userdata('ap_level');
+		if($level == 'admin' OR $level == 'kasir' OR $level == 'keuangan')
+		{
+			if($_POST)
+			{
+				$this->load->library('form_validation');
+				$this->form_validation->set_rules('nama','Nama','trim|required|alpha_spaces|max_length[40]');
+				$this->form_validation->set_rules('alamat','Alamat','trim|required|max_length[1000]');
+				$this->form_validation->set_rules('telepon','Telepon / Handphone','trim|required|numeric|max_length[40]');
+				$this->form_validation->set_rules('info','Info Tambahan Lainnya','trim|max_length[1000]');
+
+				$this->form_validation->set_message('alpha_spaces','%s harus alphabet !');
+				$this->form_validation->set_message('numeric','%s harus angka !');
+				$this->form_validation->set_message('required','%s harus diisi !');
+
+				if($this->form_validation->run() == TRUE)
+				{
+					$this->load->model('m_pelanggan');
+					$nama 		= $this->input->post('nama');
+					$alamat 	= $this->clean_tag_input($this->input->post('alamat'));
+					$telepon 	= $this->input->post('telepon');
+					$info 		= $this->clean_tag_input($this->input->post('info'));
+
+					$unique		= time().$this->session->userdata('ap_id_user');
+					$insert 	= $this->m_pelanggan->tambah_pelanggan($nama, $alamat, $telepon, $info, $unique);
+					if($insert)
+					{
+						$id_pelanggan = $this->m_pelanggan->get_dari_kode($unique)->row()->id_pelanggan;
+						echo json_encode(array(
+							'status' => 1,
+							'pesan' => "<div class='alert alert-success'><i class='fa fa-check'></i> <b>".$nama."</b> berhasil ditambahkan sebagai pelanggan.</div>",
+							'id_pelanggan' => $id_pelanggan,
+							'nama' => $nama,
+							'alamat' => preg_replace("/\r\n|\r|\n/",'<br />', $alamat),
+							'telepon' => $telepon,
+							'info' => (empty($info)) ? "<small><i>Tidak ada</i></small>" : preg_replace("/\r\n|\r|\n/",'<br />', $info)						
+						));
+					}
+					else
+					{
+						$this->query_error();
+					}
+				}
+				else
+				{
+					$this->input_error();
+				}
+			}
+			else
+			{
+				$this->load->view('penjualan/cetak_masal');
 			}
 		}
 	}

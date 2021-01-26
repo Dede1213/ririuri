@@ -48,7 +48,7 @@
 					<span class='glyphicon glyphicon-edit' aria-hidden="true"></span> DAFTAR
 					</button> -->
 
-					<a href="<?php echo site_url('secure/tambah');?>" class='btn btn-default' id='TambahUser'><i class='fa fa-user fa-fw'></i> Daftar</a>
+					<a href="<?php echo site_url('secure/tambah');?>" class='btn btn-default' id='TambahUser'><i class='fa fa-user fa-fw'></i> Buat Akun</a>
 				<?php echo form_close(); ?>
 
 				<div id='ResponseInput'></div>
@@ -64,8 +64,8 @@
 <!-- INFORMASI<br /><br /> -->
 <div class='row'>
 <div class='col-sm-3'><b>Panduan Pengguna</b><br><BR><img src="./assets/img/pdf-big.png" width="90%"/></div>
-<div class='col-sm-6' style="text-align:justify;"><b>Tentang Sahabatseller.my.id</b> <br> Salah satu faktor sukses dalam berdagang adalah manajemen produk dan keuangan yang baik.<br>Sahabatseller.my.id adalah sebuah aplikasi sederhana  yang dapat membantu seller memanajemen produk dan keuangan dengan baik, terdapat fitur cetak resi yang compatible di beberapa ukuran printer thermal (58mm, 80mm, 100mm) yang dapat memudahkan seller mencetak resi dari marketplace. <br> Akhir kata, Semoga aplikasi sederhana ini bermanfaat dapat untuk teman teman seller semua. <br> <b>Semangat & Maju Terus UMKM Indonesia.</b></div>
-<div class='col-sm-3'><b>Contact Admin On Instagram </b> <br> <img src="./assets/img/instagram.png" width="25%"/><br> dedeirawan1213 <br> <hr style='border-color:#999; border-style:dashed; '/><img src="./assets/img/gratis.png" width="35%"/> &nbsp; <img src="./assets/img/help.png" width="27%"/></div>
+<div class='col-sm-6' style="text-align:justify;"><b>Tentang Sahabatseller.my.id</b> <br> Salah satu faktor sukses dalam berdagang adalah manajemen produk dan keuangan yang baik.<br>Sahabatseller.my.id adalah sebuah aplikasi untuk membantu seller memanajemen produk dan keuangan dengan baik, terdapat fitur cetak resi yang compatible di beberapa ukuran printer thermal (58mm, 80mm, 100mm) yang dapat memudahkan seller mencetak resi dari marketplace. <br> Semoga aplikasi ini dapat bermanfaat untuk teman-teman seller semua. <br> <b>Semangat & Maju Terus UMKM Indonesia.</b></div>
+<div class='col-sm-3'><b>Ada Kendala ? Segera Hubungi Admin Via Instagram </b> <br> <img src="./assets/img/instagram.png" width="15%"/><br> dedeirawan1213 <br> <hr style='border-color:#999; border-style:dashed; '/><img src="./assets/img/gratis.png" width="25%"/> <img src="./assets/img/gratis.png" width="25%"/> <img src="./assets/img/gratis.png" width="25%"/></div>
 </div>
 </center>
 </div>

@@ -8,6 +8,9 @@
         }else{
             $font_size = '14px';
         }
+
+        $page_heigt = 175 * 5;
+        $page_heigt_fix = $page_heigt.'mm';
     ?>
     <head>
         <meta charset="UTF-8">
@@ -51,21 +54,23 @@
                     }
 
                     @page {
-                    size: 49.00mm 200.00mm; // set appropriately
+                    size: 49.00mm <?php echo $page_heigt_fix;?>; // set appropriately
                     margin: 0;
                     }
                     @media print {
                     html, body {
                         width: 49.00mm; // set appropriately
-                        height: 200.00mm; // set appropriately
+                        height: <?php echo $page_heigt_fix;?>; // set appropriately
                     }
                     /* ... the rest of the rules ... */
                     }
-
             
         </style>
     </head>
     <body>
+    <?php
+    for($i=1;$i<=5;$i++){
+    ?>
     <?php if($opsi == 'Semua' || $opsi == 'Resi'){ ?>
         <table id="table">
         <tr style="border-bottom:2px dotted #000;">
@@ -144,5 +149,7 @@
                 </tr>
             </table>
         <?php }?>
+        
+    <?php echo"<br><br><br><br>"; }?>
     </body>
 </html>

@@ -247,6 +247,8 @@ if($level !== 'admin')
 					<div class='row'>
 					<div class='col-sm-4'> </div>
 						<div class='col-sm-8'>
+						<a href="<?php echo site_url('penjualan/cetak-masal'); ?>" class='pull-right' id='cetakmasal'>Cetak Masal</a>
+
 							<div class='col-sm-3' style='padding-right: 0px;margin-left:150px;'>
 								<button type='button' class='btn btn-warning btn-block' id='CetakResi'>
 									<i class='fa fa-print'></i> Cetak Resi 
@@ -748,6 +750,16 @@ $(document).on('click', '#TambahPelanggan', function(e){
 	$('.modal-dialog').removeClass('modal-sm');
 	$('.modal-dialog').removeClass('modal-lg');
 	$('#ModalHeader').html('Tambah Pelanggan');
+	$('#ModalContent').load($(this).attr('href'));
+	$('#ModalGue').modal('show');
+});
+
+$(document).on('click', '#cetakmasal', function(e){
+	e.preventDefault();
+
+	$('.modal-dialog').removeClass('modal-sm');
+	$('.modal-dialog').removeClass('modal-lg');
+	$('#ModalHeader').html('Cetak Masal');
 	$('#ModalContent').load($(this).attr('href'));
 	$('#ModalGue').modal('show');
 });
