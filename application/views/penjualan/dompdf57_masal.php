@@ -1,13 +1,18 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
     <?php
+
+    
         $table_size = "147px";
         $logo_size = "80px";
-        if(strlen($nama_toko) > 13){
-            $font_size = '10px';
-        }else{
-            $font_size = '14px';
-        }
+        $font_size = '10px';
+        // if(strlen($nama_toko) > 13){
+        //     $font_size = '10px';
+        // }else{
+        //     $font_size = '14px';
+        // }
 
         $page_heigt = 175 * 5;
         $page_heigt_fix = $page_heigt.'mm';
@@ -69,44 +74,51 @@
     </head>
     <body>
     <?php
-    for($i=1;$i<=5;$i++){
+    
+    for ($x = 0; $x < count($data); $x++) {
+        // echo $data[$x]['ekspedisi'];
+     
     ?>
-    <?php if($opsi == 'Semua' || $opsi == 'Resi'){ ?>
+    <?php if($data[$x]['opsi'] == 'Semua' || $data[$x]['opsi'] == 'Resi'){ ?>
         <table id="table">
         <tr style="border-bottom:2px dotted #000;">
-            <td><img style="margin-left:5px;" width="<?php echo $logo_size;?>" src="./assets/img/<?php echo $ekspedisi;?>"/></td><td><div class="text"><?php echo $nama_toko;?></div></td>
+            <td>
+            <img style="margin-left:5px;" width="<?php echo $logo_size;?>" src="./assets/img/<?php echo $ekspedisi;?>"/>
+            </td><td><div class="text"><?php echo $data[$x]['nama_toko'];?></div></td>
         </tr>
         
         <tr>
-            <td colspan=2><div style="border:1px solid #000;font-weight:bold;font-size:12px;padding:1px;margin:1px;">No.Resi : <?php echo $no_resi;?></div></td>
+            <td colspan=2><div style="border:1px solid #000;font-weight:bold;font-size:12px;padding:1px;margin:1px;">No.Resi : <?php echo $data[$x]['no_resi'];?></div></td>
         </tr>
         
         <tr style="border-bottom:2px dotted #000;">
             <td colspan="2">
-                <img style="position:center;width:90%;" src="./assets/img/barcode.jpg"/>
+            <img style="position:center;width:90%;"  src="data:image/png;base64,<?php echo $data[$x]['barcode'];?>" alt='Red dot' />
+
+                <!-- <img style="position:center;width:90%;" src="./assets/img/barcode.jpg"/> -->
             </td>
         </tr>
         <tr >
             <td colspan=2><div style="font-size:12px;font-weight:bold;margin-left:1px;">Penerima : </div></td>
         </tr>
             <tr>
-            <td colspan=2><div style="font-size:12px;text-align:justify;margin-left:1px;"><?php echo $nama_penerima;?>, <?php echo $no_hp;?></div></td>
+            <td colspan=2><div style="font-size:12px;text-align:justify;margin-left:1px;"><?php echo $data[$x]['nama_penerima'];?>, <?php echo $data[$x]['no_hp'];?></div></td>
         </tr>
         <tr>
-            <td colspan=2 style="border-bottom:2px solid #000;"><div style="font-size:12px;text-align:justify;padding:1px;"><?php echo $alamat_penerima;?></div></td>
+            <td colspan=2 style="border-bottom:2px solid #000;"><div style="font-size:12px;text-align:justify;padding:1px;"><?php echo $data[$x]['alamat_penerima'];?></div></td>
         </tr>
         <tr>
             <td colspan=2><div style="font-size:12px;font-weight:bold;margin-left:1px;">Pengirim :</div></td>
         </tr>
         <tr>
-            <td colspan=2><div style="font-size:12px;text-align:justify;margin-left:1px;"> <?php echo $nama_toko;?>, <?php echo $nomor_toko;?> </div>
+            <td colspan=2><div style="font-size:12px;text-align:justify;margin-left:1px;"> <?php echo $data[$x]['nama_toko'];?>, <?php echo $data[$x]['nomor_toko'];?> </div>
         </tr>
             <tr>
-            <td colspan=2 style="border-bottom:2px solid #000;"><div style="font-size:12px;text-align:justify;padding:1px;"><?php echo $alamat_toko;?> </div></td>
+            <td colspan=2 style="border-bottom:2px solid #000;"><div style="font-size:12px;text-align:justify;padding:1px;"><?php echo $data[$x]['alamat_toko'];?> </div></td>
         </tr>
 
         <tr>
-            <td colspan=2><div style="font-size:12px;padding:1px;margin:1px;">No.Pesanan : <?php echo $no_nota;?></div></td>
+            <td colspan=2><div style="font-size:12px;padding:1px;margin:1px;">No.Pesanan : <?php echo $data[$x]['no_nota'];?></div></td>
         </tr>
        
         </table>
@@ -116,36 +128,36 @@
             <tr>
                 <td width="4%">No</td><td>Nama Produk</td><td width="10%">Qty</td>
                 </tr>
-            <?php
-            echo $data_barang;
-            ?>
+            <!-- <?php
+            // echo $/data_barang;
+            ?> -->
             
             <tr>
-                <td colspan=3>No.Pesanan : <?php echo $no_nota;?></td>
+                <td colspan=3>No.Pesanan : <?php echo $data[$x]['no_nota'];?></td>
             </tr>
         </table>
     <?php } ?>
-        <?php if($opsi == 'Semua' || $opsi == 'Ucapan'){ ?>
-            <?php if($opsi == 'Ucapan'){ $margin_top_ucapan = "-45px"; }else{ $margin_top_ucapan = "0px"; }?>
-            <?php if($opsi == 'Semua'){ ?>
+        <?php if($data[$x]['opsi'] == 'Semua' || $data[$x]['opsi'] == 'Ucapan'){ ?>
+            <?php if($data[$x]['opsi'] == 'Ucapan'){ $margin_top_ucapan = "-45px"; }else{ $margin_top_ucapan = "0px"; }?>
+            <?php if($data[$x]['opsi'] == 'Semua'){ ?>
                 <br><div style="margin-left:-42px;">---------------------------------</div><br>
             <?php } ?>    
             <table id="table2" style="margin-top:<?php echo $margin_top_ucapan;?>">
                 <tr>
                     <td><div style="text-align:justify;font-size:11px;padding:2;">
-                        Hallo Kak <?php echo $nama_penerima;?>,
-                        <br> <?php echo $kartu_ucapan;?>
+                        Hallo Kak <?php echo $data[$x]['nama_penerima'];?>,
+                        <br> <?php echo $data[$x]['kartu_ucapan'];?>
                     </div>
                         <br>
-                        <div style="background-color:black;color:#fff;text-align:center;font-size:15px;font-weight:bold;padding:2;"><?php echo $nama_toko;?></div>
+                        <div style="background-color:black;color:#fff;text-align:center;font-size:15px;font-weight:bold;padding:2;"><?php echo $data[$x]['nama_toko'];?></div>
                     </td>
                 </tr>
             </table>
         <?php } ?>
-        <?php if($opsi == 'Ucapan'){ ?>
+        <?php if($data[$x]['opsi'] == 'Ucapan'){ ?>
             <table id="table2">
                 <tr>
-                    <td colspan=3><div style="text-align:justify;font-size:11px;padding:2;">No.Pesanan : <?php echo $no_nota;?></div></td>
+                    <td colspan=3><div style="text-align:justify;font-size:11px;padding:2;">No.Pesanan : <?php echo $data[$x]['no_nota'];?></div></td>
                 </tr>
             </table>
         <?php }?>

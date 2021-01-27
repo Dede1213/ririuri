@@ -13,7 +13,25 @@
 		<option>9</option>
 		<option>10</option>
 	</select>
-</div>
+	</div>
+							<div class="form-group">
+									<label>Opsi Cetak</label>
+									<select id="opsi_masal" class='form-control'>
+										<option>Semua</option>
+										<option>Resi</option>
+										<option>Ucapan</option>
+									</select>
+							</div>
+
+							<div class="form-group">
+									<label>Opsi Kertas</label>
+									<select id="kertas_masal" class='form-control'>
+										<option>57mm</option>
+										<option>80mm</option>
+										<option>100mm</option>
+									</select>
+							</div>
+
 
 <?php echo form_close(); ?>
 
@@ -21,36 +39,12 @@
 <script>
 	function CetakMasal()
 {
-	$.ajax({
-		url: $('#FormEditAdmin').attr('action'),
-		type: "POST",
-		cache: false,
-		data: $('#FormEditAdmin').serialize(),
-		dataType:'json',
-		success: function(json){
-			if(json.status == 1)
-			{ 
-				$('#FormEditAdmin').each(function(){
-					this.reset();
-				});
+			var FormData = "jumlah_cetak="+encodeURI($('#jumlah_cetak').val());
+			FormData += "&opsi_masal="+encodeURI($('#opsi_masal').val());
+			FormData += "&kertas_masal="+encodeURI($('#kertas_masal').val());
+			
 
-					$('#ResponseInput').html('');
-
-					$('.modal-dialog').removeClass('modal-lg');
-					$('.modal-dialog').addClass('modal-sm');
-					$('#ModalHeader').html('Berhasil');
-					$('#ModalContent').html(json.pesan);
-					$('#ModalFooter').html("<button type='button' class='btn btn-primary' data-dismiss='modal' autofocus>Okay</button>");
-					$('#ModalGue').modal('show');
-
-					$('#my-grid').DataTable().ajax.reload( null, false );
-			}
-			else 
-			{
-				$('#ResponseInput').html(json.pesan);
-			}
-		}
-	});
+			window.open("<?php echo site_url('penjualan/transaksi-cetak-resi-masal/?'); ?>" + FormData,'_blank');
 }
 
 $(document).ready(function(){

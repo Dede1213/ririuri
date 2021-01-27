@@ -49,8 +49,8 @@ class M_barang extends CI_Model
 		
 		$columns_order_by = array( 
 			0 => 'nomor',
-			1 => 'a.`kode_barang`',
-			2 => 'a.`nama_barang`',
+			1 => 'a.`nama_barang`',
+			2 => 'a.`kode_barang`',
 			4 => 'b.`kategori`',
 			5 => 'c.`merk`',
 			6 => 'a.`total_stok`',

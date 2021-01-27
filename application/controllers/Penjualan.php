@@ -385,12 +385,148 @@ class Penjualan extends MY_Controller
 		$pdf->Output();
 	}
 
-	public function transaksi_cetak_resi()
+	public function logo($ekspedisi){
+		if($ekspedisi == "Anter Aja"){
+			$logo = "anteraja.jpg";
+		}else if($ekspedisi == "JNT"){
+			$logo = "jnt.jpg";
+		}else if($ekspedisi == "JNE"){
+			$logo = "jne.jpg";
+		}else if($ekspedisi == "Si Cepat"){
+			$logo = "sicepat.jpg";
+		}else if($ekspedisi == "Ninja Express"){
+			$logo = "ninja.jpg";
+		}else if($ekspedisi == "ID Express"){
+			$logo = "idexpress.jpg";
+		}else if($ekspedisi == "Gojek"){
+			$logo = "gojek.jpg";
+		}else if($ekspedisi == "Grab"){
+			$logo = "grab.jpg";
+		}else if($ekspedisi == "Shopee Xpress"){
+			$logo = "shopee.jpg";
+		}else if($ekspedisi == "Lion Parcel"){
+			$logo = "lion.jpg";
+		}else if($ekspedisi == "Pos Indonesia"){
+			$logo = "pos.jpg";
+		}else{
+			$logo = "logo.png";
+		}
+		return $logo;
+	}
+
+	public function generateBarcode($no){
+
+		if(empty($no)){
+			$no_resi = "kosong";
+		}else{
+			$no_resi = $no;
+		}
+
+		
+		$barcodeOptions = array(
+			'text' => $no_resi, 
+			'font' => 1,
+            'barHeight'=> 40,
+			'factor'=>1,
+			'drawText' => false
+
+   		 );
+		$this->load->library('zend');
+		$this->zend->load('Zend/Barcode');
+		$this->load->library('zend');
+        $this->zend->load('Zend/Barcode');
+        $image_resource = Zend_Barcode::factory('code128', 'image', $barcodeOptions, array())->draw();
+        $image_name     = 'barcode.jpg';
+        $image_dir      = './assets/img/'; // penyimpanan file barcode
+		imagejpeg($image_resource, $image_dir.$image_name); 
+		
+		// Get the image and convert into string 
+		$img = file_get_contents('./assets/img/barcode.jpg'); 
+	  
+		// Encode the image string data into base64 
+		$data = base64_encode($img); 
+	  
+		// Display the output 
+		return $data; 
+
+
+	}
+
+	public function transaksi_cetak_resi_masal()
 	{
 		
-		
-		
+		$this->load->model('m_penjualan_master');
+		$getMaster = $this->m_penjualan_master->get_resi_masal();						
+		foreach($getMaster as $row){
+			$this->load->model('m_penjualan_detail');
+			$dt = $this->m_penjualan_detail->get_detail($row['id_penjualan_m'])->result_array();	
+			
 
+		$barc = $this->generateBarcode($row['no_resi']);	
+		// echo "<img src='data:image/png;base64,".$barc."' alt='Red dot' />";
+		$data[] = array('ekspedisi'=>$this->logo($row['ekspedisi']),
+					  'nama_toko'=>$row['nama_toko'],
+					  'nomor_toko'=>$row['no_telp'],
+					  'alamat_toko'=>$row['alamat'],
+					  'kartu_ucapan'=>$row['kartu_ucapan'],
+					  'no_nota'=>$row['nomor_nota'],
+					  'no_resi'=>$row['no_resi'],
+					  'nama_penerima'=>$row['nama_penerima'],
+					  'alamat_penerima' => $row['alamat_penerima'],
+					  'no_hp'	=> $row['no_telp'],
+					  'kertas' => $this->input->get('kertas_masal'),
+					  'opsi' => $this->input->get('opsi_masal'),
+					  'jumlah_cetak' => $this->input->get('jumlah_cetak'),
+					  'barcode' => $barc,
+					  'data_barang' => $dt
+					);
+		}	    
+
+		$this->dompdf57_masal($data);
+	}
+
+	public function dompdf57_masal($data)
+	{
+		$data['data'] = $data;
+		$this->load->view('penjualan/dompdf57_masal', $data, true);
+		
+		/*
+			//Load the library
+			$this->load->library('html2pdf');
+	    
+			//Set folder to save PDF to (jika ingin di simpan)
+			$this->html2pdf->folder('./assets/pdfs/');
+			
+			//Set the filename to save/download as
+			$this->html2pdf->filename('result.pdf');
+			
+			//Set the paper defaults
+			$this->html2pdf->paper('a4', 'portrait');
+			
+			$data_barang = '';
+			$no = 0;
+			
+			
+			//Load html view
+			if($data['kertas'] == '100mm'){
+				$this->html2pdf->html($this->load->view('penjualan/dompdf100', $data, true));
+			}elseif($data['kertas'] == '80mm'){
+				$this->html2pdf->html($this->load->view('penjualan/dompdf80', $data, true));
+			}else{
+				$this->html2pdf->html($this->load->view('penjualan/dompdf57_masal', $data, true));
+			}
+			
+			
+			if($this->html2pdf->create()) { //$this->html2pdf->create('save')
+				//PDF was successfully saved or downloaded
+				// echo 'PDF saved';
+			}
+
+			*/
+		}
+
+	public function transaksi_cetak_resi()
+	{
 		$nomor_nota 	= $this->input->get('nomor_nota');
 		$tanggal		= $this->input->get('tanggal');
 		$id_kasir		= $this->input->get('id_kasir');
@@ -417,31 +553,7 @@ class Penjualan extends MY_Controller
 			$pelanggan = $this->m_pelanggan->get_baris($id_pelanggan)->row()->nama;
 		}
 
-		if($ekspedisi == "Anter Aja"){
-			$logo = "anteraja.jpg";
-		}else if($ekspedisi == "JNT"){
-			$logo = "jnt.jpg";
-		}else if($ekspedisi == "JNE"){
-			$logo = "jne.jpg";
-		}else if($ekspedisi == "Si Cepat"){
-			$logo = "sicepat.jpg";
-		}else if($ekspedisi == "Ninja Express"){
-			$logo = "ninja.jpg";
-		}else if($ekspedisi == "ID Express"){
-			$logo = "idexpress.jpg";
-		}else if($ekspedisi == "Gojek"){
-			$logo = "gojek.jpg";
-		}else if($ekspedisi == "Grab"){
-			$logo = "grab.jpg";
-		}else if($ekspedisi == "Shopee Xpress"){
-			$logo = "shopee.jpg";
-		}else if($ekspedisi == "Lion Parcel"){
-			$logo = "lion.jpg";
-		}else if($ekspedisi == "Pos Indonesia"){
-			$logo = "pos.jpg";
-		}else{
-			$logo = "logo.png";
-		}
+		$logo = $this->logo($ekspedisi);
 
 		
 		
@@ -542,7 +654,7 @@ class Penjualan extends MY_Controller
 	{
 		
 		
-		
+		/*
 		$nomor_nota 	= $this->input->get('nomor_nota');
 		$tanggal		= $this->input->get('tanggal');
 		$id_kasir		= $this->input->get('id_kasir');
@@ -655,6 +767,7 @@ class Penjualan extends MY_Controller
 
 		#------------- delete gambar barcode nya biar ga nyampah --------------#
 		// unlink(base_url()."assets/img/".$no_resi.".jpg".);
+		*/
 	}
 
 	public function ajax_pelanggan()
@@ -1066,58 +1179,6 @@ class Penjualan extends MY_Controller
 
 	public function cetak_masal()
 	{
-		$level = $this->session->userdata('ap_level');
-		if($level == 'admin' OR $level == 'kasir' OR $level == 'keuangan')
-		{
-			if($_POST)
-			{
-				$this->load->library('form_validation');
-				$this->form_validation->set_rules('nama','Nama','trim|required|alpha_spaces|max_length[40]');
-				$this->form_validation->set_rules('alamat','Alamat','trim|required|max_length[1000]');
-				$this->form_validation->set_rules('telepon','Telepon / Handphone','trim|required|numeric|max_length[40]');
-				$this->form_validation->set_rules('info','Info Tambahan Lainnya','trim|max_length[1000]');
-
-				$this->form_validation->set_message('alpha_spaces','%s harus alphabet !');
-				$this->form_validation->set_message('numeric','%s harus angka !');
-				$this->form_validation->set_message('required','%s harus diisi !');
-
-				if($this->form_validation->run() == TRUE)
-				{
-					$this->load->model('m_pelanggan');
-					$nama 		= $this->input->post('nama');
-					$alamat 	= $this->clean_tag_input($this->input->post('alamat'));
-					$telepon 	= $this->input->post('telepon');
-					$info 		= $this->clean_tag_input($this->input->post('info'));
-
-					$unique		= time().$this->session->userdata('ap_id_user');
-					$insert 	= $this->m_pelanggan->tambah_pelanggan($nama, $alamat, $telepon, $info, $unique);
-					if($insert)
-					{
-						$id_pelanggan = $this->m_pelanggan->get_dari_kode($unique)->row()->id_pelanggan;
-						echo json_encode(array(
-							'status' => 1,
-							'pesan' => "<div class='alert alert-success'><i class='fa fa-check'></i> <b>".$nama."</b> berhasil ditambahkan sebagai pelanggan.</div>",
-							'id_pelanggan' => $id_pelanggan,
-							'nama' => $nama,
-							'alamat' => preg_replace("/\r\n|\r|\n/",'<br />', $alamat),
-							'telepon' => $telepon,
-							'info' => (empty($info)) ? "<small><i>Tidak ada</i></small>" : preg_replace("/\r\n|\r|\n/",'<br />', $info)						
-						));
-					}
-					else
-					{
-						$this->query_error();
-					}
-				}
-				else
-				{
-					$this->input_error();
-				}
-			}
-			else
-			{
-				$this->load->view('penjualan/cetak_masal');
-			}
-		}
+		$this->load->view('penjualan/cetak_masal');
 	}
 }

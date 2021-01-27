@@ -208,4 +208,19 @@ class M_penjualan_master extends CI_Model
 			->where('id_penjualan_m', $id_penjualan_m)
 			->update('pj_penjualan_master', $dt);
 	}
+
+
+	function get_resi_masal($id_penjualan)
+	{
+		$id_toko = $this->session->userdata('id_toko');
+		$sql = "
+		SELECT a.id_penjualan_m,a.nomor_nota,b.nama_penerima,b.alamat_penerima,b.no_penerima,b.no_resi,b.ekspedisi,c.*
+		FROM pj_penjualan_master a 
+		LEFT JOIN pj_penjualan_resi b ON a.id_penjualan_m = b.id_penjualan_m
+		LEFT JOIN pj_toko c ON a.id_toko = c.id_toko
+		Where a.id_toko = '$id_toko'
+		ORDER BY a.id_penjualan_m DESC LIMIT 10
+		";
+		return $this->db->query($sql)->result_array();
+	}
 }
