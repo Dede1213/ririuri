@@ -29,6 +29,7 @@
 										<option>57mm</option>
 										<option>80mm</option>
 										<option>100mm</option>
+										<option>A4</option>
 									</select>
 							</div>
 

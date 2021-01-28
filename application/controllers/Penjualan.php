@@ -454,76 +454,65 @@ class Penjualan extends MY_Controller
 
 	public function transaksi_cetak_resi_masal()
 	{
-		
 		$this->load->model('m_penjualan_master');
-		$getMaster = $this->m_penjualan_master->get_resi_masal();						
+		$this->load->model('m_penjualan_detail');
+
+		$kertas = $this->input->get('kertas_masal');
+		$jumlah_cetak = $this->input->get('jumlah_cetak');
+
+		$data['jumlah_cetak'] = $jumlah_cetak;
+
+		$getMaster = $this->m_penjualan_master->get_resi_masal($jumlah_cetak)->result_array();	
 		foreach($getMaster as $row){
-			$this->load->model('m_penjualan_detail');
+			
 			$dt = $this->m_penjualan_detail->get_detail($row['id_penjualan_m'])->result_array();	
 			
-
 		$barc = $this->generateBarcode($row['no_resi']);	
-		// echo "<img src='data:image/png;base64,".$barc."' alt='Red dot' />";
-		$data[] = array('ekspedisi'=>$this->logo($row['ekspedisi']),
+		$data['header'][] = array('ekspedisi'=>$this->logo($row['ekspedisi']),
 					  'nama_toko'=>$row['nama_toko'],
-					  'nomor_toko'=>$row['no_telp'],
 					  'alamat_toko'=>$row['alamat'],
+					  'nomor_toko'=>$row['no_telp'],
 					  'kartu_ucapan'=>$row['kartu_ucapan'],
 					  'no_nota'=>$row['nomor_nota'],
 					  'no_resi'=>$row['no_resi'],
 					  'nama_penerima'=>$row['nama_penerima'],
 					  'alamat_penerima' => $row['alamat_penerima'],
 					  'no_hp'	=> $row['no_telp'],
-					  'kertas' => $this->input->get('kertas_masal'),
 					  'opsi' => $this->input->get('opsi_masal'),
-					  'jumlah_cetak' => $this->input->get('jumlah_cetak'),
 					  'barcode' => $barc,
 					  'data_barang' => $dt
 					);
 		}	    
 
-		$this->dompdf57_masal($data);
+		//Load the library
+		$this->load->library('html2pdf');
+		//Set folder to save PDF to (jika ingin di simpan)
+		$this->html2pdf->folder('./assets/pdfs/');
+		//Set the filename to save/download as
+		$this->html2pdf->filename('result.pdf');
+		//Set the paper defaults
+		$this->html2pdf->paper('a4', 'portrait');
+
+		//Load html view
+		if($kertas == '100mm'){
+			$view = $this->load->view('penjualan/dompdf100_masal', $data, true);
+		}elseif($kertas == '80mm'){
+			$view = $this->load->view('penjualan/dompdf80_masal', $data, true);
+		}elseif($kertas == 'A4'){
+			$view = $this->load->view('penjualan/dompdf100_a4_masal', $data, true);
+		}else{
+			$view = $this->load->view('penjualan/dompdf57_masal', $data, true);
+		}
+		
+		$this->html2pdf->html($view);
+		if($this->html2pdf->create()) { //$this->html2pdf->create('save')
+			//PDF was successfully saved or downloaded
+			// echo 'PDF saved';
+		}
+		
 	}
 
-	public function dompdf57_masal($data)
-	{
-		$data['data'] = $data;
-		$this->load->view('penjualan/dompdf57_masal', $data, true);
-		
-		/*
-			//Load the library
-			$this->load->library('html2pdf');
-	    
-			//Set folder to save PDF to (jika ingin di simpan)
-			$this->html2pdf->folder('./assets/pdfs/');
-			
-			//Set the filename to save/download as
-			$this->html2pdf->filename('result.pdf');
-			
-			//Set the paper defaults
-			$this->html2pdf->paper('a4', 'portrait');
-			
-			$data_barang = '';
-			$no = 0;
-			
-			
-			//Load html view
-			if($data['kertas'] == '100mm'){
-				$this->html2pdf->html($this->load->view('penjualan/dompdf100', $data, true));
-			}elseif($data['kertas'] == '80mm'){
-				$this->html2pdf->html($this->load->view('penjualan/dompdf80', $data, true));
-			}else{
-				$this->html2pdf->html($this->load->view('penjualan/dompdf57_masal', $data, true));
-			}
-			
-			
-			if($this->html2pdf->create()) { //$this->html2pdf->create('save')
-				//PDF was successfully saved or downloaded
-				// echo 'PDF saved';
-			}
-
-			*/
-		}
+	
 
 	public function transaksi_cetak_resi()
 	{

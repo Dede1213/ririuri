@@ -210,7 +210,7 @@ class M_penjualan_master extends CI_Model
 	}
 
 
-	function get_resi_masal($id_penjualan)
+	function get_resi_masal($jumlah_cetak)
 	{
 		$id_toko = $this->session->userdata('id_toko');
 		$sql = "
@@ -219,8 +219,8 @@ class M_penjualan_master extends CI_Model
 		LEFT JOIN pj_penjualan_resi b ON a.id_penjualan_m = b.id_penjualan_m
 		LEFT JOIN pj_toko c ON a.id_toko = c.id_toko
 		Where a.id_toko = '$id_toko'
-		ORDER BY a.id_penjualan_m DESC LIMIT 10
+		ORDER BY a.id_penjualan_m DESC LIMIT $jumlah_cetak
 		";
-		return $this->db->query($sql)->result_array();
+		return $this->db->query($sql);
 	}
 }

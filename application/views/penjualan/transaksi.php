@@ -247,10 +247,15 @@ if($level !== 'admin')
 					<div class='row'>
 					<div class='col-sm-4'> </div>
 						<div class='col-sm-8'>
-						<a href="<?php echo site_url('penjualan/cetak-masal'); ?>" class='pull-right' id='cetakmasal'>Cetak Masal</a>
 
-							<div class='col-sm-3' style='padding-right: 0px;margin-left:150px;'>
-								<button type='button' class='btn btn-warning btn-block' id='CetakResi'>
+							<div class='col-sm-3' style='padding-right: 0px;'>
+							<a href="<?php echo site_url('penjualan/cetak-masal'); ?>" class='btn btn-danger btn-block' id='cetakmasal' style="padding-top:8px;padding-bottom:8px;">
+							<i class='fa fa-print'></i>Cetak Resi Masal
+							</a>
+							</div>
+
+							<div class='col-sm-3' style='padding-right: 0px;'>
+								<button type='button' class='btn btn-success btn-block' id='CetakResi'>
 									<i class='fa fa-print'></i> Cetak Resi 
 								</button>
 							</div>

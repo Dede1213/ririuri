@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <?php
-
-    
-        $table_size = "147px";
+        $table_size = "235px"; //333 100 mm
         $logo_size = "80px";
-        
-
-        $page_heigt = 175 * $jumlah_cetak;
+        $page_heigt = 155 * $jumlah_cetak;
         $page_heigt_fix = $page_heigt.'mm';
     ?>
     <head>
@@ -37,6 +33,7 @@
             
             .text {
                         font-family: 'Arial', cursive;
+                        font-size:<?php echo $font_size;?>;
                         font-weight:bold;
                         margin-top : -5;
                         text-align:center;
@@ -45,18 +42,18 @@
                     }
 
                     .textA {
-                        font-size:10px;
+                        font-size:11px;
                         padding:1px;
                         margin:1px;
+                        
                     }
-
                     @page {
-                    size: 49.00mm <?php echo $page_heigt_fix;?>; // set appropriately
+                    size: 71.50mm <?php echo $page_heigt_fix;?>; // set appropriately
                     margin: 0;
                     }
                     @media print {
                     html, body {
-                        width: 49.00mm; // set appropriately
+                        width: 76.50mm; // set appropriately
                         height: <?php echo $page_heigt_fix;?>; // set appropriately
                     }
                     /* ... the rest of the rules ... */
@@ -89,7 +86,7 @@
         
         <tr style="border-bottom:2px dotted #000;">
             <td colspan="2">
-            <img style="position:center;width:90%;"  src="data:image/png;base64,<?php echo $row['barcode'];?>" alt='Red dot' />
+            <img style="margin-left:20px;width:70%;"  src="data:image/png;base64,<?php echo $row['barcode'];?>" alt='Red dot' />
 
                 <!-- <img style="position:center;width:90%;" src="./assets/img/barcode.jpg"/> -->
             </td>
@@ -118,7 +115,7 @@
         </tr>
        
         </table>
-        <br><div style="margin-left:-42px;">---------------------------------</div><br>
+        <div style="margin-left:-42px;">-------------------------------------------------</div><br>
 
         <table id="table2" class="textA">
             <tr>
@@ -146,11 +143,11 @@
         <?php if($row['opsi'] == 'Semua' || $row['opsi'] == 'Ucapan'){ ?>
             <?php if($row['opsi'] == 'Ucapan'){ $margin_top_ucapan = "-45px"; }else{ $margin_top_ucapan = "0px"; }?>
             <?php if($row['opsi'] == 'Semua'){ ?>
-                <br><div style="margin-left:-42px;">---------------------------------</div><br>
+                <br>        <div style="margin-left:-42px;">-------------------------------------------------</div><br>
             <?php } ?>    
             <table id="table2" style="margin-top:<?php echo $margin_top_ucapan;?>">
                 <tr>
-                    <td><div style="text-align:justify;font-size:11px;padding:2;">
+                    <td><div style="text-align:justify;font-size:12px;padding:2;">
                         Hallo Kak <?php echo $row['nama_penerima'];?>,
                         <br> <?php echo $row['kartu_ucapan'];?>
                     </div>
