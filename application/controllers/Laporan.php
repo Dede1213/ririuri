@@ -246,4 +246,26 @@ class Laporan extends MY_Controller
 
 		$pdf->Output();
 	}
+
+	public function log(){
+
+		$this->load->model('m_penjualan_master');
+		$penjualan 	= $this->m_user->get_log()->result_array();
+
+		foreach($penjualan as $row){
+			print_r($row);
+			echo "<br><hr>";
+		}
+	}
+
+	public function graphic(){
+
+		$this->load->model('m_penjualan_master');
+		$penjualan['data'] 	= $this->m_penjualan_master->get_trx_day()->result_array();
+		$penjualan['data_month'] 	= $this->m_penjualan_master->get_trx_month()->result_array();
+		$penjualan['controller'] = "graphic";
+		// print_r($penjualan['data_month']);
+		$this->load->view('laporan/graphic',$penjualan);
+		
+	}
 }

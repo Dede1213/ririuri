@@ -147,7 +147,14 @@ class Secure extends MY_Controller
 						'ap_level_caption' => $data_user->level_caption,
 						'id_toko' => $data_user->id_toko 
 					);
+
+					
+
 					$this->session->set_userdata($session);	
+
+					// insert log dede
+					$this->m_user->insert_log();
+					//end
 
 					$URL_home = site_url('penjualan');
 					if($data_user->level == 'inventory')

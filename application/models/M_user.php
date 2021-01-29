@@ -231,4 +231,28 @@ class M_user extends CI_Model
 
 		return $this->db->query($sql);
 	}
+
+	function insert_log()
+	{
+
+		$dt = array(
+			'id_toko' => $this->session->userdata('id_toko'),
+			'ap_id_user' => $this->session->userdata('ap_id_user'),
+			'ap_level_caption' => $this->session->userdata('ap_level_caption'),
+			'ap_nama' => $this->session->userdata('ap_nama'),
+			'datetime' => date("Y-m-d h:i:s")
+
+		);
+
+		return $this->db->insert('pj_log', $dt);
+	}
+
+	function get_log()
+	{
+		$sql = "SELECT a.ap_nama,a.ap_level_caption,b.nama_toko,a.datetime
+		FROM pj_log a LEFT JOIN pj_toko b ON a.id_toko = b.id_toko 
+		WHERE DATE(DATETIME) = CURDATE()";
+
+		return $this->db->query($sql);
+	}
 }

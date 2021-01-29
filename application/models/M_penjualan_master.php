@@ -223,4 +223,27 @@ class M_penjualan_master extends CI_Model
 		";
 		return $this->db->query($sql);
 	}
+
+	function get_trx_day()
+	{
+		$id_toko = $this->session->userdata('id_toko');
+		$sql = "
+		SELECT COUNT(id_penjualan_m) AS total_transaksi, DATE_FORMAT(tanggal,'%d %M %Y') AS tanggal FROM `pj_penjualan_master` 
+		WHERE id_toko = '$id_toko' AND DATE_FORMAT(tanggal,'%Y-%m') = '2021-01'
+		GROUP BY tanggal
+		";
+		return $this->db->query($sql);
+	}
+
+	function get_trx_month()
+	{
+		$id_toko = $this->session->userdata('id_toko');
+		$sql = "
+		SELECT COUNT(id_penjualan_m) AS total_transaksi, DATE_FORMAT(tanggal,'%d %M %Y') AS tanggal FROM `pj_penjualan_master` 
+		WHERE id_toko = '$id_toko' AND DATE_FORMAT(tanggal,'%Y') = '2021'
+		GROUP BY DATE_FORMAT(tanggal,'%m')
+		";
+		return $this->db->query($sql);
+	}
+
 }
