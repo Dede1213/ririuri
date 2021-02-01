@@ -1,11 +1,16 @@
 <?php echo form_open('secure/act_tambah', array('id' => 'FormTambahUser')); ?>
 <div class='form-group'>
-	<label>Username Login</label>
+	<label>Username</label>
 	<input type='text' name='username' class='form-control'>
 </div>
 <div class='form-group'>
-	<label>Password Login</label>
-	<input type='password' name='password' class='form-control'>
+	<label>Password</label>
+	<input type='password' name='password' id="password" class='form-control'>
+</div>
+
+<div class='form-group'>
+	<label>Ulangi Password</label>
+	<input type='password' name='repassword' id="repassword" class='form-control'>
 </div>
 
 <hr />
@@ -28,28 +33,39 @@
 <script>
 function TambahUser()
 {
-	$.ajax({
-		url: $('#FormTambahUser').attr('action'),
-		type: "POST",
-		cache: false,
-		data: $('#FormTambahUser').serialize(),
-		dataType:'json',
-		success: function(json){
-			if(json.status == 1){ 
-				$('.modal-dialog').removeClass('modal-lg');
-				$('.modal-dialog').addClass('modal-sm');
-				$('#ModalHeader').html('Sukses !');
-				$('#ModalContent').html(json.pesan);
-				$('#ModalFooter').html("<button type='button' class='btn btn-primary' data-dismiss='modal'>Ok</button>");
-				$('#ModalGue').modal('show');
-				// $('#my-grid').DataTable().ajax.reload( null, false );
-				location.reload(); 
+	var a = $('#password').val();
+	var b = $('#repassword').val();
+
+	if(a == b){
+
+		$.ajax({
+			url: $('#FormTambahUser').attr('action'),
+			type: "POST",
+			cache: false,
+			data: $('#FormTambahUser').serialize(),
+			dataType:'json',
+			success: function(json){
+				if(json.status == 1){ 
+					$('.modal-dialog').removeClass('modal-lg');
+					$('.modal-dialog').addClass('modal-sm');
+					$('#ModalHeader').html('Sukses !');
+					$('#ModalContent').html(json.pesan);
+					$('#ModalFooter').html("<button type='button' class='btn btn-primary' data-dismiss='modal' id='oke'>Ok</button>");
+					$('#ModalGue').modal('show');
+					// $('#my-grid').DataTable().ajax.reload( null, false );
+					$('#oke').click(function(){
+						location.reload(); 
+					});
+					
+				}
+				else {
+					$('#ResponseInputModal').html(json.pesan);
+				}
 			}
-			else {
-				$('#ResponseInputModal').html(json.pesan);
-			}
-		}
-	});
+		});
+	}else{
+		alert('password tidak sama!');
+	}
 }
 
 $(document).ready(function(){

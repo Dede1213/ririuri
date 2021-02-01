@@ -24,7 +24,7 @@ $level = $this->session->userdata('ap_level');
 							<th>Stok</th>
 							<th>Modal</th>
 							<th>Harga</th>
-							<th>Keterangan</th>
+							<th width="15%">Keterangan</th>
 							<?php if($level == 'admin' OR $level == 'inventory') { ?>
 							<th class='no-sort'>Edit</th>
 							<th class='no-sort'>Hapus</th>
@@ -80,7 +80,7 @@ if($level == 'admin' OR $level == 'inventory')
 				}
 	        ],
 			"sPaginationType": "simple_numbers", 
-			"iDisplayLength": 10,
+			"iDisplayLength": 20,
 			"aLengthMenu": [[10, 20, 50, 100, 150], [10, 20, 50, 100, 150]],
 			
 			"ajax":{

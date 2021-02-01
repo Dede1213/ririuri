@@ -178,7 +178,7 @@
         </table>
     <?php } ?>
         <?php if($row['opsi'] == 'Semua' || $row['opsi'] == 'Ucapan'){ ?>
-            <?php if($row['opsi'] == 'Ucapan'){ $margin_top_ucapan = "-45px"; }else{ $margin_top_ucapan = "0px"; }?>
+            <?php if($row['opsi'] == 'Ucapan'){ $margin_top_ucapan = "-5px"; }else{ $margin_top_ucapan = "0px"; }?>
             <?php if($row['opsi'] == 'Semua'){ ?>
                 <!-- <br><div style="margin-left:-42px;">------------------------------------------------------------------</div><br> -->
 

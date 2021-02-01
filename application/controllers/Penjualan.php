@@ -20,6 +20,8 @@ class Penjualan extends MY_Controller
 		if($this->session->userdata('ap_level') == 'inventory'){
 			redirect();
 		}
+		date_default_timezone_set("Asia/Bangkok");
+
 	}
 
 	public function index()
@@ -409,7 +411,7 @@ class Penjualan extends MY_Controller
 		}else if($ekspedisi == "Pos Indonesia"){
 			$logo = "pos.jpg";
 		}else{
-			$logo = "logo.png";
+			$logo = "logo-eks.png";
 		}
 		return $logo;
 	}

@@ -62,7 +62,7 @@ class Laporan extends MY_Controller
 					<thead>
 						<tr>
 							<th>#</th>
-							<th>No. Nota</th>
+							<th>No. Pesanan</th>
 							<th>Tanggal</th>
 							<th>Nama Barang</th>
 							<th>Harga Satuan</th>
@@ -167,15 +167,15 @@ class Laporan extends MY_Controller
 		$pdf->Cell(0, 8, "Laporan Penjualan Tanggal ".date('d/m/Y', strtotime($from))." - ".date('d/m/Y', strtotime($to)), 0, 1, 'L'); 
 		
 		$pdf->Cell(7, 7, 'No', 1, 0, 'L'); 
+		$pdf->Cell(35, 7, 'No.Pesanan', 1, 0, 'L'); 
 		$pdf->Cell(20, 7, 'Tanggal', 1, 0, 'L'); 
-		$pdf->Cell(50, 7, 'Nama Barang', 1, 0, 'L');
+		$pdf->Cell(70, 7, 'Nama Barang', 1, 0, 'L');
 		$pdf->Cell(25, 7, 'Harga/pc', 1, 0, 'L'); 
 		$pdf->Cell(25, 7, 'Modal', 1, 0, 'L'); 
 		$pdf->Cell(8, 7, 'Qty', 1, 0, 'L'); 
 		$pdf->Cell(25, 7, 'Laba', 1, 0, 'L'); 
 		$pdf->Cell(25, 7, 'Admin', 1, 0, 'L'); 
 		$pdf->Cell(25, 7, 'Income +', 1, 0, 'L'); 
-		$pdf->Cell(50, 7, 'Keterangan', 1, 0, 'L'); 
 		$pdf->Ln();
 
 		$this->load->model('m_penjualan_master');
@@ -215,15 +215,15 @@ class Laporan extends MY_Controller
 
 
 			$pdf->Cell(7, 7, $no, 1, 0, 'L'); 
+			$pdf->Cell(35, 7, $p->nomor_nota, 1, 0, 'L'); 
 			$pdf->Cell(20, 7, $tanggal, 1, 0, 'L'); 
-			$pdf->Cell(50, 7, substr($p->nama_barang,0,25), 1, 0, 'L');  //
+			$pdf->Cell(70, 7, substr($p->nama_barang,0,25), 1, 0, 'L');  //
 			$pdf->Cell(25, 7, number_format($p->harga_satuan), 1, 0, 'L'); 
 			$pdf->Cell(25, 7, number_format($p->modal), 1, 0, 'L'); 
 			$pdf->Cell(8, 7, $p->jumlah_beli, 1, 0, 'L'); 
 			$pdf->Cell(25, 7, number_format($p->laba), 1, 0, 'L'); 
 			$pdf->Cell(25, 7, $biaya_admin, 1, 0, 'L');
 			$pdf->Cell(25, 7, $laba_tambahan, 1, 0, 'L');
-			$pdf->Cell(50, 7, substr($keterengan,0,25), 1, 0, 'L');
 			$pdf->Ln();
 
 				$total_laba = $total_laba + $p->laba;
@@ -237,11 +237,10 @@ class Laporan extends MY_Controller
 				$no++;
 		}
 
-		$pdf->Cell(135, 7, '                                                                                        Total', 1, 0, 'L'); 
+		$pdf->Cell(190, 7, '                                                                                    Total', 1, 0, 'L'); 
 		$pdf->Cell(25, 7, number_format($total_laba), 1, 0, 'L'); 
 		$pdf->Cell(25, 7, number_format($total_Admin), 1, 0, 'L'); 
 		$pdf->Cell(25, 7, number_format($total_laba_tambahan), 1, 0, 'L'); 
-		$pdf->Cell(50, 7, '', 1, 0, 'L');
 		$pdf->Ln();
 
 		$pdf->Output();

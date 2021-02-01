@@ -248,16 +248,18 @@ if($level !== 'admin')
 					<div class='col-sm-4'> </div>
 						<div class='col-sm-8'>
 
-							<div class='col-sm-3' style='padding-right: 0px;'>
-							<a href="<?php echo site_url('penjualan/cetak-masal'); ?>" class='btn btn-danger btn-block' id='cetakmasal' style="padding-top:8px;padding-bottom:8px;">
-							<i class='fa fa-print'></i>Cetak Resi Masal
-							</a>
-							</div>
+							
 
 							<div class='col-sm-3' style='padding-right: 0px;'>
 								<button type='button' class='btn btn-success btn-block' id='CetakResi'>
 									<i class='fa fa-print'></i> Cetak Resi 
 								</button>
+							</div>
+
+							<div class='col-sm-3' style='padding-right: 0px;'>
+							<a href="<?php echo site_url('penjualan/cetak-masal'); ?>" class='btn btn-danger btn-block' id='cetakmasal' style="padding-top:8px;padding-bottom:8px;">
+							<i class='fa fa-print'></i>Cetak Resi Masal
+							</a>
 							</div>
 
 							<div class='col-sm-3' style='padding-right: 0px;'>

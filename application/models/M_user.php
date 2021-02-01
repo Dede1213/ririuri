@@ -235,6 +235,8 @@ class M_user extends CI_Model
 	function insert_log()
 	{
 
+		date_default_timezone_set("Asia/Bangkok");
+		
 		$dt = array(
 			'id_toko' => $this->session->userdata('id_toko'),
 			'ap_id_user' => $this->session->userdata('ap_id_user'),

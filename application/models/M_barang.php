@@ -49,14 +49,14 @@ class M_barang extends CI_Model
 		
 		$columns_order_by = array( 
 			0 => 'nomor',
-			1 => 'a.`nama_barang`',
-			2 => 'a.`kode_barang`',
-			4 => 'b.`kategori`',
-			5 => 'c.`merk`',
-			6 => 'a.`total_stok`',
-			7 => 'a.`modal`',
-			8 => '`harga`',
-			9 => 'a.`keterangan`'
+			1 => 'a.`kode_barang`',
+			2 => 'a.`nama_barang`',
+			3 => 'b.`kategori`',
+			4 => 'c.`merk`',
+			5 => 'a.`total_stok`',
+			6 => 'a.`modal`',
+			7 => '`harga`',
+			8 => 'a.`keterangan`'
 		);
 		
 		$sql .= " ORDER BY ".$columns_order_by[$column_order]." ".$column_dir.", nomor ";

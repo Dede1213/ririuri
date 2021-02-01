@@ -1,10 +1,10 @@
 <?php if($penjualan->num_rows() > 0) { ?>
-
-	<table class='table table-bordered'>
+	<table class='table table-bordered table-striped table-responsive table-sm' style="font-size:12px;">
 		<thead>
 			<tr>
 				<th>#</th>
 				<th>Tanggal</th>
+				<th>No Pesanan</th>
 				<th>Nama Barang</th>
 				<th>Harga /pc</th>
 				<th>Modal</th>
@@ -60,6 +60,7 @@
 						<td>".$no."</td>
 						<td>".$tanggal
 						."</td>
+						<td>".$p->nomor_nota."</td>
 						<td>".$p->nama_barang."</td>
 						<td>".number_format($p->harga_satuan)."</td>
 						<td>".number_format($p->modal)."</td>
@@ -93,7 +94,7 @@
 
 			echo "
 				<tr>
-					<td colspan='7'><b>TOTAL</b></td>
+					<td colspan='8'><b>TOTAL</b></td>
 					<td><b>".number_format($total_laba)."</b></td>
 					<td><b>".number_format($total_penjualan)."</b></td>
 					<td><b>".number_format($total_Admin)."</b></td>
@@ -103,6 +104,7 @@
 			?>
 		</tbody>
 	</table>
+		
 
 	<p>
 		<?php

@@ -157,10 +157,9 @@ class M_penjualan_master extends CI_Model
 			}
 		}
 
+		$this->db->where('id_penjualan_m', $id_penjualan)->delete('pj_penjualan_resi');
 		$this->db->where('id_penjualan_m', $id_penjualan)->delete('pj_penjualan_detail');
-		return $this->db
-			->where('id_penjualan_m', $id_penjualan)
-			->delete('pj_penjualan_master');
+		return $this->db->where('id_penjualan_m', $id_penjualan)->delete('pj_penjualan_master');
 	}
 
 	function laporan_penjualan($from, $to, $id_barang)
@@ -213,34 +212,39 @@ class M_penjualan_master extends CI_Model
 	function get_resi_masal($jumlah_cetak)
 	{
 		$id_toko = $this->session->userdata('id_toko');
-		$sql = "
-		SELECT a.id_penjualan_m,a.nomor_nota,b.nama_penerima,b.alamat_penerima,b.no_penerima,b.no_resi,b.ekspedisi,c.*
+		$sqlA = "
+		CREATE TEMPORARY TABLE IF NOT EXISTS tmp_masal AS (SELECT a.id_penjualan_m,a.nomor_nota,b.nama_penerima,b.alamat_penerima,b.no_penerima,b.no_resi,b.ekspedisi,c.*
 		FROM pj_penjualan_master a 
 		LEFT JOIN pj_penjualan_resi b ON a.id_penjualan_m = b.id_penjualan_m
 		LEFT JOIN pj_toko c ON a.id_toko = c.id_toko
-		Where a.id_toko = '$id_toko'
-		ORDER BY a.id_penjualan_m DESC LIMIT $jumlah_cetak
-		";
-		return $this->db->query($sql);
+		WHERE a.id_toko = '$id_toko'
+		ORDER BY a.id_penjualan_m DESC LIMIT $jumlah_cetak)";
+		$this->db->query($sqlA);
+
+		$sqlB = "SELECT * FROM tmp_masal ORDER BY id_penjualan_m ASC";
+
+		return $this->db->query($sqlB);
 	}
 
 	function get_trx_day()
 	{
+		$bulan_berjalan = date('Y-m');
 		$id_toko = $this->session->userdata('id_toko');
 		$sql = "
 		SELECT COUNT(id_penjualan_m) AS total_transaksi, DATE_FORMAT(tanggal,'%d %M %Y') AS tanggal FROM `pj_penjualan_master` 
-		WHERE id_toko = '$id_toko' AND DATE_FORMAT(tanggal,'%Y-%m') = '2021-01'
-		GROUP BY tanggal
+		WHERE id_toko = '$id_toko' AND DATE_FORMAT(tanggal,'%Y-%m') = '$bulan_berjalan'
+		GROUP BY DATE_FORMAT(tanggal,'%d %M %Y')
 		";
 		return $this->db->query($sql);
 	}
 
 	function get_trx_month()
 	{
+		$tahun_berjalan = date('Y');
 		$id_toko = $this->session->userdata('id_toko');
 		$sql = "
-		SELECT COUNT(id_penjualan_m) AS total_transaksi, DATE_FORMAT(tanggal,'%d %M %Y') AS tanggal FROM `pj_penjualan_master` 
-		WHERE id_toko = '$id_toko' AND DATE_FORMAT(tanggal,'%Y') = '2021'
+		SELECT COUNT(id_penjualan_m) AS total_transaksi, DATE_FORMAT(tanggal,'%M %Y') AS tanggal FROM `pj_penjualan_master` 
+		WHERE id_toko = '$id_toko' AND DATE_FORMAT(tanggal,'%Y') = '$tahun_berjalan'
 		GROUP BY DATE_FORMAT(tanggal,'%m')
 		";
 		return $this->db->query($sql);

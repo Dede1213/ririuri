@@ -15,12 +15,12 @@ $level = $this->session->userdata('ap_level');
 			
 
 			<div class="row">
-				<div class="col-sm-6">
+				<div class="col-sm-12">
 					
 						<canvas id="myChart2"></canvas>
 					
 				</div>
-				<div class="col-sm-6">
+				<div class="col-sm-12">
 					
 						<canvas id="myChart"></canvas>
 					
