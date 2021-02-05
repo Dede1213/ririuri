@@ -58,6 +58,9 @@ $level = $this->session->userdata('ap_level');
 
 						</ul>
 					</li>
+					<li class="dropdown <?php if($controller == 'pengeluaran') { echo 'active'; } ?>">
+						<a href="<?php echo site_url('pengeluaran'); ?>"><i class='fa fa-money'></i> Pengeluaran</a>
+					</li>
 
 				
 				<?php } ?>

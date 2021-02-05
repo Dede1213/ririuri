@@ -42,6 +42,26 @@ $level = $this->session->userdata('ap_level');
           <canvas id="myChart4"></canvas>
         
         </div>
+
+
+
+        <div class="col-sm-12">
+        <br>
+         <hr>
+        <br>
+        </div>
+
+				<div class="col-sm-6">
+					
+						<canvas id="myChart5"></canvas>
+					
+				</div>
+        <div class="col-sm-6">
+					
+          <canvas id="myChart6"></canvas>
+        
+        </div>
+
 			</div>	
 
 		</div>
@@ -79,6 +99,16 @@ $level = $this->session->userdata('ap_level');
             ]
         }]
     },
+    options: {
+        scales: {
+            xAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true
+                }
+            }],
+        }
+    }
 });
  
   </script>
@@ -113,6 +143,16 @@ $level = $this->session->userdata('ap_level');
             ]
         }]
     },
+    options: {
+        scales: {
+            xAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true
+                }
+            }],
+        }
+    }
 });
  
   </script>
@@ -147,6 +187,16 @@ $level = $this->session->userdata('ap_level');
             ]
         }]
     },
+    options: {
+        scales: {
+            xAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true
+                }
+            }],
+        }
+    }
 });
  
   </script>
@@ -181,6 +231,44 @@ $level = $this->session->userdata('ap_level');
             ]
         }]
     },
+
+    options: {
+        scales: {
+            xAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true
+                }
+            }],
+        }
+    }
+});
+ 
+  </script>
+
+
+<script type="text/javascript">
+    var ctx = document.getElementById('myChart5').getContext('2d');
+    var chart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: [
+          'Red',
+        'Yellow',
+        'Blue'
+        ],
+        datasets: [{
+            label: 'Data Penjualan Per Bulan Sebelumnya',
+            // backgroundColor: '#ADD8E6',
+            // borderColor: '#93C3D2',
+            backgroundColor: ["red", "yellow", "blue"],
+            data: [
+              10, 20, 30
+            ]
+        }]
+    },
+    
+    
 });
  
   </script>
