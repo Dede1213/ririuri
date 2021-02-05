@@ -17,14 +17,31 @@ $level = $this->session->userdata('ap_level');
 			<div class="row">
 				<div class="col-sm-12">
 					
+						<canvas id="myChart1"></canvas>
+					
+				</div>
+        <div class="col-sm-12">
+					
 						<canvas id="myChart2"></canvas>
 					
 				</div>
-				<div class="col-sm-12">
+
+        <div class="col-sm-12">
+        <br>
+         <hr>
+        <br>
+        </div>
+
+				<div class="col-sm-6">
 					
-						<canvas id="myChart"></canvas>
+						<canvas id="myChart3"></canvas>
 					
 				</div>
+        <div class="col-sm-6">
+					
+          <canvas id="myChart4"></canvas>
+        
+        </div>
 			</div>	
 
 		</div>
@@ -33,7 +50,7 @@ $level = $this->session->userdata('ap_level');
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <script type="text/javascript">
-    var ctx = document.getElementById('myChart').getContext('2d');
+    var ctx = document.getElementById('myChart4').getContext('2d');
     var chart = new Chart(ctx, {
     type: 'horizontalBar',
     data: {
@@ -65,9 +82,41 @@ $level = $this->session->userdata('ap_level');
 });
  
   </script>
-<br>
-  <hr>
-  <br>
+
+<script type="text/javascript">
+    var ctx = document.getElementById('myChart3').getContext('2d');
+    var chart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: [
+          <?php
+		  	
+            if (count($data_month_before)>0) {
+              foreach ($data_month_before as $row) {
+                echo "'" .$row['tanggal'] ."',";
+              }
+            }
+          ?>
+        ],
+        datasets: [{
+            label: 'Data Penjualan Per Tahun Sebelumnya',
+            backgroundColor: '#ccff99',
+            borderColor: '#ccff99',
+            data: [
+              <?php
+                if (count($data_month_before)>0) {
+                   foreach ($data_month_before as $row) {
+                    echo $row['total_transaksi'] . ", ";
+                  }
+                }
+              ?>
+            ]
+        }]
+    },
+});
+ 
+  </script>
+
   <script type="text/javascript">
     var ctx = document.getElementById('myChart2').getContext('2d');
     var chart = new Chart(ctx, {
@@ -101,6 +150,41 @@ $level = $this->session->userdata('ap_level');
 });
  
   </script>
+
+<script type="text/javascript">
+    var ctx = document.getElementById('myChart1').getContext('2d');
+    var chart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: [
+          <?php
+		  	
+            if (count($data_before)>0) {
+              foreach ($data_before as $row) {
+                echo "'" .$row['tanggal'] ."',";
+              }
+            }
+          ?>
+        ],
+        datasets: [{
+            label: 'Data Penjualan Per Bulan Sebelumnya',
+            backgroundColor: '#ADD8E6',
+            borderColor: '##93C3D2',
+            data: [
+              <?php
+                if (count($data_before)>0) {
+                   foreach ($data_before as $row) {
+                    echo $row['total_transaksi'] . ", ";
+                  }
+                }
+              ?>
+            ]
+        }]
+    },
+});
+ 
+  </script>
+
 <p class='footer'><?php echo config_item('web_footer'); ?></p>
 
 

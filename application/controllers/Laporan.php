@@ -261,7 +261,14 @@ class Laporan extends MY_Controller
 
 		$this->load->model('m_penjualan_master');
 		$penjualan['data'] 	= $this->m_penjualan_master->get_trx_day()->result_array();
+		$penjualan['data_before'] 	= $this->m_penjualan_master->get_trx_day_before()->result_array();
+
+	
+		
 		$penjualan['data_month'] 	= $this->m_penjualan_master->get_trx_month()->result_array();
+		$penjualan['data_month_before'] 	= $this->m_penjualan_master->get_trx_month_before()->result_array();
+
+
 		$penjualan['controller'] = "graphic";
 		// print_r($penjualan['data_month']);
 		$this->load->view('laporan/graphic',$penjualan);

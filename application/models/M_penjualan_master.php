@@ -238,9 +238,55 @@ class M_penjualan_master extends CI_Model
 		return $this->db->query($sql);
 	}
 
+
+	function get_trx_day_before()
+	{
+		$bulan_berjalan = date('m');
+		$tahun_berjalan = date('Y');
+
+		
+
+		if($bulan_berjalan == '01'){
+			$tahun_berjalan = $tahun_berjalan-1;
+			$bulan_berjalan = '12';
+		}else{
+			$bulan_berjalan = $bulan_berjalan - 1;
+
+			if(strlen($bulan_berjalan) ==  1){
+				$bulan_berjalan = '0'.$bulan_berjalan;
+			}
+		}
+	
+
+		
+
+		$ym = $tahun_berjalan.'-'.$bulan_berjalan;
+
+		
+		$id_toko = $this->session->userdata('id_toko');
+		$sql = "
+		SELECT COUNT(id_penjualan_m) AS total_transaksi, DATE_FORMAT(tanggal,'%d %M %Y') AS tanggal FROM `pj_penjualan_master` 
+		WHERE id_toko = '$id_toko' AND DATE_FORMAT(tanggal,'%Y-%m') = '$ym'
+		GROUP BY DATE_FORMAT(tanggal,'%d %M %Y')
+		";
+		return $this->db->query($sql);
+	}
+
 	function get_trx_month()
 	{
 		$tahun_berjalan = date('Y');
+		$id_toko = $this->session->userdata('id_toko');
+		$sql = "
+		SELECT COUNT(id_penjualan_m) AS total_transaksi, DATE_FORMAT(tanggal,'%M %Y') AS tanggal FROM `pj_penjualan_master` 
+		WHERE id_toko = '$id_toko' AND DATE_FORMAT(tanggal,'%Y') = '$tahun_berjalan'
+		GROUP BY DATE_FORMAT(tanggal,'%m')
+		";
+		return $this->db->query($sql);
+	}
+
+	function get_trx_month_before()
+	{
+		$tahun_berjalan = date('Y')-1;
 		$id_toko = $this->session->userdata('id_toko');
 		$sql = "
 		SELECT COUNT(id_penjualan_m) AS total_transaksi, DATE_FORMAT(tanggal,'%M %Y') AS tanggal FROM `pj_penjualan_master` 
