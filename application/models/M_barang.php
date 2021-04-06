@@ -22,7 +22,7 @@ class M_barang extends CI_Model
 				LEFT JOIN `pj_kategori_barang` AS b ON a.`id_kategori_barang` = b.`id_kategori_barang` 
 				LEFT JOIN `pj_merk_barang` AS c ON a.`id_merk_barang` = c.`id_merk_barang` 
 				, (SELECT @row := 0) r WHERE 1=1 
-				AND a.`dihapus` = 'tidak' AND a.`id_toko`='$id_toko'
+				AND a.`id_toko`='$id_toko'
 		";
 		
 		$data['totalData'] = $this->db->query($sql)->num_rows();
@@ -68,10 +68,9 @@ class M_barang extends CI_Model
 
 	function hapus_barang($id_barang)
 	{
-		$dt['dihapus'] = 'ya';
 		return $this->db
 				->where('id_barang', $id_barang)
-				->update('pj_barang', $dt);
+				->delete('pj_barang');
 	}
 
 	function tambah_baru($kode, $nama, $id_kategori_barang, $id_merk_barang, $stok, $modal, $harga, $keterangan)
