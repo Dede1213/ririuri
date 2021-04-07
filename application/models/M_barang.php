@@ -68,7 +68,9 @@ class M_barang extends CI_Model
 
 	function hapus_barang($id_barang)
 	{
+		$id_toko = $this->session->userdata('id_toko');
 		return $this->db
+				->where('id_toko', $id_toko)
 				->where('id_barang', $id_barang)
 				->delete('pj_barang');
 	}
