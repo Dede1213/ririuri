@@ -26,6 +26,20 @@ class Laporan extends MY_Controller
 		}
 	}
 
+	public function pengeluaran()
+	{			
+		$this->load->view('laporan/form_pengeluaran',$data);
+	}
+
+	public function lap_pengeluaran($from, $to)
+	{
+		$this->load->model('m_pengeluaran');
+		$dt['penjualan'] 	= $this->m_pengeluaran->laporan_pengeluaran($from, $to);
+		$dt['from']			= date('d F Y', strtotime($from));
+		$dt['to']			= date('d F Y', strtotime($to));
+		$this->load->view('laporan/laporan_pengeluaran', $dt);
+	}
+
 	public function index()
 	{
 		$this->load->model('m_barang');

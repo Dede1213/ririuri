@@ -55,50 +55,71 @@ class M_pengeluaran extends CI_Model
 		return $data;
 	}
 
-	function tambah_merek($merek)
+	function tambah($keterangan,$nominal,$tgl_keluar)
 	{
 
 		$id_toko = $this->session->userdata('id_toko');
 		$dt = array(
 			'id_toko' => $id_toko,
-			'merk' => $merek,
-			'dihapus' => 'tidak'
+			'keterangan' => $keterangan,
+			'nominal' => $nominal,
+			'tgl_keluar' => $tgl_keluar
 		);
 
-		return $this->db->insert('pj_merk_barang', $dt);
+		return $this->db->insert('pj_pengeluaran', $dt);
 	}
 
-	function hapus_merek($id_merk_barang)
-	{
-		$dt = array(
-			'dihapus' => 'ya'
-		);
-
-		return $this->db
-			->where('id_merk_barang', $id_merk_barang)
-			->update('pj_merk_barang', $dt);
-	}
-
-	function get_baris($id_merk_barang)
+	function hapus_pengeluaran($id)
 	{
 		$id_toko = $this->session->userdata('id_toko');
 
 		return $this->db
-			->select('id_merk_barang, merk')
+			->where('id', $id)
 			->where('id_toko', $id_toko)
-			->where('id_merk_barang', $id_merk_barang)
-			->limit(1)
-			->get('pj_merk_barang');
+			->delete('pj_pengeluaran');
 	}
 
-	function update_merek($id_merk_barang, $merek)
+	function get_baris($id)
+	{
+		$id_toko = $this->session->userdata('id_toko');
+
+		return $this->db
+			->select('*')
+			->where('id_toko', $id_toko)
+			->where('id', $id)
+			->limit(1)
+			->get('pj_pengeluaran');
+	}
+
+	function update($id, $keterangan, $nominal, $tgl_keluar)
 	{
 		$dt = array(
-			'merk' => $merek
+			'keterangan' => $keterangan,
+			'nominal' => $nominal,
+			'tgl_keluar' => $tgl_keluar
 		);
 
 		return $this->db
-			->where('id_merk_barang', $id_merk_barang)
-			->update('pj_merk_barang', $dt);
+			->where('id', $id)
+			->update('pj_pengeluaran', $dt);
+	}
+
+	function laporan_pengeluaran($from, $to)
+	{
+		$id_toko = $this->session->userdata('id_toko');
+
+		$sql = "SELECT a.* FROM `pj_pengeluaran` a 
+		
+			WHERE 
+				SUBSTR(a.`tgl_keluar`, 1, 10) >= '".$from."' 
+				AND SUBSTR(a.`tgl_keluar`, 1, 10) <= '".$to."' 
+				AND a.id_toko = '$id_toko'
+			ORDER BY 
+				a.`tgl_keluar` ASC
+		";
+
+		// print_r($sql);
+		// exit;
+		return $this->db->query($sql);
 	}
 }

@@ -83,7 +83,7 @@ if($level == 'admin' OR $level == 'inventory')
 		} );
 	});
 	
-	$(document).on('click', '#HapusMerek', function(e){
+	$(document).on('click', '#HapusPengeluaran', function(e){
 		e.preventDefault();
 		var Link = $(this).attr('href');
 
@@ -112,7 +112,7 @@ if($level == 'admin' OR $level == 'inventory')
 		});
 	});
 
-	$(document).on('click', '#TambahPengeluraran, #EditMerek', function(e){
+	$(document).on('click', '#TambahPengeluraran, #EditPengeluaran', function(e){
 		e.preventDefault();
 
 		$('.modal-dialog').addClass('modal-sm');

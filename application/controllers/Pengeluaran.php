@@ -42,10 +42,10 @@ class Pengeluaran extends MY_Controller
 			$nestedData[]	= $row['nominal'];
 			$nestedData[]	= date_format(date_create($row['tgl_keluar']),"d-m-Y");
 
-			if($level == 'admin' OR $level == 'inventory')
+			if($level == 'admin' OR $level == 'keuangan')
 			{
-				$nestedData[]	= "<a href='".site_url('barang/edit-merek/'.$row['id_merk_barang'])."' id='EditMerek'><i class='fa fa-pencil'></i> Edit</a>";
-				$nestedData[]	= "<a href='".site_url('barang/hapus-merek/'.$row['id_merk_barang'])."' id='HapusMerek'><i class='fa fa-trash-o'></i> Hapus</a>";
+				$nestedData[]	= "<a href='".site_url('pengeluaran/edit-pengeluaran/'.$row['id'])."' id='EditPengeluaran'><i class='fa fa-pencil'></i> Edit</a>";
+				$nestedData[]	= "<a href='".site_url('pengeluaran/hapus-pengeluaran/'.$row['id'])."' id='HapusPengeluaran'><i class='fa fa-trash-o'></i> Hapus</a>";
 			}
 
 			$data[] = $nestedData;
@@ -61,56 +61,47 @@ class Pengeluaran extends MY_Controller
 		echo json_encode($json_data);
 	}
 
-	public function tambah_merek()
+	public function tambah_pengeluaran()
 	{
 		$level = $this->session->userdata('ap_level');
-		if($level == 'admin' OR $level == 'inventory')
+		if($level == 'admin' OR $level == 'keuangan')
 		{
 			if($_POST)
 			{
-				$this->load->library('form_validation');
-				$this->form_validation->set_rules('merek','Merek','trim|required|max_length[40]|alpha_numeric_spaces');				
-				$this->form_validation->set_message('required','%s harus diisi !');
-				$this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+				$this->load->model('m_pengeluaran');
+					$keterangan 	= $this->input->post('keterangan');
+					$nominal 	= $this->input->post('nominal');
+					$tgl_keluar 	= $this->input->post('tgl_keluar');
 
-				if($this->form_validation->run() == TRUE)
-				{
-					$this->load->model('m_merk_barang');
-					$merek 	= $this->input->post('merek');
-					$insert = $this->m_merk_barang->tambah_merek($merek);
+					$insert = $this->m_pengeluaran->tambah($keterangan,$nominal,$tgl_keluar);
 					if($insert)
 					{
 						echo json_encode(array(
 							'status' => 1,
-							'pesan' => "<div class='alert alert-success'><i class='fa fa-check'></i> <b>".$merek."</b> berhasil ditambahkan.</div>"
+							'pesan' => "<div class='alert alert-success'><i class='fa fa-check'></i> Data berhasil ditambahkan.</div>"
 						));
 					}
 					else
 					{
 						$this->query_error();
 					}
-				}
-				else
-				{
-					$this->input_error();
-				}
 			}
 			else
 			{
-				$this->load->view('barang/merek/merek_tambah');
+				$this->load->view('pengeluaran/tambah');
 			}
 		}
 	}
 
-	public function hapus_merek($id_merk_barang)
+	public function hapus_pengeluaran($id)
 	{
 		$level = $this->session->userdata('ap_level');
-		if($level == 'admin' OR $level == 'inventory')
+		if($level == 'admin' OR $level == 'keuangan')
 		{
 			if($this->input->is_ajax_request())
 			{
-				$this->load->model('m_merk_barang');
-				$hapus = $this->m_merk_barang->hapus_merek($id_merk_barang);
+				$this->load->model('m_pengeluaran');
+				$hapus = $this->m_pengeluaran->hapus_pengeluaran($id);
 				if($hapus)
 				{
 					echo json_encode(array(
@@ -127,28 +118,25 @@ class Pengeluaran extends MY_Controller
 		}
 	}
 
-	public function edit_merek($id_merk_barang = NULL)
+	public function edit_pengeluaran($id = NULL)
 	{
-		if( ! empty($id_merk_barang))
+		if( ! empty($id))
 		{
 			$level = $this->session->userdata('ap_level');
-			if($level == 'admin' OR $level == 'inventory')
+			if($level == 'admin' OR $level == 'keuangan')
 			{
 				if($this->input->is_ajax_request())
 				{
-					$this->load->model('m_merk_barang');
+					$this->load->model('m_pengeluaran');
 					
 					if($_POST)
 					{
-						$this->load->library('form_validation');
-						$this->form_validation->set_rules('merek','Merek','trim|required|max_length[40]|alpha_numeric_spaces');				
-						$this->form_validation->set_message('required','%s harus diisi !');
-						$this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
-
-						if($this->form_validation->run() == TRUE)
-						{
-							$merek 	= $this->input->post('merek');
-							$insert = $this->m_merk_barang->update_merek($id_merk_barang, $merek);
+						
+						$keterangan 	= $this->input->post('keterangan');
+						$nominal 	= $this->input->post('nominal');
+						$tgl_keluar 	= $this->input->post('tgl_keluar');
+							
+							$insert = $this->m_pengeluaran->update($id, $keterangan, $nominal, $tgl_keluar);
 							if($insert)
 							{
 								echo json_encode(array(
@@ -160,16 +148,12 @@ class Pengeluaran extends MY_Controller
 							{
 								$this->query_error();
 							}
-						}
-						else
-						{
-							$this->input_error();
-						}
+						
 					}
 					else
 					{
-						$dt['merek'] = $this->m_merk_barang->get_baris($id_merk_barang)->row();
-						$this->load->view('barang/merek/merek_edit', $dt);
+						$dt['pengeluaran'] = $this->m_pengeluaran->get_baris($id)->row();
+						$this->load->view('pengeluaran/pengeluaran_edit', $dt);
 					}
 				}
 			}

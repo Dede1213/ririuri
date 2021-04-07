@@ -54,6 +54,7 @@ $level = $this->session->userdata('ap_level');
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class='fa fa-file-text-o fa-fw'></i> Laporan <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 						<li><a href="<?php echo site_url('laporan'); ?>"><i class='fa fa-file-text-o fa-fw'></i> Laporan Penjualan</a></li>
+						<li><a href="<?php echo site_url('laporan/pengeluaran'); ?>"><i class='fa fa-file-text-o fa-fw'></i> Laporan Pengeluaran</a></li>
 						<li><a href="<?php echo site_url('laporan/graphic'); ?>"><i class='fa fa-bar-chart'></i> Info Graphic</a></li>
 
 						</ul>
