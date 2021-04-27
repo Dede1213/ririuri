@@ -10,10 +10,12 @@ $level = $this->session->userdata('ap_level');
 		<div class="panel-body">
 			<h5><i class='fa fa-cube fa-fw'></i> Barang <i class='fa fa-angle-right fa-fw'></i> Semua Barang</h5>
 			<hr />
+			NOTE : (*) pada kode barang adalah tanda barang sedang di bundling dengan barang lain.
+			<hr />
 
 			<div class='table-responsive'>
 				<link rel="stylesheet" href="<?php echo config_item('plugin'); ?>datatables/css/dataTables.bootstrap.css"/>
-				<table id="my-grid" class="table table-striped table-bordered">
+				<table id="my-grid" class="table table-striped table-bordered table-sm" style="font-size:12px;">
 					<thead>
 						<tr>
 							<th>#</th>
@@ -134,6 +136,17 @@ if($level == 'admin' OR $level == 'inventory')
 				$('#my-grid').DataTable().ajax.reload( null, false );
 			}
 		});
+
+		$.ajax({    
+			type: "get",
+			url: "<?php echo site_url('barang/total_modal'); ?>",             
+			dataType: "html",               
+			success: function(response){                    
+				$("#TotalModal").html(response); 
+				//alert(response);
+			}
+		});
+		
 	});
 
 	$(document).on('click', '#TambahBarang, #EditBarang', function(e){

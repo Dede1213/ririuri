@@ -8,20 +8,23 @@ $level = $this->session->userdata('ap_level');
 <div class="container">
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<h5><i class='fa fa-cube fa-fw'></i> Pengeluaran </h5>
+			<h5><i class='fa fa-cube fa-fw'></i> Barang <i class='fa fa-angle-right fa-fw'></i> List Bundling</h5>
 			<hr />
-
+			NOTE : Barang bundling akan otomatis berkurang stok nya jika barang utama terjadi transaksi penjualan.
+			<hr />
 			<div class='table-responsive'>
 				<link rel="stylesheet" href="<?php echo config_item('plugin'); ?>datatables/css/dataTables.bootstrap.css"/>
+				
 				<table id="my-grid" class="table table-striped table-bordered table-sm" style="font-size:12px;">
 					<thead>
 						<tr>
 							<th>#</th>
-							<th>Keterangan</th>
-							<th>Nominal</th>
-							<th>Tgl.Keluar</th>
-							<?php if($level == 'admin' OR $level == 'keuangan') { ?>
-							<th class='no-sort'>Edit</th>
+							<th>ID</th>
+							<th>Kd.Brg Utama</th>
+							<th>Nm.Brg Utama</th>
+							<th>Kd.Brg Bundling</th>
+							<th>Nm.Brg Bundling</th>
+							<?php if($level == 'admin' OR $level == 'inventory') { ?>
 							<th class='no-sort'>Hapus</th>
 							<?php } ?>
 						</tr>
@@ -37,7 +40,7 @@ $level = $this->session->userdata('ap_level');
 $tambahan = '';
 if($level == 'admin' OR $level == 'inventory')
 {
-	$tambahan .= nbs(2)."<a href='".site_url('pengeluaran/tambah-pengeluaran')."' class='btn btn-default' id='TambahPengeluraran'><i class='fa fa-plus fa-fw'></i> Tambah </a>";
+	$tambahan .= nbs(2)."<a href='".site_url('barang/tambah-bundling')."' class='btn btn-default' id='TambahBundling'><i class='fa fa-plus fa-fw'></i> Tambah Bundling</a>";
 	$tambahan .= nbs(2)."<span id='Notifikasi' style='display: none;'></span>";
 }
 ?>
@@ -72,7 +75,7 @@ if($level == 'admin' OR $level == 'inventory')
 			"iDisplayLength": 10,
 			"aLengthMenu": [[10, 20, 50, 100, 150], [10, 20, 50, 100, 150]],
 			"ajax":{
-				url :"<?php echo site_url('pengeluaran/list_pengeluaran_json'); ?>",
+				url :"<?php echo site_url('barang/list-bundling-json'); ?>",
 				type: "post",
 				error: function(){ 
 					$(".my-grid-error").html("");
@@ -83,19 +86,19 @@ if($level == 'admin' OR $level == 'inventory')
 		} );
 	});
 	
-	$(document).on('click', '#HapusPengeluaran', function(e){
+	$(document).on('click', '#HapusBundling', function(e){
 		e.preventDefault();
 		var Link = $(this).attr('href');
 
 		$('.modal-dialog').removeClass('modal-lg');
 		$('.modal-dialog').addClass('modal-sm');
 		$('#ModalHeader').html('Konfirmasi');
-		$('#ModalContent').html('Apakah anda yakin ingin menghapus <br /><b>'+$(this).parent().parent().find('td:nth-child(2)').html()+'</b> ?');
-		$('#ModalFooter').html("<button type='button' class='btn btn-primary' id='YesDeleteMerek' data-url='"+Link+"'>Ya, saya yakin</button><button type='button' class='btn btn-default' data-dismiss='modal'>Batal</button>");
+		$('#ModalContent').html('Apakah anda yakin ingin menghapus ID <br /><b>'+$(this).parent().parent().find('td:nth-child(2)').html()+'</b> ?');
+		$('#ModalFooter').html("<button type='button' class='btn btn-primary' id='YesDeleteBundling' data-url='"+Link+"'>Ya, saya yakin</button><button type='button' class='btn btn-default' data-dismiss='modal'>Batal</button>");
 		$('#ModalGue').modal('show');
 	});
 
-	$(document).on('click', '#YesDeleteMerek', function(e){
+	$(document).on('click', '#YesDeleteBundling', function(e){
 		e.preventDefault();
 		$('#ModalGue').modal('hide');
 
@@ -112,14 +115,14 @@ if($level == 'admin' OR $level == 'inventory')
 		});
 	});
 
-	$(document).on('click', '#TambahPengeluraran, #EditPengeluaran', function(e){
+	$(document).on('click', '#TambahBundling, #EditMerek', function(e){
 		e.preventDefault();
 
 		$('.modal-dialog').addClass('modal-sm');
 		$('.modal-dialog').removeClass('modal-lg');
-		if($(this).attr('id') == 'TambahPengeluraran')
+		if($(this).attr('id') == 'TambahBundling')
 		{
-			$('#ModalHeader').html('Tambah Pengeluaran');
+			$('#ModalHeader').html('Tambah Bundling');
 		}
 		if($(this).attr('id') == 'EditMerek')
 		{

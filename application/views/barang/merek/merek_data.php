@@ -13,7 +13,7 @@ $level = $this->session->userdata('ap_level');
 
 			<div class='table-responsive'>
 				<link rel="stylesheet" href="<?php echo config_item('plugin'); ?>datatables/css/dataTables.bootstrap.css"/>
-				<table id="my-grid" class="table table-striped table-bordered">
+				<table id="my-grid" class="table table-striped table-bordered table-sm" style="font-size:12px;">
 					<thead>
 						<tr>
 							<th>#</th>

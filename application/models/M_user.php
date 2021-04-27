@@ -257,4 +257,15 @@ class M_user extends CI_Model
 
 		return $this->db->query($sql);
 	}
+
+	function get_user()
+	{
+		$sql = "SELECT a.username,b.level_akses,c.nama_toko 
+		FROM pj_user a
+		LEFT JOIN pj_akses b ON a.id_akses = b.id_akses
+		LEFT JOIN pj_toko c ON a.id_toko = c.id_toko
+		ORDER BY c.nama_toko";
+
+		return $this->db->query($sql);
+	}
 }

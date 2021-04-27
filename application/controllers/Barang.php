@@ -37,11 +37,26 @@ class Barang extends MY_Controller
 		$data	= array();
 		foreach($query->result_array() as $row)
 		{ 
+			// ########## update stok bundling ###########
+			$this->load->model('m_bundling_barang');
+			$getBundling = $this->m_bundling_barang->get_baris($row['id_barang']);
+			$bundling = "";
+
+			if($getBundling){
+				
+				foreach($getBundling as $value){
+					$bundling .= "*";
+				}
+				
+			}
+
+			//end
+			
 			$modal = $row['total_stok'] * $row['modal'];
 			$nestedData = array(); 
 
 			$nestedData[]	= $row['nomor'];
-			$nestedData[]	= $row['kode_barang'];
+			$nestedData[]	= $row['kode_barang'].$bundling;
 			$nestedData[]	= $row['nama_barang'];
 			$nestedData[]	= $row['kategori'];
 			$nestedData[]	= $row['merk'];
@@ -683,4 +698,178 @@ class Barang extends MY_Controller
 			}
 		}
 	}
+
+
+
+	#---------------- Bundling
+	public function list_bundling()
+	{
+		$this->load->view('barang/bundling/bundling_data');
+	}
+
+	public function list_bundling_json()
+	{
+	
+		$this->load->model('m_bundling_barang');
+		$level 			= $this->session->userdata('ap_level');
+
+		$requestData	= $_REQUEST;
+		$fetch			= $this->m_bundling_barang->fetch_data_bundling($requestData['search']['value'], $requestData['order'][0]['column'], $requestData['order'][0]['dir'], $requestData['start'], $requestData['length']);
+
+
+		
+		$totalData		= $fetch['totalData'];
+		$totalFiltered	= $fetch['totalFiltered'];
+		$query			= $fetch['query'];
+
+		$data	= array();
+		foreach($query->result_array() as $row)
+		{ 
+			$nestedData = array(); 
+
+			$nestedData[]	= $row['nomor'];
+			$nestedData[]	= $row['id_bundling'];
+			$nestedData[]	= $row['kode_barang'];
+			$nestedData[]	= $row['nama_barang'];
+			$nestedData[]	= $row['kode_barang_bundling'];
+			$nestedData[]	= $row['nama_barang_bundling'];
+
+			if($level == 'admin' OR $level == 'inventory')
+			{
+				$nestedData[]	= "<a href='".site_url('barang/hapus-bundling/'.$row['id_bundling'])."' id='HapusBundling'><i class='fa fa-trash-o'></i> Hapus</a>";
+			}
+
+			$data[] = $nestedData;
+		}
+
+		$json_data = array(
+			"draw"            => intval( $requestData['draw'] ),  
+			"recordsTotal"    => intval( $totalData ),  
+			"recordsFiltered" => intval( $totalFiltered ), 
+			"data"            => $data
+			);
+
+		echo json_encode($json_data);
+	}
+
+	public function tambah_bundling()
+	{
+		$level = $this->session->userdata('ap_level');
+		if($level == 'admin' OR $level == 'inventory')
+		{
+			if($_POST)
+			{
+				
+				$this->load->library('form_validation');
+				$this->form_validation->set_rules('id_barang','Nama Barang Utama','required');
+				$this->form_validation->set_rules('id_barang_bundling','Nama Barang Bundling','required');				
+				
+				$this->form_validation->set_message('required','%s harus diisi !');
+
+				if($this->form_validation->run() == TRUE)
+				{
+					
+					$this->load->model('m_bundling_barang');
+					$id_barang 				= $this->input->post('id_barang');
+					$id_barang_bundling 	= $this->input->post('id_barang_bundling');
+					$insert = $this->m_bundling_barang->tambah_bundling($id_barang,$id_barang_bundling);
+					if($insert)
+					{
+						echo json_encode(array(
+							'status' => 1,
+							'pesan' => "<div class='alert alert-success'><i class='fa fa-check'></i> Data berhasil ditambahkan.</div>"
+						));
+					}
+					else
+					{
+						$this->query_error();
+					}
+				}
+				else
+				{
+					$this->input_error();
+				}
+			}
+			else
+			{
+				$this->load->model('m_barang');				
+				$data['barang'] =  $this->m_barang->getBarangdd();
+				$this->load->view('barang/bundling/bundling_tambah',$data);
+			}
+		}
+	}
+
+	public function hapus_bundling($id_bundling)
+	{
+		$level = $this->session->userdata('ap_level');
+		if($level == 'admin' OR $level == 'inventory')
+		{
+			if($this->input->is_ajax_request())
+			{
+				$this->load->model('m_bundling_barang');
+				$hapus = $this->m_bundling_barang->hapus_bundling($id_bundling);
+				if($hapus)
+				{
+					echo json_encode(array(
+						"pesan" => "<font color='green'><i class='fa fa-check'></i> Data berhasil dihapus !</font>
+					"));
+				}
+				else
+				{
+					echo json_encode(array(
+						"pesan" => "<font color='red'><i class='fa fa-warning'></i> Terjadi kesalahan, coba lagi !</font>
+					"));
+				}
+			}
+		}
+	}
+
+	// public function edit_merek($id_merk_barang = NULL)
+	// {
+	// 	if( ! empty($id_merk_barang))
+	// 	{
+	// 		$level = $this->session->userdata('ap_level');
+	// 		if($level == 'admin' OR $level == 'inventory')
+	// 		{
+	// 			if($this->input->is_ajax_request())
+	// 			{
+	// 				$this->load->model('m_merk_barang');
+					
+	// 				if($_POST)
+	// 				{
+	// 					$this->load->library('form_validation');
+	// 					$this->form_validation->set_rules('merek','Merek','trim|required|max_length[40]|alpha_numeric_spaces');				
+	// 					$this->form_validation->set_message('required','%s harus diisi !');
+	// 					$this->form_validation->set_message('alpha_numeric_spaces', '%s Harus huruf / angka !');
+
+	// 					if($this->form_validation->run() == TRUE)
+	// 					{
+	// 						$merek 	= $this->input->post('merek');
+	// 						$insert = $this->m_merk_barang->update_merek($id_merk_barang, $merek);
+	// 						if($insert)
+	// 						{
+	// 							echo json_encode(array(
+	// 								'status' => 1,
+	// 								'pesan' => "<div class='alert alert-success'><i class='fa fa-check'></i> Data berhasil diupdate.</div>"
+	// 							));
+	// 						}
+	// 						else
+	// 						{
+	// 							$this->query_error();
+	// 						}
+	// 					}
+	// 					else
+	// 					{
+	// 						$this->input_error();
+	// 					}
+	// 				}
+	// 				else
+	// 				{
+	// 					$dt['merek'] = $this->m_merk_barang->get_baris($id_merk_barang)->row();
+	// 					$this->load->view('barang/merek/merek_edit', $dt);
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
 }

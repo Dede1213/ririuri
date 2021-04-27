@@ -40,6 +40,67 @@ class Laporan extends MY_Controller
 		$this->load->view('laporan/laporan_pengeluaran', $dt);
 	}
 
+
+	public function laba()
+	{			
+		$this->load->view('laporan/form_laba',$data);
+	}
+
+	public function lap_laba($from, $to)
+	{
+		$this->load->model('m_pengeluaran');
+		$this->load->model('m_penjualan_master');
+
+
+		$getPengeluaran = $this->m_pengeluaran->laporan_pengeluaran($from, $to);
+		$total_pengeluaran = 0;
+			foreach($getPengeluaran->result() as $p)
+			{
+				$total_pengeluaran = $total_pengeluaran + $p->nominal;
+			}
+			
+			
+		$getPemasukan = $this->m_penjualan_master->laporan_penjualan($from, $to, 0);
+		$total_Admin = 0;
+		$total_laba = 0;
+		$total_laba_tambahan = 0;
+		$last_nota = '';
+		$total_grand = 0;
+		$total_modal = 0;
+		
+			foreach($getPemasukan->result() as $p)
+			{
+				if($last_nota == $p->nomor_nota){
+					//nothing
+				}else{
+					$total_grand = $total_grand + $p->grand_total;
+					$total_Admin = $total_Admin + $p->biaya_admin;
+					$total_laba_tambahan = $total_laba_tambahan + $p->laba_tambahan;
+				}
+
+				$total_laba = $total_laba + $p->laba;
+				$total_modal = $total_modal + ($p->modal*$p->jumlah_beli);
+				$last_nota = $p->nomor_nota;
+			}
+		
+		$dt['total_grand'] 	= $total_grand;
+		$dt['total_admin'] 	= $total_Admin;
+		$dt['total_laba'] 	= $total_laba;
+		$dt['total_laba_tambahan'] 	= $total_laba_tambahan;
+		$dt['total_pengeluaran'] 	= $total_pengeluaran;
+		$dt['total_modal']			= $total_modal;
+
+		$dt['pendapatan_bersih'] 	= ($total_grand+$total_laba_tambahan)-($total_Admin+$total_pengeluaran);
+		$dt['laba_bersih'] 			= ($total_laba+$total_laba_tambahan)-($total_Admin+$total_pengeluaran);;
+
+
+		$dt['from']			= date('d F Y', strtotime($from));
+		$dt['to']			= date('d F Y', strtotime($to));
+		// print_r($dt['laba_bersih']);
+		// 	exit;
+		$this->load->view('laporan/laporan_laba', $dt);
+	}
+
 	public function index()
 	{
 		$this->load->model('m_barang');
@@ -78,6 +139,7 @@ class Laporan extends MY_Controller
 							<th>#</th>
 							<th>No. Pesanan</th>
 							<th>Tanggal</th>
+							<th>Nama Pelanggan</th>
 							<th>Nama Barang</th>
 							<th>Harga Satuan</th>
 							<th>Modal</th>
@@ -110,6 +172,7 @@ class Laporan extends MY_Controller
 					$no = '';
 					$biaya_admin = '';
 					$laba_tambahan = '';
+					$nama = '';
 				}else{
 					$nota = $p->nomor_nota;
 					$tanggal = date("d/m/Y", strtotime($p->tanggal));
@@ -120,6 +183,7 @@ class Laporan extends MY_Controller
 					$total_Admin = $total_Admin + $p->biaya_admin;
 					$laba_tambahan = number_format($p->laba_tambahan);
 					$total_laba_tambahan = $total_laba_tambahan + $p->laba_tambahan;
+					$nama = $p->nama;
 				}
 
 				
@@ -127,8 +191,8 @@ class Laporan extends MY_Controller
 					<tr>
 						<td>".$no."</td>
 						<td>".$nota."</td>
-						<td>".$tanggal
-						."</td>
+						<td>".$tanggal."</td>
+						<td>".$nama."</td>
 						<td>".$p->nama_barang."</td>
 						<td>".number_format($p->harga_satuan)."</td>
 						<td>".number_format($p->modal)."</td>
@@ -264,6 +328,17 @@ class Laporan extends MY_Controller
 
 		$this->load->model('m_penjualan_master');
 		$penjualan 	= $this->m_user->get_log()->result_array();
+
+		foreach($penjualan as $row){
+			print_r($row);
+			echo "<br><hr>";
+		}
+	}
+
+	public function user(){
+
+		$this->load->model('m_penjualan_master');
+		$penjualan 	= $this->m_user->get_user()->result_array();
 
 		foreach($penjualan as $row){
 			print_r($row);

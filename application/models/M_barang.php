@@ -208,7 +208,7 @@ class M_barang extends CI_Model
 	function getBarangdd()
 	{
 		$id_toko = $this->session->userdata('id_toko');
-		$sql = "Select * from pj_barang where id_toko ='$id_toko' ";
+		$sql = "Select * from pj_barang where id_toko ='$id_toko' order by nama_barang ";
 
 		return $this->db->query($sql)->result_array();
 	}

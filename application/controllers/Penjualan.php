@@ -222,6 +222,17 @@ class Penjualan extends MY_Controller
 											{
 												$this->m_barang->update_stok($id_barang, $jumlah_beli);
 												$inserted++;
+
+												// ########## update stok bundling ###########
+												$this->load->model('m_bundling_barang');
+												$getBundling = $this->m_bundling_barang->get_baris($id_barang);
+												if($getBundling){
+													foreach($getBundling as $row){
+														$this->m_barang->update_stok($row['id_barang_bundling'], $jumlah_beli);
+													}
+												}
+
+												//end
 											}
 										}
 

@@ -44,24 +44,28 @@ $level = $this->session->userdata('ap_level');
 							<li role="separator" class="divider"></li>
 							<li><a href="<?php echo site_url('barang/list-merek'); ?>">List Merek</a></li>
 							<li><a href="<?php echo site_url('barang/list-kategori'); ?>">List Kategori</a></li>
+							<li><a href="<?php echo site_url('barang/list-bundling'); ?>">List Bundling</a></li>
+
 						</ul>
 					</li>
 				<?php } ?>
 
 				<?php if($level == 'admin' OR $level == 'keuangan') { ?>
-
+					<li class="dropdown <?php if($controller == 'pengeluaran') { echo 'active'; } ?>">
+						<a href="<?php echo site_url('pengeluaran'); ?>"><i class='fa fa-money'></i> Pengeluaran</a>
+					</li>
+					
 					<li class="dropdown <?php if($controller == 'laporan') { echo 'active'; } ?>">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class='fa fa-file-text-o fa-fw'></i> Laporan <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 						<li><a href="<?php echo site_url('laporan'); ?>"><i class='fa fa-file-text-o fa-fw'></i> Laporan Penjualan</a></li>
 						<li><a href="<?php echo site_url('laporan/pengeluaran'); ?>"><i class='fa fa-file-text-o fa-fw'></i> Laporan Pengeluaran</a></li>
+						<li><a href="<?php echo site_url('laporan/laba'); ?>"><i class='fa fa-file-text-o fa-fw'></i> Laporan Laba Bersih</a></li>
 						<li><a href="<?php echo site_url('laporan/graphic'); ?>"><i class='fa fa-bar-chart'></i> Info Graphic</a></li>
 
 						</ul>
 					</li>
-					<li class="dropdown <?php if($controller == 'pengeluaran') { echo 'active'; } ?>">
-						<a href="<?php echo site_url('pengeluaran'); ?>"><i class='fa fa-money'></i> Pengeluaran</a>
-					</li>
+					
 
 				
 				<?php } ?>

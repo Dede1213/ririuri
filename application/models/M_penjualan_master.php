@@ -154,6 +154,24 @@ class M_penjualan_master extends CI_Model
 				";
 
 				$this->db->query($sql);
+
+				// ########## update stok bundling ###########
+				$getBundling = $this->db
+				->select('id_barang_bundling')
+				->where('id_barang', $b->id_barang)
+				->get('pj_bundling')->result_array();
+
+				if($getBundling){
+					foreach($getBundling as $row){
+						$sqlBundling = "
+							UPDATE `pj_barang` SET `total_stok` = `total_stok` + ".$b->jumlah_beli." 
+							WHERE `id_barang` = '".$row['id_barang_bundling']."' 
+						";
+						$this->db->query($sqlBundling);
+					}
+				}
+
+				//end
 			}
 		}
 
@@ -173,9 +191,10 @@ class M_penjualan_master extends CI_Model
 
 		$id_toko = $this->session->userdata('id_toko');
 
-		$sql = "SELECT a.*,b.*,c.nama_barang FROM `pj_penjualan_master` a 
+		$sql = "SELECT a.*,b.*,c.nama_barang,d.nama FROM `pj_penjualan_master` a 
 		LEFT JOIN `pj_penjualan_detail` b ON a.`id_penjualan_m`=b.`id_penjualan_m`
 		LEFT JOIN `pj_barang` c ON b.`id_barang`= c.`id_barang`
+		LEFT JOIN `pj_pelanggan` d on a.id_pelanggan = d.id_pelanggan
 		
 			WHERE 
 				SUBSTR(a.`tanggal`, 1, 10) >= '".$from."' 

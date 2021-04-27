@@ -13,7 +13,7 @@ $level = $this->session->userdata('ap_level');
 
 			<div class='table-responsive'>
 				<link rel="stylesheet" href="<?php echo config_item('plugin'); ?>datatables/css/dataTables.bootstrap.css"/>
-				<table id="my-grid" class="table table-striped table-bordered">
+				<table id="my-grid" class="table table-striped table-bordered table-sm" style="font-size:12px;">
 					<thead>
 						<tr>
 							<th>#</th>
@@ -84,7 +84,7 @@ $tambahan = nbs(2)."<span id='Notifikasi' style='display: none;'></span>";
 	$(document).on('click', '#HapusTransaksi', function(e){
 		e.preventDefault();
 		var Link = $(this).attr('href');
-		var Check = "<br /><hr style='margin:10px 0px 8px 0px;' /><div class='checkbox'><label><input type='checkbox' name='reverse_stok' value='yes' id='reverse_stok'> Kembalikan stok barang</label></div>";
+		var Check = "<br /><hr style='margin:10px 0px 8px 0px;' /><div class='checkbox'><label><input type='checkbox' name='reverse_stok' value='yes' id='reverse_stok'> Kembalikan stok barang Utama & Bundling</label></div>";
 		$('.modal-dialog').removeClass('modal-lg');
 		$('.modal-dialog').addClass('modal-sm');
 		$('#ModalHeader').html('Konfirmasi');
